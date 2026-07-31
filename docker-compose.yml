@@ -1,0 +1,17 @@
+version: "3.9"
+
+services:
+  flutter:
+    build:
+      context: ./flutter_app
+      dockerfile: Dockerfile
+      target: dev
+    container_name: bloodbank_flutter_dev
+    working_dir: /app
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./flutter_app:/app
+    stdin_open: true
+    tty: true
+    restart: unless-stopped

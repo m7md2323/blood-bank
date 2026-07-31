@@ -1,0 +1,18 @@
+version: "3.9"
+
+services:
+  flutter:
+    build:
+      context: ./flutter_app
+      dockerfile: Dockerfile
+      target: production
+    container_name: bloodbank_flutter_prod
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    networks:
+      - bloodbank_net
+
+networks:
+  bloodbank_net:
+    driver: bridge
