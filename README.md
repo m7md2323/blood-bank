@@ -50,28 +50,27 @@ When a shortage is detected, the system automatically notifies the blood bank an
 
 ---
 
-## 🛠 Tech Stack
+## Tech Stack
 
 | Layer | Technology |
-|-------|------------|
-| Mobile/Web Frontend | Flutter (Firebase Hosting) |
-| Backend API | ASP.NET Core |
+|---|---|
+| Mobile & Web | Flutter / Dart |
+| Backend API | ASP.NET Core / C# |
 | Database | PostgreSQL |
-| Deployment | Docker + Railway |
-| CI/CD | GitHub Actions |
+| Deployment | Docker + AWS + GitHub Actions |
 
 ---
 
 ## 🏗 Architecture
 
 We will be using the Clean Architecture, by jasontaylordev.
-Github ref :[Link](https://github.com/jasontaylordev/CleanArchitecture)
+[Github Repo](https://github.com/jasontaylordev/CleanArchitecture)
 
 ```
 src/
 ├── Application/       # Use cases / application logic
-├── Domain/            # Core domain entities and interfaces
-├── Infrastructure/    # DB, external services, repositories
+├── Domain/            # Pure C# Entities & Enums
+├── Infrastructure/    # EF Core + PostgreSQL mappings, DbContext
 └── Web/               # ASP.NET Core API controllers & middleware
 flutter_app/           # Flutter mobile/web app
 ```
@@ -101,5 +100,3 @@ blood-bank/
 
 We will use the built in implementation of .NET for OpenAPI.
 
-
----
