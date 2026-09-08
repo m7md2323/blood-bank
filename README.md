@@ -1,20 +1,105 @@
-The smart blood bank project is a system for automating the blood donation process in jordan.<br>
-We started the project when we noticed there was no electronic system for the blood bank in Jordan in general or for any specific hospital, and also because the process of collecting blood units for an emergency case is not organized, for example, which takes a long time and other reasons that will be mentioned later.
+<h1 align="center">🩸 Smart Blood Bank</h1>
 
-About the project: Our project will be a website and mobile application connecting blood donors, hospitals, and blood bank to provide blood units during emergencies and reduce donor search times using a database, donors can register their contact information and blood type, hospitals can register patients, and the blood bank is responsible for monitoring blood stock levels. 
-For example, if a hospital notifies the blood bank of a shortage of a specific blood type, the hospital will be supplied with the required units, and the blood bank will send notifications to donors and conduct donation drives to cover the shortage, so making the blood donation process faster.
+<p align="center">
+  A full-stack platform connecting blood donors, hospitals, and blood banks to streamline emergency blood supply in Jordan.
+</p>
 
-<br>
-<h3>Initial Tech Stack</h3>
-<h4>Frontend:</h4>
-<ul>
-  <li>Flutter</li>
-  <li>Firebase hosting</li>
-</ul>
-<h4>Backend:</h4>
-<ul>
-  <li>ASP.NET Core</li>
-  <li>PostgreSQL or Oracle</li>
-  <li>Docker Deployment + Github Actions for CI/CD </li>
-  <li>Railway Hosting</li>
-</ul>
+<p align="center">
+  <img src="https://img.shields.io/badge/backend-ASP.NET%20Core-512BD4?style=for-the-badge&logo=dotnet" />
+  <img src="https://img.shields.io/badge/mobile-Flutter-02569B?style=for-the-badge&logo=flutter" />
+  <img src="https://img.shields.io/badge/database-PostgreSQL-4169E1?style=for-the-badge&logo=postgresql" />
+  <img src="https://img.shields.io/badge/deploy-Docker-2496ED?style=for-the-badge&logo=docker" />
+</p>
+
+---
+
+## 📖 Table of Contents
+
+- [About the Project](#about-the-project)
+- [Features](#features)
+- [Tech Stack](#tech-stack)
+- [Architecture](#architecture)
+- [Project Structure](#project-structure)
+- [API Documentation](#api-documentation)
+
+---
+
+## 📌 About the Project
+
+> **Problem:** There is currently no electronic system managing blood banks in Jordan, causing delays and disorganization during emergency cases.
+
+**Smart Blood Bank** is a web and mobile platform that automates the blood donation process by connecting three parties:
+
+- 🏥 **Hospitals** — register patients and request blood units
+- 🩸 **Blood Banks** — monitor stock levels and coordinate supply
+- 🙋 **Donors** — register their blood type and receive donation drive notifications
+
+When a shortage is detected, the system automatically notifies the blood bank and triggers donor outreach to cover the deficit — making the process significantly faster and more reliable.
+
+---
+
+## ✨ Features
+
+- [ ] Donor registration with blood type and contact info
+- [ ] Hospital patient registration and blood request portal
+- [ ] Real-time blood stock monitoring dashboard
+- [ ] Automated shortage alerts and donor notifications
+- [ ] Donation drive scheduling and management
+- [ ] Role-based access (Donor / Hospital / Blood Bank Admin)
+- [ ] Mobile app (Flutter) + Web app
+
+---
+
+## 🛠 Tech Stack
+
+| Layer | Technology |
+|-------|------------|
+| Mobile/Web Frontend | Flutter (Firebase Hosting) |
+| Backend API | ASP.NET Core |
+| Database | PostgreSQL |
+| Deployment | Docker + Railway |
+| CI/CD | GitHub Actions |
+
+---
+
+## 🏗 Architecture
+
+We will be using the Clean Architecture, by jasontaylordev.
+Github ref :[Link](https://github.com/jasontaylordev/CleanArchitecture)
+
+```
+src/
+├── Application/       # Use cases / application logic
+├── Domain/            # Core domain entities and interfaces
+├── Infrastructure/    # DB, external services, repositories
+└── Web/               # ASP.NET Core API controllers & middleware
+flutter_app/           # Flutter mobile/web app
+```
+
+---
+
+## 📁 Project Structure
+
+```
+blood-bank/
+├── .github/            # GitHub Actions CI/CD workflows
+├── database/           # DB migrations / seed scripts
+├── docs/               # Project documentation
+├── flutter_app/        # Flutter frontend
+├── src/                # ASP.NET Core backend (Clean Architecture)
+│   ├── Application/
+│   ├── Domain/
+│   ├── Infrastructure/
+│   └── Web/
+├── docker-compose.yml
+└── README.md
+```
+
+---
+
+## 📚 API Documentation
+
+We will use the built in implementation of .NET for OpenAPI.
+
+
+---
