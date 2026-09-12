@@ -118,3 +118,20 @@ class DefaultFormField extends StatelessWidget {
     );
   }
 }
+//////
+class MainLogo extends StatelessWidget {
+  final double logoSize;
+  const MainLogo({
+    super.key,
+
+    this.logoSize = 100,
+
+
+  });
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    return Icon(Icons.bloodtype);
+  }
+
+}
