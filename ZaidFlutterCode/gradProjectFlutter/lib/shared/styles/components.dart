@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'constants.dart';
+
 class DefaultButton extends StatelessWidget {
   final double width;
   final Color background;
@@ -31,44 +32,44 @@ class DefaultButton extends StatelessWidget {
         onPressed: function,
         child: Text(
           buttonText,
-          style: const TextStyle(color: Colors.white), // Optional: explicitly styling text color
+          style: const TextStyle(
+            color: Colors.white,
+          ), // Optional: explicitly styling text color
         ),
       ),
     );
   }
 }
+
 //////
-class DefaultCard extends StatelessWidget{
+class DefaultCard extends StatelessWidget {
   final Widget child;
   final EdgeInsetsGeometry? padding;
-  const DefaultCard({
-    this.padding,
-    super.key,
-    required this.child,
-  });
+  final Color? color;
+  const DefaultCard({this.padding, this.color, super.key, required this.child});
   @override
-  Widget build(BuildContext context){
+  Widget build(BuildContext context) {
     return Container(
-      padding: padding??const EdgeInsets.all(16),
+      padding: padding ?? const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: color,
         borderRadius: BorderRadius.circular(20.0),
         boxShadow: [
           BoxShadow(
-          color: Colors.grey.withOpacity(0.5),
-          spreadRadius: 5,
-          blurRadius: 7,
-          offset: const Offset(0, 3),
+            color: Colors.grey.withOpacity(0.5),
+            spreadRadius: 5,
+            blurRadius: 7,
+            offset: const Offset(0, 3),
           ),
-        ]
+        ],
+      ),
+      child: child,
+    );
+  }
+}
 
-),
-child: child,
-);
-}
-}
 //////
-class DefaultFormField extends StatelessWidget {
+class DefaultFormField extends StatefulWidget {
   final bool isReadOnly;
   final bool isPassword;
   final TextEditingController textControl;
@@ -95,43 +96,42 @@ class DefaultFormField extends StatelessWidget {
   });
 
   @override
+  State<DefaultFormField> createState() => _DefaultFormFieldState();
+}
+
+class _DefaultFormFieldState extends State<DefaultFormField> {
+  @override
   Widget build(BuildContext context) {
     return TextFormField(
-      readOnly: isReadOnly,
-      onTap: onTap,
-      obscureText: isPassword,
-      keyboardType: type,
-      controller: textControl,
-      validator: validate,
+      readOnly: widget.isReadOnly,
+      onTap: widget.onTap,
+      obscureText: widget.isPassword,
+      keyboardType: widget.type,
+      controller: widget.textControl,
+      validator: widget.validate,
       decoration: InputDecoration(
         border: const OutlineInputBorder(),
-        labelText: label,
-        prefixIcon: Icon(prefix),
+        labelText: widget.label,
+        prefixIcon: Icon(widget.prefix),
         // Now accurately hides the widget if no suffix icon is provided
-        suffixIcon: suffix != null
+        suffixIcon: widget.suffix != null
             ? IconButton(
-          icon: Icon(suffix),
-          onPressed: suffixPressed,
-        )
+                icon: Icon(widget.suffix),
+                onPressed: widget.suffixPressed,
+              )
             : null,
       ),
     );
   }
 }
+
 //////
 class MainLogo extends StatelessWidget {
   final double logoSize;
-  const MainLogo({
-    super.key,
-
-    this.logoSize = 100,
-
-
-  });
+  const MainLogo({super.key, this.logoSize = 100});
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
     return Icon(Icons.bloodtype);
   }
-
 }
