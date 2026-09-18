@@ -1,7 +1,11 @@
+import 'package:blood_bank/screens/SignupScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:blood_bank/shared/styles/components.dart';
 import 'package:blood_bank/shared/styles/constants.dart';
 import 'package:blood_bank/shared/network/AuthService.dart'; // Adjust path as needed
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -16,6 +20,27 @@ class _LoginScreenState extends State<LoginScreen> {
   final formKey = GlobalKey<FormState>();
   bool isPassword = true;
   final AuthService myAuthService = AuthService();
+  final storage = FlutterSecureStorage();
+
+  Future<void> logIn() async {
+    final response = await http.post(
+      Uri.parse('${AuthService.baseUrl}/api/auth/login'),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode({
+        'nationalID': nationalIDController.text,
+        'password': passwordController.text,
+      }),
+    );
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+      final token = data['token'];
+      await storage.write(key: "jwt", value: token);
+      Navigator.pushReplacementNamed(context, '/home');
+    } else {
+      debugPrint("asds");
+      throw Exception("login failed");
+    }
+  }
 
   @override
   void dispose() {
@@ -53,7 +78,7 @@ class _LoginScreenState extends State<LoginScreen> {
             // Changed height from fixed * 0.8 to a minimum constraint so it adapts gracefully without layout overflows
             child: DefaultCard(
               color: Colors.white,
-              padding: const EdgeInsets.all(12),
+              padding: const EdgeInsets.all(20),
               child: Form(
                 key: formKey,
                 child: Column(
@@ -126,8 +151,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         function: () async {
                           if (formKey.currentState!.validate()) {
                             try {
-                              // TEMPORARY TEST: Skip API and test the snackbar layout engine
-                              throw "Authentication failed: This is a test error from the backend!";
+                              await logIn();
                             } catch (error) {
                               if (mounted) {
                                 ScaffoldMessenger.of(context).showSnackBar(
@@ -173,7 +197,14 @@ class _LoginScreenState extends State<LoginScreen> {
                       children: [
                         const Text("no account?"),
                         TextButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => SignupScreen(),
+                              ),
+                            );
+                          },
                           style: TextButton.styleFrom(
                             padding: const EdgeInsets.symmetric(horizontal: 4),
                             minimumSize: Size.zero,
