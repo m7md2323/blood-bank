@@ -20,8 +20,12 @@ class _SignupScreenState extends State<SignupScreen> {
   final confirmPasswordController = TextEditingController();
   final emailController = TextEditingController();
   final phoneNumberController = TextEditingController();
+  final dateController = TextEditingController();
+  final firstNameController = TextEditingController();
+  final lastNameController = TextEditingController();
   final formKey = GlobalKey<FormState>();
   bool isPassword = true;
+  String? selectedGender;
   final AuthService myAuthService = AuthService();
 
   Future<void> signUp() async {
@@ -29,11 +33,15 @@ class _SignupScreenState extends State<SignupScreen> {
       Uri.parse('${AuthService.baseUrl}/api/auth/register'),
       headers: {'Content-Type': 'application/json'},
       body: jsonEncode({
+        'firstName': firstNameController.text,
+        'lastName': lastNameController.text,
+        'gender': selectedGender ?? "undefined",
         'nationalID': nationalIDController.text,
-        'password': passwordController.text,
-        'passwordConfirm': confirmPasswordController.text,
         'email': emailController.text,
         'phone': phoneNumberController.text,
+        'date': dateController.text,
+        'password': passwordController.text,
+        'passwordConfirm': confirmPasswordController.text,
       }),
     );
     if (response.statusCode == 201) {
@@ -51,6 +59,9 @@ class _SignupScreenState extends State<SignupScreen> {
     passwordController.dispose();
     confirmPasswordController.dispose();
     phoneNumberController.dispose();
+    dateController.dispose();
+    firstNameController.dispose();
+    lastNameController.dispose();
     super.dispose();
   }
 
@@ -75,7 +86,64 @@ class _SignupScreenState extends State<SignupScreen> {
                 children: [
                   MainLogo(),
                   Text("Sign Up"),
-                  SizedBox(height: 30),
+                  SizedBox(height: MediaQuery.of(context).size.height * 0.04),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: DefaultFormField(
+                          textControl: firstNameController,
+                          label: 'first name',
+                          prefix: Icons.sort_by_alpha,
+                          validate: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'field cannot be empty';
+                            }
+                            return null;
+                          },
+                          type: TextInputType.text,
+                        ),
+                      ),
+                      ///////
+                      SizedBox(width: MediaQuery.of(context).size.width * 0.04),
+                      //////
+                      Expanded(
+                        child: DefaultFormField(
+                          textControl: lastNameController,
+                          label: 'last name',
+                          prefix: Icons.eighteen_mp,
+                          validate: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'field cannot be empty';
+                            }
+                            return null;
+                          },
+                          type: TextInputType.text,
+                        ),
+                      ),
+                    ],
+                  ),
+                  /////////
+                  SizedBox(height: MediaQuery.of(context).size.height * 0.04),
+                  /////////////
+                  DropdownButtonFormField<String>(
+                    decoration: const InputDecoration(
+                      labelText: "Gender",
+                      border: OutlineInputBorder(),
+                    ),
+                    initialValue: selectedGender,
+                    items: const [
+                      DropdownMenuItem(child: Text("male"), value: "male"),
+                      DropdownMenuItem(child: Text("female"), value: "female"),
+                    ],
+
+                    onChanged: (value) {
+                      setState(() {
+                        selectedGender = value;
+                      });
+                    },
+                  ),
+                  ///////
+                  SizedBox(height: MediaQuery.of(context).size.height * 0.04),
                   DefaultFormField(
                     textControl: nationalIDController,
                     label: "enter your national ID",
@@ -90,6 +158,50 @@ class _SignupScreenState extends State<SignupScreen> {
                   ),
                   //////
                   SizedBox(height: MediaQuery.of(context).size.height * 0.04),
+                  DefaultFormField(
+                    textControl: dateController,
+                    label: "enter your birth date",
+                    prefix: Icons.calendar_month,
+                    validate: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'field cannot be empty';
+                      }
+                      return null;
+                    },
+                    type: TextInputType.datetime,
+                  ),
+
+                  //////
+                  SizedBox(height: MediaQuery.of(context).size.height * 0.04),
+                  DefaultFormField(
+                    textControl: emailController,
+                    label: "enter your Email",
+                    prefix: Icons.email,
+                    validate: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'field cannot be empty';
+                      }
+                      return null;
+                    },
+                    type: TextInputType.emailAddress,
+                  ),
+                  ////////
+                  SizedBox(height: MediaQuery.of(context).size.height * 0.04),
+                  DefaultFormField(
+                    textControl: phoneNumberController,
+                    label: "enter your phone number",
+                    prefix: Icons.phone,
+                    validate: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'field cannot be empty';
+                      }
+                      return null;
+                    },
+                    type: TextInputType.phone,
+                  ),
+                  ////////////
+                  SizedBox(height: MediaQuery.of(context).size.height * 0.04),
+
                   DefaultFormField(
                     isPassword: isPassword,
                     textControl: passwordController,
@@ -136,34 +248,7 @@ class _SignupScreenState extends State<SignupScreen> {
                     },
                   ),
                   //////
-                  SizedBox(height: MediaQuery.of(context).size.height * 0.04),
-                  DefaultFormField(
-                    textControl: emailController,
-                    label: "enter your Email",
-                    prefix: Icons.email,
-                    validate: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'field cannot be empty';
-                      }
-                      return null;
-                    },
-                    type: TextInputType.emailAddress,
-                  ),
-                  ////////
-                  SizedBox(height: MediaQuery.of(context).size.height * 0.04),
-                  DefaultFormField(
-                    textControl: phoneNumberController,
-                    label: "enter your phone number",
-                    prefix: Icons.phone,
-                    validate: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'field cannot be empty';
-                      }
-                      return null;
-                    },
-                    type: TextInputType.phone,
-                  ),
-                  ////////////
+                  /////////////////
                   SizedBox(height: MediaQuery.of(context).size.height * 0.04),
                   DefaultButton(
                     buttonText: "Create account",
@@ -212,3 +297,37 @@ class _SignupScreenState extends State<SignupScreen> {
     );
   }
 }
+
+/*
+*
+* Row(
+                    children: [
+                      Expanded(
+                        child: RadioGroup<String>(
+                          onChanged: (value) {
+                            setState(() {
+                              selectedGender = value;
+                            });
+                          },
+                          groupValue: selectedGender,
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: RadioListTile<String>(
+                                  value: "male",
+                                  title: Text("male"),
+                                ),
+                              ),
+                              Expanded(
+                                child: RadioListTile<String>(
+                                  value: "female",
+                                  title: Text("female"),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+* */
