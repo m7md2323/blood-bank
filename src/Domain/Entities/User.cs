@@ -8,7 +8,7 @@ public class User : BaseEntity
     //General information about users
     public string NationalNumber { get; set; } = string.Empty;
     public string FullName { get; set; } = string.Empty;
-    public string Gender { get; set; } = string.Empty;
+    public Gender Gender { get; set; }
     public string Email { get; set; } = string .Empty;
     public string PhoneNumber { get; set; } = string.Empty;
     public string PasswordHash { get; set; } = string.Empty;
@@ -28,6 +28,13 @@ public class User : BaseEntity
     //Collections that stores received or donated blood units
     public ICollection<BloodUnit> DonatedUnits { get; set; } = new List<BloodUnit>(); 
     public ICollection<BloodUnit> ReceivedUnits { get; set; } = new List<BloodUnit>(); 
+
+    //To map EF Core relationship (Foreign Keys), 
+    // and it's for staff members of Hospitals or Blood Banks.
+    public Guid? HospitalId {get;set;}
+    public Hospital? Hospital {get;set;}
+    public Guid? BloodBankId {get;set;}  
+    public BloodBank? BloodBank {get;set;}
 
     //Methods for marking a user as a donor or acceptor
     public void MarkAsDonor(){

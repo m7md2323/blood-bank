@@ -9,7 +9,7 @@ public class BloodUnit : BaseEntity
     //System specific data
 
     public BloodType BloodType {set;get;}    
-    public string ComponentType {set;get;} = string.Empty;
+    public ComponentType ComponentType {set;get;}
     public double VolumeMl {set;get;} = 0.0;
     public DateTime CollectionDate {set;get;}
     public DateTime ExpirationDate {set;get;}
