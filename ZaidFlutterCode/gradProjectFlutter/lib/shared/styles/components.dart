@@ -135,3 +135,16 @@ class MainLogo extends StatelessWidget {
     return Icon(Icons.bloodtype);
   }
 }
+
+class DefaultSizedBox extends StatelessWidget {
+  final double height;
+  final double width;
+  const DefaultSizedBox({super.key, this.height = 0.05, this.width = 0.05});
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: MediaQuery.of(context).size.height * height,
+      width: MediaQuery.of(context).size.width * width,
+    );
+  }
+}

@@ -132,8 +132,8 @@ class _SignupScreenState extends State<SignupScreen> {
                     ),
                     initialValue: selectedGender,
                     items: const [
-                      DropdownMenuItem(child: Text("male"), value: "male"),
-                      DropdownMenuItem(child: Text("female"), value: "female"),
+                      DropdownMenuItem(value: "male", child: Text("male")),
+                      DropdownMenuItem(value: "female", child: Text("female")),
                     ],
 
                     onChanged: (value) {
