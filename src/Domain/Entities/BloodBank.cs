@@ -14,7 +14,7 @@ public class BloodBank : BaseEntity{
     public double Longitude { get; set; }
 
     public ICollection<BloodUnit> StoredUnits{get;set;}
-    public ICollection<User> Staff {get;set;}\
+    public ICollection<User> Staff {get;set;}
 
     public ICollection<BloodRequest> FulfilledRequests {get;set;}
 

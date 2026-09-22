@@ -3,15 +3,20 @@ using Domain.Common;
 
 namespace Domain.Entities
 {
-    internal class Donation : BaseEntity
+    public class Donation : BaseEntity
     {
-        public string DonorId { get; set; } = string.Empty;
+        public Guid DonorId {get;set;}
+        public User Donor {get;set;}
 
-        //public Donor Donor;
-        public BloodBank BloodBank { get; set; } = string.Empty;
-        public BloodUnit BloodUnit { get; set; } = string.Empty;
+        public Guid? HospitalId {get;set;}
+        public Hospital? Hospital {get;set;}
+        public Guid? BloodBankId {get;set;}  
+        public BloodBank? BloodBank {get;set;}
 
-        public DateTime DontaionDate { get; set; }
+        public Guid BloodUnitId {get;set;}
+        public BloodUnit BloodUnit {get;set;}
+
+        public DateTime DonationDate {get;set;}
 
     }
 }
