@@ -1,6 +1,6 @@
 ﻿namespace Domain.Enums;
 
-public enum BloodType
+public enum BloodGroup
 {
     APositive,
     ANegative,

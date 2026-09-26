@@ -1,46 +1,47 @@
-using Domain.Common;
-using Domain.Enums;
+﻿using Domain.Enums;
 
 namespace Domain.Entities;
 
-public class User : BaseEntity 
+public class User
 {
-    //General information about users
+    public long UserId { get; set; }
     public string NationalNumber { get; set; } = string.Empty;
-    public string FullName { get; set; } = string.Empty;
-    public Gender Gender { get; set; }
-    public string Email { get; set; } = string .Empty;
+    public string Email { get; set; } = string.Empty;
     public string PhoneNumber { get; set; } = string.Empty;
     public string PasswordHash { get; set; } = string.Empty;
-    public DateTime DateOfBirth { set; get; }
+    public string FirstName { get; set; } = string.Empty;
+    public string LastName { get; set; } = string.Empty;
+    public GenderType Gender { get; set; }
+    public DateOnly DateOfBirth { get; set; }
+    public BloodGroup? BloodType { get; set; }
+    public decimal? WeightKg { get; set; }
+    public string? ResidenceGovernorate { get; set; }
+    public string? ResidenceCity { get; set; }
+    public string? AddressText { get; set; }
+    public decimal? Latitude { get; set; }
+    public decimal? Longitude { get; set; }
+    public string? ProfilePhotoUrl { get; set; }
+    public UserStatus Status { get; set; } = UserStatus.PendingVerification;
+    public long? ManagedBloodBankId { get; set; }
+    public long? ManagedHospitalId { get; set; }
+    public DateTimeOffset CreatedAt { get; set; } = DateTimeOffset.UtcNow;
+    public DateTimeOffset UpdatedAt { get; set; } = DateTimeOffset.UtcNow;
 
-    //System specific data
-    public BloodType BloodType { get; set; }
-    public UserStatus Status { get; set; } = UserStatus.ActiveDonor;
-    public UserRole Role { get; set; } = UserRole.StandardUser;
-    public int BloodUnitsBalance { get; set; } = 0;
+    // Navigation properties
+    public BloodBank? ManagedBloodBank { get; set; }
+    public Hospital? ManagedHospital { get; set; }
+    public DonorProfile? DonorProfile { get; set; }
+    public Patient? LinkedPatient { get; set; }
 
-    //For locating Donors when blood units are needed
-    public string City { get; set; } = string.Empty;
-    public double Latitude { get; set; }
-    public double Longitude { get; set; }
-
-    //Collections that stores received or donated blood units
-    public ICollection<BloodUnit> DonatedUnits { get; set; } = new List<BloodUnit>(); 
-    public ICollection<BloodUnit> ReceivedUnits { get; set; } = new List<BloodUnit>(); 
-
-    //To map EF Core relationship (Foreign Keys), 
-    // and it's for staff members of Hospitals or Blood Banks.
-    public Guid? HospitalId {get;set;}
-    public Hospital? Hospital {get;set;}
-    public Guid? BloodBankId {get;set;}  
-    public BloodBank? BloodBank {get;set;}
-
-    //Methods for marking a user as a donor or acceptor
-    public void MarkAsDonor(){
-        Status = UserStatus.ActiveDonor;
-    }
-    public void MarkAsAcceptor(){
-        Status = UserStatus.MedicalAcceptor;
-    }
-}   
+    public ICollection<UserRole> UserRoles { get; set; } = new List<UserRole>();
+    public ICollection<UserMfaMethod> MfaMethods { get; set; } = new List<UserMfaMethod>();
+    public ICollection<OtpChallenge> OtpChallenges { get; set; } = new List<OtpChallenge>();
+    public ICollection<PasswordResetToken> PasswordResetTokens { get; set; } = new List<PasswordResetToken>();
+    public ICollection<Donation> TestedDonations { get; set; } = new List<Donation>();
+    public ICollection<BloodRequest> BloodRequests { get; set; } = new List<BloodRequest>();
+    public ICollection<BloodRequestAllocation> AllocationsMade { get; set; } = new List<BloodRequestAllocation>();
+    public ICollection<BloodUnitTransfer> TransfersCreated { get; set; } = new List<BloodUnitTransfer>();
+    public ICollection<Message> SentMessages { get; set; } = new List<Message>();
+    public ICollection<Message> ReceivedMessages { get; set; } = new List<Message>();
+    public ICollection<Notification> Notifications { get; set; } = new List<Notification>();
+}

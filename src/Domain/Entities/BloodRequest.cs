@@ -1,29 +1,31 @@
-using Domain.Common;
-using Domain.Enums;
+﻿using Domain.Enums;
 
 namespace Domain.Entities;
 
-public enum UrgencyLevel
+public class BloodRequest
 {
-    Routine,      //Within 24-48 hours
-    Urgent,       //Within 2-4 hours
-    Emergency     //Needed immediately!
-}
+    public long BloodRequestId { get; set; }
+    public long HospitalId { get; set; }
+    public long? PatientId { get; set; }
+    public long? RequestedByUserId { get; set; }
+    public BloodGroup BloodType { get; set; }
+    public int UnitsRequested { get; set; }
+    public RequestPriority Priority { get; set; } = RequestPriority.Normal;
+    public DateTimeOffset? NeededBy { get; set; }
+    public RequestStatus Status { get; set; } = RequestStatus.Submitted;
+    public string? Reason { get; set; }
+    public decimal? BroadcastRadiusKm { get; set; }
+    public string? BroadcastMessage { get; set; }
+    public bool IsBroadcastActive { get; set; } = false;
+    public DateTimeOffset CreatedAt { get; set; } = DateTimeOffset.UtcNow;
+    public DateTimeOffset UpdatedAt { get; set; } = DateTimeOffset.UtcNow;
 
-public class BloodRequest: BaseEntity{
-
-    public BloodType BloodType {get;set;}
-    public int NumberOfUnits {get;set;}
-    public UrgencyLevel UrgencyLevel{get;set;} = UrgencyLevel.Routine;
-    public RequestStatus Status { get; set; } = RequestStatus.Pending;
-    public ComponentType ComponentType { get; set; }
-
-    //This is the requester. 
-    public Guid HospitalId {get;set;}
-    public Hospital Hospital {get;set;} = null!;
-
-    //This is the fullfiller.
-    public Guid? BloodBankId {get;set;}
-    public BloodBank? BloodBank {get;set;}
-
+    // Navigation properties
+    public Hospital Hospital { get; set; } = null!;
+    public Patient? Patient { get; set; }
+    public User? RequestedByUser { get; set; }
+    public ICollection<BloodRequestAllocation> Allocations { get; set; } = new List<BloodRequestAllocation>();
+    public ICollection<BloodCreditTransaction> CreditTransactions { get; set; } = new List<BloodCreditTransaction>();
+    public ICollection<Message> Messages { get; set; } = new List<Message>();
+    public ICollection<Notification> Notifications { get; set; } = new List<Notification>();
 }

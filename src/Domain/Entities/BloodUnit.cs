@@ -1,39 +1,28 @@
-using Domain.Common;
-using Domain.Enums;
+﻿using Domain.Enums;
 
 namespace Domain.Entities;
 
-public class BloodUnit : BaseEntity 
+public class BloodUnit
 {
+    public long BloodUnitId { get; set; }
+    public string UnitCode { get; set; } = string.Empty;
+    public int VolumeMl { get; set; } = 450;
+    public long? DonationId { get; set; }
+    public BloodGroup BloodType { get; set; }
+    public long? CurrentBloodBankId { get; set; }
+    public long? CurrentHospitalId { get; set; }
+    public BloodUnitStatus Status { get; set; } = BloodUnitStatus.Available;
+    public DateTimeOffset CollectedAt { get; set; }
+    public DateTimeOffset ExpiresAt { get; set; }
+    public DateTimeOffset? TestedAt { get; set; }
+    public TestResult TestStatus { get; set; } = TestResult.Pending;
+    public DateTimeOffset CreatedAt { get; set; } = DateTimeOffset.UtcNow;
+    public DateTimeOffset UpdatedAt { get; set; } = DateTimeOffset.UtcNow;
 
-    //System specific data
-
-    public BloodType BloodType {set;get;}    
-    public ComponentType ComponentType {set;get;}
-    public double VolumeMl {set;get;} = 0.0;
-    public DateTime CollectionDate {set;get;}
-    public DateTime ExpirationDate {set;get;}
-    public BloodUnitStatus Status {set;get;} = BloodUnitStatus.Available;
-
-    //EF Core linking
-
-    //Every Blood unit must be linked to a donor
-    public Guid DonorId { get; set; }
-    public User Donor { get; set; } = null!; 
-
-    //In the case if a user is an Acceptor, the blood unit must be linked to him.
-    public Guid? RecipientAcceptorId { get; set; }
-    public User? RecipientAcceptor { get; set; }
-
-    //Blood units can be in a blood bank or inside a hospital
-    //We are treating the blood units that are inside a hospital as 
-    //if they where placed in the ICU or any place closer to the doctor or patitint.
-    //And we are treating blood units that are inside a blood bank,
-    //as if they are placed in bank itself, whether its a section in the hospital, or a complete seperated blood bank center.
-    public Guid? CurrentHospitalId { get; set; }
-    public Hospital? CurrentHospital { get; set; }
-
-    public Guid? CurrentBloodBankId { get; set; }
+    // Navigation properties
+    public Donation? Donation { get; set; }
     public BloodBank? CurrentBloodBank { get; set; }
-
+    public Hospital? CurrentHospital { get; set; }
+    public BloodRequestAllocation? Allocation { get; set; }
+    public ICollection<BloodUnitTransferItem> TransferItems { get; set; } = new List<BloodUnitTransferItem>();
 }
