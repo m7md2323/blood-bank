@@ -1,7 +1,6 @@
-﻿namespace Domain.Enums;
+namespace Domain.Enums;
 
-public enum Gender
-{
+public enum Gender {
     Male,
     Female
 }
