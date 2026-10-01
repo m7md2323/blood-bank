@@ -3,57 +3,86 @@ import 'package:flutter/material.dart';
 import 'package:blood_bank/shared/styles/components.dart';
 import 'package:blood_bank/shared/styles/constants.dart';
 import 'package:blood_bank/shared/network/AuthService.dart'; // Adjust path as needed
+import 'package:go_router/go_router.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:blood_bank/models/visits.dart';
+import 'package:blood_bank/screens/allTransactionsScreen.dart';
+import "package:blood_bank/shared/styles/responsive_methods.dart";
 
-class Bloodwalletscreen extends StatelessWidget {
-  const Bloodwalletscreen({super.key});
+class Bloodwalletscreen extends StatefulWidget {
+  @override
+  State<Bloodwalletscreen> createState() => _BloodwalletscreenState();
+}
+
+class _BloodwalletscreenState extends State<Bloodwalletscreen> {
+  bool isMobile(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
+    return width < 600; // Adjust the threshold as needed
+  }
+
+  AuthService authService = AuthService();
+
+  double? credit; //completed: fetch credit from database
+  String? userId; //EDIT NEEDED: fetch user ID from database
+  List<Visit> visits = []; //completed: fetch visits from database
+  List<String> lastSixMonths =
+      []; //completed: fetch last 6 months from database
+
+  // const Bloodwalletscreen({super.key});
   final String placeHolder = 'your_token_here';
+  final String userIdPlaceholder =
+      'your_user_id_here'; //EDIT NEEDED: fetch user ID from database
+  //Placeholder for donation status
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       appBar: null,
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(
             children: [
               SizedBox(
-                height: getResponsiveHeight(context, 0.4),
-                width: getResponsiveWidth(context, 1),
+                height: context.resHeight(0.4),
+                width: context.resWidth(1),
                 child: DefaultCard(
                   color: mainColor,
                   child: Column(
                     children: [
-                      DefaultSizedBox(width: 0, height: 0.08),
+                      SizedBox(width: 0, height: context.resHeight(0.04)),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Expanded(
                             flex: 7,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  "wallet card",
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.white,
-                                    fontSize: 33,
-                                    fontFamily: "Inter",
+                            child: Container(
+                              margin: EdgeInsets.only(left: 20),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    "wallet card",
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white,
+                                      fontSize: 33,
+                                      fontFamily: "Inter",
+                                    ),
                                   ),
-                                ),
-                                Text(
-                                  'Jordan Blood Bank . User ID: $placeHolder', //EDIT NEEDED: fetch ID from database
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.white,
-                                    fontSize: 20,
+                                  Text(
+                                    'Jordan Blood Bank . User ID: $placeHolder', //EDIT NEEDED: fetch ID from database
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white,
+                                      fontSize: 20,
+                                    ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
                           ),
                           SizedBox(width: 20),
@@ -67,7 +96,7 @@ class Bloodwalletscreen extends StatelessWidget {
                           ),
                         ],
                       ),
-                      DefaultSizedBox(height: 0.02, width: 0),
+                      SizedBox(height: context.resWidth(0.047), width: 0),
                       Expanded(
                         child: DefaultCard(
                           color: Colors.white60,
@@ -84,13 +113,16 @@ class Bloodwalletscreen extends StatelessWidget {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    "Current credit: ",
+                                    "Current credit:",
                                     style: GoogleFonts.inter(),
                                   ),
                                   Row(
                                     children: [
                                       Text(
-                                        "$placeHolder ", //EDIT NEEDED: fetch credit from database
+                                        credit == null
+                                            ? "Loading..."
+                                            : credit!
+                                                  .toString(), //EDIT Completed: fetch credit from database
                                         style: TextStyle(
                                           fontSize: 19,
                                           fontWeight: FontWeight.bold,
@@ -105,15 +137,15 @@ class Bloodwalletscreen extends StatelessWidget {
                           ),
                         ),
                       ),
-                      DefaultSizedBox(
-                        height: getResponsiveHeight(context, 0.0001),
-                        width: 0,
-                      ),
+                      SizedBox(height: context.resHeight(0.0001), width: 0),
                     ],
                   ),
                 ),
               ),
-              DefaultSizedBox(),
+              SizedBox(
+                width: context.resWidth(0.047),
+                height: context.resHeight(0.047),
+              ),
               Row(
                 children: [
                   Expanded(
@@ -189,28 +221,28 @@ class Bloodwalletscreen extends StatelessWidget {
               ),
               Padding(
                 padding: EdgeInsets.symmetric(
-                  horizontal: getResponsiveWidth(context, 0.05),
-                  vertical: getResponsiveHeight(context, 0.02),
+                  horizontal: context.resWidth(0.05),
+                  vertical: context.resHeight(0.02),
                 ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     SizedBox(
-                      height: getResponsiveHeight(context, 0.03),
+                      height: context.resHeight(0.03),
                       child: Text(
                         "donation activities",
                         style: TextStyle(
-                          fontSize: getResponsiveWidth(context, 0.047),
+                          fontSize: context.resWidth(0.047),
                           fontWeight: FontWeight.bold,
                         ),
                       ), // Optional: Add a child widget if needed
                     ),
                     SizedBox(
-                      height: getResponsiveHeight(context, 0.02),
+                      height: context.resHeight(0.02),
                       child: Text(
-                        "Last ... months", // EDIT NEEDED: fetch months from database
+                        "Last 6 months", // EDIT NEEDED: fetch months from database
                         style: TextStyle(
-                          fontSize: getResponsiveWidth(context, 0.03),
+                          fontSize: context.resWidth(0.03),
                           fontWeight: FontWeight.bold,
                         ),
                       ), // Optional: Add a child widget if needed
@@ -219,13 +251,142 @@ class Bloodwalletscreen extends StatelessWidget {
                 ),
               ),
 
-              BarChart(
-                //EDIT NEEDED: fetch data from database to display in chart
-                BarChartData(
-                  // read about it in the BarChartData section
+              AspectRatio(
+                aspectRatio: 2,
+                child: Container(
+                  margin: EdgeInsets.all(10),
+                  child: BarChart(
+                    //EDIT NEEDED: fetch data from database to display in chart
+                    BarChartData(
+                      titlesData: FlTitlesData(
+                        topTitles: AxisTitles(
+                          sideTitles: SideTitles(showTitles: false),
+                        ),
+                        rightTitles: AxisTitles(
+                          sideTitles: SideTitles(showTitles: false),
+                        ),
+                        leftTitles: AxisTitles(
+                          sideTitles: SideTitles(showTitles: false),
+                        ),
+                        bottomTitles: AxisTitles(
+                          sideTitles: SideTitles(
+                            showTitles: true,
+                            reservedSize: 30,
+                            getTitlesWidget: (double value, TitleMeta meta) {
+                              List<String> lastSixMonths = authService
+                                  .fetchLastSixMonths();
+
+                              final index = value.toInt();
+
+                              if (index < 0 || index >= lastSixMonths.length) {
+                                return const SizedBox();
+                              }
+
+                              return SideTitleWidget(
+                                meta: meta,
+                                space: 8,
+                                child: Text(
+                                  lastSixMonths[index], //EDIT NEEDED: fetch months from databaseS
+                                  style: const TextStyle(
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 14,
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                      ),
+                      maxY: 8,
+                      alignment: BarChartAlignment.start,
+                      groupsSpace: 40,
+                      backgroundColor: Colors.white.withValues(alpha: 0.3),
+                      barGroups: List.generate(6, (index) {
+                        return BarChartGroupData(
+                          x: index,
+
+                          barRods: [
+                            BarChartRodData(
+                              //return these codes once the database is connected
+                              toY:
+                                  true //visits[index].visitType == 'Donation'
+                                  ? 6
+                                  : 1,
+                              color:
+                                  true // visits[index].visitType == 'Donation'
+                                  ? Colors.red
+                                  : Colors.grey.withOpacity(0.3),
+                              width: 20,
+                              borderRadius: BorderRadius.circular(4),
+                            ),
+                          ],
+                        );
+                      }),
+                    ),
+                    duration: Duration(milliseconds: 150), // Optional
+                    curve: Curves.linear, // Optional
+                  ),
                 ),
-                duration: Duration(milliseconds: 150), // Optional
-                curve: Curves.linear, // Optional
+              ),
+              /////////////
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "Recent Transactions",
+                      style: TextStyle(
+                        fontSize: context.resWidth(0.047),
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        context.push('/all-transactions');
+                      },
+                      child: Text(
+                        "View All",
+                        style: TextStyle(
+                          fontSize: context.resWidth(0.03),
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Column(
+                //EDIT NEEDED :fetch # of transactions from database and display them in a list
+                children: List.generate(3, (index) {
+                  return ListTile(
+                    leading: Icon(
+                      Icons.bloodtype,
+                      color: mainColor,
+                    ), //EDIT NEEDED: fetch icon from database based on transaction type
+                    title: Text(
+                      "Transaction ${index + 1}",
+                      style: TextStyle(
+                        fontSize: context.resWidth(0.04),
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    subtitle: Text(
+                      "Date of transaction ${index + 1}",
+                      style: TextStyle(fontSize: context.resWidth(0.03)),
+                    ),
+                    trailing: Text(
+                      "-${index + 1} Units",
+                      style: TextStyle(
+                        fontSize: context.resWidth(0.04),
+                        color: Colors
+                            .red, //EDIT NEEDED: isDonation feature needs to be implemented to determine if the transaction is a donation or not, and change the color accordingly
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  );
+                }),
               ),
 
               SizedBox(
@@ -235,6 +396,21 @@ class Bloodwalletscreen extends StatelessWidget {
 
               //4 buttons
             ],
+          ),
+        ),
+      ),
+      floatingActionButton: FloatingActionButton.extended(
+        icon: Icon(Icons.add, color: Colors.white),
+        backgroundColor: mainColor,
+        onPressed: () => debugPrint(
+          "Book new donation pressed",
+        ), //EDIT NEEDED: navigate to book new donation screen
+        label: Text(
+          "Book new donation",
+          style: TextStyle(
+            fontSize: context.resWidth(0.04),
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
           ),
         ),
       ),

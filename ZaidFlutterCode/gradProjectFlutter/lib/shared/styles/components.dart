@@ -51,7 +51,7 @@ class DefaultCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: color,
+        color: color ?? Colors.white,
         borderRadius: BorderRadius.circular(20.0),
         boxShadow: [
           BoxShadow(
@@ -144,6 +144,31 @@ class DefaultSizedBox extends StatelessWidget {
     return SizedBox(
       height: MediaQuery.of(context).size.height * height,
       width: MediaQuery.of(context).size.width * width,
+    );
+  }
+}
+
+class DefaultTransactionCard extends StatelessWidget {
+  final String title;
+  final String subtitle;
+  final String trailing;
+  final bool isReceived =
+      false; //EDIT NEEDED: Default value, can be modified later if needed
+  const DefaultTransactionCard({
+    super.key,
+    required this.title,
+    required this.subtitle,
+    required this.trailing,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      child: ListTile(
+        title: Text(title),
+        subtitle: Text(subtitle),
+        trailing: Text(trailing),
+      ),
     );
   }
 }

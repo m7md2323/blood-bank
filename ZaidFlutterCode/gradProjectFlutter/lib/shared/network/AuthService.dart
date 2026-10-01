@@ -1,7 +1,10 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:blood_bank/models/visits.dart';
 
 class AuthService {
+  final storage = const FlutterSecureStorage();
   // 1. Define your backend address (Replace with your actual API URL later)
   static const String baseUrl = 'https://your-api-url.com';
 
@@ -38,4 +41,78 @@ class AuthService {
       throw 'Cannot connect to server. Check your internet connection.';
     }
   }
+
+  Future<String?> getToken() async {
+    return await storage.read(key: 'token');
+  }
+
+  Future<double> fetchCredit() async {
+    final token = await storage.read(key: 'token');
+    final response = await http.get(
+      Uri.parse('${AuthService.baseUrl}/api/user/credit'),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization':
+            'Bearer $token', //EDIT NEEDED: fetch token from secure storage
+        // JWT token can be added here if needed for authentication
+      },
+    );
+    if (response.statusCode == 200) {
+      final pageData = jsonDecode(response.body);
+      return pageData['credit'].toDouble();
+      // Process the data as needed
+    } else {
+      throw Exception('Failed to fetch credit amount');
+    }
+  }
+
+  Future<List<Visit>> fetchVisits() async {
+    final token = await storage.read(key: 'token');
+    final response = await http.get(
+      Uri.parse('${AuthService.baseUrl}/api/user/visits'),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization':
+            'Bearer $token', //EDIT completed: fetch token from secure storage
+        // JWT token can be added here if needed for authentication
+      },
+    );
+    if (response.statusCode == 200) {
+      final visitData = jsonDecode(response.body);
+      return (visitData['visits'] as List)
+          .map((visit) => Visit.fromJson(visit))
+          .toList();
+      // Process the data as needed
+    } else {
+      throw Exception('Failed to fetch visits');
+    }
+  }
+
+  List<String> fetchLastSixMonths() {
+    DateTime now = DateTime.now();
+    List<String> months = [];
+    List<String> monthsNames = [
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec',
+    ];
+    for (int i = 5; i >= 0; i--) {
+      int monthIndex = (now.month - i - 1) % 12;
+      if (monthIndex < 0) {
+        monthIndex += 12;
+      }
+      months.add(monthsNames[monthIndex]);
+    }
+    return months;
+  }
+  
 }
