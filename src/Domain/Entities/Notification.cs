@@ -1,21 +1,22 @@
-﻿using Domain.Enums;
+﻿
 
-namespace Domain.Entities;
+using Domain.Common;
 
-public class Notification
+namespace Domain.Entities
 {
-    public long NotificationId { get; set; }
-    public long UserId { get; set; }
-    public long? BloodRequestId { get; set; }
-    public NotificationChannel Channel { get; set; }
-    public string Title { get; set; } = string.Empty;
-    public string Body { get; set; } = string.Empty;
-    public NotificationStatus Status { get; set; } = NotificationStatus.Queued;
-    public DateTimeOffset QueuedAt { get; set; } = DateTimeOffset.UtcNow;
-    public DateTimeOffset? SentAt { get; set; }
-    public DateTimeOffset? ReadAt { get; set; }
+    public class Notification:BaseEntity
+    {
+        public string Title { get; set; } = string.Empty;
+        public string Message { get; set; } = string.Empty;
 
-    // Navigation properties
-    public User User { get; set; } = null!;
-    public BloodRequest? BloodRequest { get; set; }
+
+        public bool IsRead { get; set; }
+
+        public DateTime? ReadAtUtc { get; set; }
+
+        public Guid? RecipientUserId { get; set; }
+        public Guid? RecipientHospitalId { get; set; }
+        public Guid? RecipientBloodBankId { get; set; }
+        public Guid? RelatedBloodRequestId { get; set; }
+    }
 }

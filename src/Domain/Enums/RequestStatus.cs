@@ -1,11 +1,8 @@
-﻿namespace Domain.Enums;
+namespace Domain.Enums;
 
-public enum RequestStatus
-{
-    Submitted,
-    SearchingDonors,
+public enum RequestStatus {
+    Pending,
     PartiallyFulfilled,
     Fulfilled,
-    Cancelled,
-    Rejected
+    Cancelled
 }

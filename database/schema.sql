@@ -8,7 +8,7 @@ CREATE TYPE user_status AS ENUM ('pending_verification', 'active', 'suspended', 
 CREATE TYPE organization_status AS ENUM ('active', 'inactive');
  
 CREATE TYPE donation_status AS ENUM ('scheduled', 'confirmed', 'no_show', 'pending_test', 'accepted', 'rejected', 'cancelled');
- 
+                                            
 CREATE TYPE test_result AS ENUM ('pending', 'passed', 'failed');
 CREATE TYPE blood_unit_status AS ENUM ('available', 'reserved', 'issued', 'transfused', 'expired', 'discarded');
 CREATE TYPE request_status AS ENUM ('submitted', 'searching_donors', 'partially_fulfilled', 'fulfilled', 'cancelled', 'rejected');

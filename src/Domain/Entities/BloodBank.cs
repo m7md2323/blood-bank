@@ -1,27 +1,24 @@
-﻿using Domain.Enums;
+using Domain.Common;
+using Domain.Enums;
 
 namespace Domain.Entities;
 
-public class BloodBank
-{
-    public long BloodBankId { get; set; }
-    public string Name { get; set; } = string.Empty;
-    public string? PhoneNumber { get; set; }
-    public string? Email { get; set; }
-    public string Governorate { get; set; } = string.Empty;
-    public string City { get; set; } = string.Empty;
-    public string AddressText { get; set; } = string.Empty;
-    public decimal? Latitude { get; set; }
-    public decimal? Longitude { get; set; }
-    public OrganizationStatus Status { get; set; } = OrganizationStatus.Active;
-    public DateTimeOffset CreatedAt { get; set; } = DateTimeOffset.UtcNow;
-    public DateTimeOffset UpdatedAt { get; set; } = DateTimeOffset.UtcNow;
 
-    // Navigation properties
-    public ICollection<User> ManagedUsers { get; set; } = new List<User>();
-    public ICollection<DonationCenter> DonationCenters { get; set; } = new List<DonationCenter>();
-    public ICollection<BloodUnit> BloodUnits { get; set; } = new List<BloodUnit>();
-    public ICollection<BloodTransportVehicle> Vehicles { get; set; } = new List<BloodTransportVehicle>();
-    public ICollection<BloodUnitTransfer> OriginTransfers { get; set; } = new List<BloodUnitTransfer>();
-    public ICollection<BloodUnitTransfer> DestinationTransfers { get; set; } = new List<BloodUnitTransfer>();
+public class BloodBank : BaseEntity{
+    
+    public string Name {get;set;} = string.Empty;
+    public string Email {get;set;} = string.Empty;
+
+    public string City { get; set; } = string.Empty;
+    public double Latitude { get; set; }
+    public double Longitude { get; set; }
+
+    public ICollection<BloodUnit> StoredUnits{get;set;}
+    public ICollection<User> Staff {get;set;}
+
+    public ICollection<BloodRequest> FulfilledRequests {get;set;}
+
+
 }
+
+
