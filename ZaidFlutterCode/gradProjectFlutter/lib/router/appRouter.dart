@@ -16,5 +16,13 @@ final GoRouter appRouter = GoRouter(
       path: '/all-transactions',
       builder: (context, state) => Alltransactionsscreen(),
     ),
+    GoRoute(
+      path: '/test',
+      builder: (context, state) {
+        print("TEST ROUTE BUILDER CALLED");
+
+        return const Scaffold(body: Center(child: Text("HELLO")));
+      },
+    ),
   ],
 );

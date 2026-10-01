@@ -155,6 +155,7 @@ class _BloodwalletscreenState extends State<Bloodwalletscreen> {
                         children: [
                           //all 4 buttons still need interactivity coded
                           FloatingActionButton(
+                            heroTag: 'Redeem',
                             onPressed: () => debugPrint("lolol"),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(12),
@@ -172,6 +173,7 @@ class _BloodwalletscreenState extends State<Bloodwalletscreen> {
                       child: Column(
                         children: [
                           FloatingActionButton(
+                            heroTag: 'Transfer',
                             onPressed: () => debugPrint("lolol"),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(12),
@@ -189,6 +191,7 @@ class _BloodwalletscreenState extends State<Bloodwalletscreen> {
                       child: Column(
                         children: [
                           FloatingActionButton(
+                            heroTag: 'Certificate',
                             onPressed: () => debugPrint("lolol"),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(12),
@@ -206,6 +209,7 @@ class _BloodwalletscreenState extends State<Bloodwalletscreen> {
                       child: Column(
                         children: [
                           FloatingActionButton(
+                            heroTag: 'share',
                             onPressed: () => debugPrint("lolol"),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(12),

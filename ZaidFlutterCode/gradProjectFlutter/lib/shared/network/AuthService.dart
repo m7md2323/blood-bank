@@ -66,6 +66,7 @@ class AuthService {
     }
   }
 
+  /* EDIT NEEDED: when the backend is ready, uncomment this function to fetch visits
   Future<List<Visit>> fetchVisits() async {
     final token = await storage.read(key: 'token');
     final response = await http.get(
@@ -84,8 +85,30 @@ class AuthService {
           .toList();
       // Process the data as needed
     } else {
-      throw Exception('Failed to fetch visits');
+      print('STATUS CODE: ${response.statusCode}');
+      print('RESPONSE BODY: ${response.body}');
+      throw Exception('Failed to fetch visits: ${response.statusCode}');
     }
+  }*/
+  //EDIT NEEDED: Temporary mock function to simulate fetching visits
+  Future<List<Visit>> fetchVisits() async {
+    await Future.delayed(const Duration(seconds: 1)); // Simulate network delay
+    return [
+      Visit(
+        id: '1',
+        visitDate: DateTime.now().subtract(const Duration(days: 1)),
+        visitType: 'Blood Donation',
+        visitLocation: 'City Hospital',
+        visitStatus: 'Completed',
+      ),
+      Visit(
+        id: '2',
+        visitDate: DateTime.now().subtract(const Duration(days: 180)),
+        visitType: 'Blood Test',
+        visitLocation: 'Health Clinic',
+        visitStatus: 'Pending',
+      ),
+    ];
   }
 
   List<String> fetchLastSixMonths() {
@@ -114,5 +137,4 @@ class AuthService {
     }
     return months;
   }
-  
 }
