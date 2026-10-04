@@ -35,13 +35,12 @@ public class BloodBank : BaseEntity
     {
         return request.NumberOfUnits >= StoredUnits.Count
            (u => u.BloodType == request.BloodType &&
-       u.ComponentType == request.ComponentType &&
-       u.BloodUnitStatus != BloodUnitStatus.Expired);
+       u.ComponentType == request.ComponentType);
     }
 
-    public IEnumerable GetExpiredUnits()
+    public IEnumerable<BloodUnit> GetExpiredUnits()
     {
-        return StoredUnits.Where(u => u.BloodUnitStatus == BloodUnitStatus.Expired);
+        return StoredUnits.Where(u => u.ExpirationDate <= DateTime.UtcNow);
     }
 
     public void MarkExpiredUnits()
@@ -56,7 +55,7 @@ public class BloodBank : BaseEntity
         return Staff.Any(u => u.BloodBankId == UserId);
     }
 
-    public double DistanceTo() //AI GENERATED!
+    /*public double DistanceTo() //AI GENERATED!
     {
         const double EarthRadiusKm = 6371.0;
 
@@ -78,5 +77,5 @@ public class BloodBank : BaseEntity
         double c = 2.0 * Math.Atan2(Math.Sqrt(a), Math.Sqrt(1.0 - a));
 
         return EarthRadiusKm * c;
-    }
+    }*/
 }

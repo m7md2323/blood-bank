@@ -38,9 +38,9 @@ public class Hospital : BaseEntity
         return StoredUnits.Count(u => u.BloodType == Type && u.ComponentType == Component);
     }
 
-    public bool IsStaff()
+    public bool IsStaffMember(Guid userId)
     {
-        return Role == UserRole.HospitalAdmin;
+        return Staff.Any(u => u.Id == userId && u.Role == UserRole.HospitalAdmin);
     }
 
     public bool HasPendingRequest(BloodType Type, ComponentType Component)
@@ -49,15 +49,15 @@ public class Hospital : BaseEntity
                                   u.Status == RequestStatus.Pending);
     }
 
-    public IEnumerable GetExpiredUnits()
+    public IEnumerable<BloodUnit> GetExpiredUnits()
     {
-        return StoredUnits.Where(u => u.BloodUnitStatus == BloodUnitStatus.Expired);
+        return StoredUnits.Where(u => u.ExpirationDate <= DateTime.UtcNow);
     }
 
     //The request is Active when its in pending or partiallyfulfilled
-    public IEnumerable GetActiveRequests()
+    public IEnumerable<BloodRequest> GetActiveRequests()
     {
-        return BloodRequests.Where(u => u.BloodRequests == RequestStatus.PartiallyFulfilled ||
-        u.BloodRequests == RequestStatus.Pending);
+        return BloodRequests.Where(u => u.Status == RequestStatus.PartiallyFulfilled ||
+        u.Status == RequestStatus.Pending);
     }
 }
