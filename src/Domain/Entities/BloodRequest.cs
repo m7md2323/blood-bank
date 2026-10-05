@@ -25,5 +25,6 @@ public class BloodRequest: BaseEntity{
     //This is the fullfiller.
     public Guid? BloodBankId {get;set;}
     public BloodBank? BloodBank {get;set;}
+    public ICollection<WalletTransaction> WalletTransactions { get; set; } = new List<WalletTransaction>();
 
 }

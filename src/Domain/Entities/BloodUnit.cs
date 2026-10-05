@@ -5,6 +5,7 @@ namespace Domain.Entities;
 
 public class BloodUnit : BaseEntity 
 {
+    public bool IsDeleted { get; private set; }
 
     //System specific data
 
@@ -84,6 +85,11 @@ public class BloodUnit : BaseEntity
     public TimeSpan TimeLeft()
     {
         return ExpirationDate - DateTime.UtcNow;
+    }
+
+    public void SoftDelete()
+    {
+        IsDeleted = true;
     }
 
 }

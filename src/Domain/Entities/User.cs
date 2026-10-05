@@ -19,6 +19,7 @@ public class User : BaseEntity
     public UserStatus Status { get; private set; } = UserStatus.ActiveDonor;
     public UserRole Role { get; private set; } = UserRole.StandardUser;
     public int BloodUnitsBalance { get; private set; } = 0;
+    public bool IsDeleted { get; private set; }
 
     //For locating Donors when blood units are needed
     public Location Location {get; private set;}
@@ -48,10 +49,15 @@ public class User : BaseEntity
     public void AdjustBloodBalance(int amount) {
         // when the amount is Positive, it means he just donated or recived blood units.
         // When the amount is Negative, it means he is donating or some of his blood units are beeing expired.
-        if (amount < 0 && BloodUnitsBalance - amount <0)
+        if (amount < 0 && BloodUnitsBalance + amount < 0)
             throw new InvalidOperationException("Insufficient blood unit balance.");
 
         BloodUnitsBalance+=amount;
+    }
+
+    public void SoftDelete()
+    {
+        IsDeleted = true;
     }
 
     public bool IsEligibleToDonate(){
