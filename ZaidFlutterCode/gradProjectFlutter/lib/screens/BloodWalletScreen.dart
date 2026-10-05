@@ -19,6 +19,111 @@ class Bloodwalletscreen extends StatefulWidget {
 }
 
 class _BloodwalletscreenState extends State<Bloodwalletscreen> {
+  Future<void> _bookDonation() async {
+    // Use the donation center defined in database/seed.sql until a center API exists.
+    const donationCenters = ['North Region Donation Center'];
+    final center = await showDialog<String>(
+      context: context,
+      builder: (dialogContext) => SimpleDialog(
+        title: const Text('Choose a donation center'),
+        children: [
+          for (final center in donationCenters)
+            SimpleDialogOption(
+              onPressed: () => Navigator.of(dialogContext).pop(center),
+              child: Text(center),
+            ),
+          TextButton(
+            onPressed: () => Navigator.of(dialogContext).pop(),
+            child: const Text('Cancel'),
+          ),
+        ],
+      ),
+    );
+    if (!mounted || center == null) return;
+
+    final now = DateTime.now();
+    final date = await showDatePicker(
+      context: context,
+      initialDate: now,
+      firstDate: DateTime(now.year, now.month, now.day),
+      lastDate: DateTime(now.year + 1, now.month, now.day),
+      helpText: 'Choose a donation date',
+    );
+    if (!mounted || date == null) return;
+
+    final time = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay.now(),
+      helpText: 'Choose a donation time',
+    );
+    if (!mounted || time == null) return;
+
+    final appointment = DateTime(
+      date.year,
+      date.month,
+      date.day,
+      time.hour,
+      time.minute,
+    );
+    if (!appointment.isAfter(DateTime.now())) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please choose a future appointment time.')),
+      );
+      return;
+    }
+
+    final formattedDate = MaterialLocalizations.of(context)
+        .formatMediumDate(date);
+    final formattedTime = time.format(context);
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        title: const Text('Review donation appointment'),
+        content: Text(
+          '$center\n$formattedDate at $formattedTime\n\n'
+          'This selection is saved for this session only. '
+          'It is not confirmed with the donation center.',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(dialogContext).pop(false),
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.of(dialogContext).pop(true),
+            child: const Text('Save selection'),
+          ),
+        ],
+      ),
+    );
+    if (!mounted || confirmed != true) return;
+    if (!appointment.isAfter(DateTime.now())) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please choose a future appointment time.')),
+      );
+      return;
+    }
+
+    setState(() {
+      visits.add(
+        Visit(
+          id: 'local-${DateTime.now().microsecondsSinceEpoch}',
+          visitDate: appointment,
+          visitType: 'Blood Donation',
+          visitLocation: center,
+          visitStatus: 'Pending',
+        ),
+      );
+    });
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          'Appointment selection saved: $center, $formattedDate at $formattedTime',
+        ),
+      ),
+    );
+  }
+
   bool isMobile(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     return width < 600; // Adjust the threshold as needed
@@ -406,9 +511,7 @@ class _BloodwalletscreenState extends State<Bloodwalletscreen> {
       floatingActionButton: FloatingActionButton.extended(
         icon: Icon(Icons.add, color: Colors.white),
         backgroundColor: mainColor,
-        onPressed: () => debugPrint(
-          "Book new donation pressed",
-        ), //EDIT NEEDED: navigate to book new donation screen
+        onPressed: _bookDonation,
         label: Text(
           "Book new donation",
           style: TextStyle(
