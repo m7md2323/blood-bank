@@ -1,16 +1,16 @@
-import 'package:blood_bank/screens/SignupScreen.dart';
+//import 'package:blood_bank/screens/MainScreens/SignupScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:blood_bank/shared/styles/components.dart';
 import 'package:blood_bank/shared/styles/constants.dart';
 import 'package:blood_bank/shared/network/AuthService.dart'; // Adjust path as needed
 import 'package:go_router/go_router.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+//import 'package:http/http.dart' as http;
+//import 'dart:convert';
+//import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:blood_bank/models/visits.dart';
-import 'package:blood_bank/screens/allTransactionsScreen.dart';
+//import 'package:blood_bank/screens/MainScreens/AllTransactionsScreen.dart';
 import "package:blood_bank/shared/styles/responsive_methods.dart";
 
 class Bloodwalletscreen extends StatefulWidget {
@@ -277,8 +277,8 @@ class _BloodwalletscreenState extends State<Bloodwalletscreen> {
                             showTitles: true,
                             reservedSize: 30,
                             getTitlesWidget: (double value, TitleMeta meta) {
-                              List<String> lastSixMonths = authService
-                                  .fetchLastSixMonths();
+                              List<String> lastSixMonths =
+                                  AuthService.fetchLastSixMonths();
 
                               final index = value.toInt();
 

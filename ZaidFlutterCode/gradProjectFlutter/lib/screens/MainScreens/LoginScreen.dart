@@ -1,4 +1,4 @@
-import 'package:blood_bank/screens/SignupScreen.dart';
+import 'package:blood_bank/screens/MainScreens/SignupScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:blood_bank/shared/styles/components.dart';
 import 'package:blood_bank/shared/styles/constants.dart';

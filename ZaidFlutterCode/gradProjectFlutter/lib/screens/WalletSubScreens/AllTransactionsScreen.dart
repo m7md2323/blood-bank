@@ -2,7 +2,6 @@ import 'package:blood_bank/shared/styles/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:blood_bank/shared/network/AuthService.dart';
 import 'package:blood_bank/models/visits.dart';
-import 'bloodwalletscreen.dart';
 import 'package:blood_bank/shared/styles/responsive_methods.dart';
 import 'package:intl/intl.dart';
 
@@ -14,7 +13,7 @@ class Alltransactionsscreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(backgroundColor: mainColor),
       body: FutureBuilder<List<Visit>>(
-        future: authService.fetchVisits(), // Fetch visits from the API
+        future: authService.dummyFetchVisits(), //EDIT NEEDED: Fetch visits from the API
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());

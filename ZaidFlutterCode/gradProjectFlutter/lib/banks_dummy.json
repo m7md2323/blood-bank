@@ -1,0 +1,44 @@
+[
+  {
+    "name": "National Blood Bank Directorate - Amman",
+    "latitude": 31.9398,
+    "longitude": 35.9382,
+    "workingHours": "08:00 AM - 03:30 PM (Sun - Thu)",
+    "description": "The primary national center located within the Al-Basheer Hospital complex, coordinating nationwide blood supplies."
+  },
+  {
+    "name": "Irbid Regional Blood Bank",
+    "latitude": 32.5514,
+    "longitude": 35.8515,
+    "workingHours": "08:30 AM - 03:00 PM (Sun - Thu)",
+    "description": "Main Ministry of Health blood banking facility serving the northern governorates of Jordan."
+  },
+  {
+    "name": "Zarqa Regional Blood Bank",
+    "latitude": 32.0689,
+    "longitude": 36.0851,
+    "workingHours": "08:30 AM - 03:00 PM (Sun - Thu)",
+    "description": "Regional collection center serving Zarqa governorate, managed directly by the Ministry of Health."
+  },
+  {
+    "name": "Karak Regional Blood Bank",
+    "latitude": 31.1852,
+    "longitude": 35.7048,
+    "workingHours": "08:30 AM - 03:00 PM (Sun - Thu)",
+    "description": "The southern region hub providing critical blood processing and storage for Karak and surrounding areas."
+  },
+  {
+    "name": "King Hussein Medical Center (RMS) Blood Bank",
+    "latitude": 31.9861,
+    "longitude": 35.8364,
+    "workingHours": "07:30 AM - 04:00 PM (Sun - Thu)",
+    "description": "The premier Royal Medical Services (Military) blood center located in Amman, supporting all military hospitals."
+  },
+  {
+    "name": "Jordan University Hospital Blood Bank",
+    "latitude": 32.0125,
+    "longitude": 35.8752,
+    "workingHours": "08:00 AM - 04:00 PM (Sun - Thu)",
+    "description": "University-affiliated main teaching hospital bank processing immediate clinical donations in Amman."
+  }
+]

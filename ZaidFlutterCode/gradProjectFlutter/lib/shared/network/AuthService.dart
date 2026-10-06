@@ -1,12 +1,14 @@
 import 'dart:convert';
+import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:blood_bank/models/visits.dart';
+import 'package:blood_bank/models/banks_detail.dart';
 
 class AuthService {
   final storage = const FlutterSecureStorage();
   // 1. Define your backend address (Replace with your actual API URL later)
-  static const String baseUrl = 'https://your-api-url.com';
+  static const String baseUrl = 'https://our-api-url.com';
 
   Future<Map<String, dynamic>> login(String nationalID, String password) async {
     try {
@@ -91,7 +93,7 @@ class AuthService {
     }
   }*/
   //EDIT NEEDED: Temporary mock function to simulate fetching visits
-  Future<List<Visit>> fetchVisits() async {
+  Future<List<Visit>> dummyFetchVisits() async {
     await Future.delayed(const Duration(seconds: 1)); // Simulate network delay
     return [
       Visit(
@@ -111,7 +113,7 @@ class AuthService {
     ];
   }
 
-  List<String> fetchLastSixMonths() {
+  static List<String> fetchLastSixMonths() {
     DateTime now = DateTime.now();
     List<String> months = [];
     List<String> monthsNames = [
@@ -136,5 +138,18 @@ class AuthService {
       months.add(monthsNames[monthIndex]);
     }
     return months;
+  }
+}
+
+Future<List<BanksDetails>> fetchBanks() async {
+  try {
+    final String banksJson = await rootBundle.loadString(
+      'assets/gradProjectFlutter/lib/banks_dummy.json',
+    );
+    final List<BanksDetails> banksData = jsonDecode(banksJson);
+    return Future.value(banksData);
+  } catch (e) {
+    print('Error loading banks data: $e');
+    return Future.value([]);
   }
 }
