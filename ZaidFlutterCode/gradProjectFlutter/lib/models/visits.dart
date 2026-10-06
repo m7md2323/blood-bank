@@ -4,6 +4,7 @@ class Visit {
   final String visitType;
   final String? visitLocation; // Optional field for visit location
   final String? visitStatus;
+  final num? units;
 
   Visit({
     required this.id,
@@ -11,6 +12,7 @@ class Visit {
     required this.visitType,
     required this.visitLocation,
     required this.visitStatus,
+    this.units,
   });
   factory Visit.fromJson(Map<String, dynamic> json) {
     return Visit(
@@ -19,6 +21,7 @@ class Visit {
       id: json['id'],
       visitLocation: json['visitLocation'],
       visitStatus: json['visitStatus'],
+      units: json['units'] as num?,
     );
   }
 }

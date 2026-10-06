@@ -45,11 +45,18 @@ dependencies:
   fl_chart: ^1.2.0
   go_router: ^17.5.0
   google_fonts: ^8.2.1
+<<<<<<< HEAD
   flutter_map: 8.3.2
   latlong2: 0.10.1
   geolocator: 14.1.1
   osm_nominatim: 4.0.1
   flutter_map_marker_popup: 8.1.2
+=======
+  pdf: ^3.13.1
+  printing: ^5.15.1
+  image_picker: ^1.2.4
+
+>>>>>>> ede8bb9eda0e1454c372bf8f0108b55b3a8d851c
 dev_dependencies:
   flutter_test:
     sdk: flutter

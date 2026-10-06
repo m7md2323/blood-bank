@@ -5,6 +5,7 @@ namespace Domain.Entities;
 
 public class BloodUnit : BaseEntity 
 {
+    public bool IsDeleted { get; private set; }
 
     //System specific data
 
@@ -35,5 +36,60 @@ public class BloodUnit : BaseEntity
 
     public Guid? CurrentBloodBankId { get; set; }
     public BloodBank? CurrentBloodBank { get; set; }
+
+    //Methods
+
+    public bool IsExpired()
+    {
+        return ExpirationDate <= DateTime.UtcNow;
+    }
+
+    public bool IsAvailable()
+    {
+        return Status == BloodUnitStatus.Available && !IsExpired();
+    }
+
+    public bool TransferToRecipient(Guid RecipientId)
+    {
+        if (IsAvailable())
+        {
+            RecipientAcceptorId = RecipientId;
+            Status = BloodUnitStatus.Transfused;
+            return true;
+        }
+            return false;
+    }
+
+    public bool TransferToHospital(Guid HospitalId)
+    {
+        if (IsAvailable())
+        {
+            CurrentHospitalId = HospitalId;
+            Status = BloodUnitStatus.Transfused;
+            return true;
+        }
+            return false;
+    }
+
+    public bool TransferToBloodBank(Guid BloodBankId)
+    {
+        if (IsAvailable())
+        {
+            CurrentBloodBankId = BloodBankId;
+            Status = BloodUnitStatus.Transfused;
+            return true;
+        }
+            return false;
+    }
+
+    public TimeSpan TimeLeft()
+    {
+        return ExpirationDate - DateTime.UtcNow;
+    }
+
+    public void SoftDelete()
+    {
+        IsDeleted = true;
+    }
 
 }

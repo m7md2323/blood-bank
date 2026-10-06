@@ -1,4 +1,4 @@
-﻿using Domain.Entities;
+using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Data;
@@ -36,6 +36,11 @@ public sealed class ApplicationDbContext : DbContext
         modelBuilder.Entity<WalletTransaction>().HasOne(x => x.User).WithMany().HasForeignKey(x => x.UserId).OnDelete(DeleteBehavior.Restrict);
         modelBuilder.Entity<WalletTransaction>().HasOne(x => x.Receiver).WithMany().HasForeignKey(x => x.ReceiverId).OnDelete(DeleteBehavior.Restrict);
         modelBuilder.Entity<WalletTransaction>().HasOne(x => x.Donation) .WithMany().HasForeignKey(x => x.DonationId).OnDelete(DeleteBehavior.Restrict);
+        modelBuilder.Entity<WalletTransaction>().HasOne(x => x.BloodRequest).WithMany(x => x.WalletTransactions).HasForeignKey(x => x.BloodRequestId).OnDelete(DeleteBehavior.Restrict);
+
+        modelBuilder.Entity<User>().Property<uint>("xmin").HasColumnName("xmin").IsRowVersion();
+        modelBuilder.Entity<User>().HasQueryFilter(x => !x.IsDeleted);
+        modelBuilder.Entity<BloodUnit>().HasQueryFilter(x => !x.IsDeleted);
 
 
         foreach (var entityType in modelBuilder.Model.GetEntityTypes()
