@@ -27,4 +27,28 @@ public class BloodRequest: BaseEntity{
     public BloodBank? BloodBank {get;set;}
     public ICollection<WalletTransaction> WalletTransactions { get; set; } = new List<WalletTransaction>();
 
+    //Methods
+
+    public void MarkAsUrgent()
+    {
+        UrgencyLevel = UrgencyLevel.Urgent;
+    }
+    public void ServeRequest()
+    {
+        Status = RequestStatus.Fulfilled;
+    }
+    
+    public void RequestBlood(BloodBank BloodBank, int NumberOfUnits, BloodType Type, ComponentType Component, UrgencyLevel Urgency)
+    {
+        this.BloodType = Type;
+        this.NumberOfUnits = NumberOfUnits;
+        this.ComponentType = Component;
+        this.UrgencyLevel = Urgency;
+
+        if(!BloodBank.CanFulfill(this))
+            throw new InvalidOperationException("The blood bank cannot fulfill this request.");
+
+        BloodBankId = BloodBank.Id;
+    }
+    
 }

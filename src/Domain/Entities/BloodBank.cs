@@ -23,19 +23,25 @@ public class BloodBank : BaseEntity
     //Methods
     public bool HasAvailableUnits(BloodType Type, ComponentType Component)
     {
-        return StoredUnits.Any(u => u.BloodType == Type && u.ComponentType == Component);
+        return StoredUnits.Any(u => u.BloodType == Type && u.ComponentType == Component &&
+         u.Status == BloodUnitStatus.Available && !u.IsExpired());
     }
 
     public int CountAvailableUnits(BloodType Type, ComponentType Component)
     {
-        return StoredUnits.Count(u => u.BloodType == Type && u.ComponentType == Component);
+        return StoredUnits.Count(u => u.BloodType == Type && u.ComponentType == Component && 
+        u.Status == BloodUnitStatus.Available && !u.IsExpired());
     }
 
     public bool CanFulfill(BloodRequest request)
     {
-        return request.NumberOfUnits >= StoredUnits.Count
-           (u => u.BloodType == request.BloodType &&
-       u.ComponentType == request.ComponentType);
+        if(CountAvailableUnits(request.BloodType, request.ComponentType) >= request.NumberOfUnits)
+        {
+            FulfilledRequests.Add(request);
+            return true;
+        }
+        else
+            return false;
     }
 
     public IEnumerable<BloodUnit> GetExpiredUnits()
@@ -52,19 +58,23 @@ public class BloodBank : BaseEntity
 
     public bool IsStaffMember(Guid UserId)
     {
-        return Staff.Any(u => u.BloodBankId == UserId);
+        return Staff.Any(u => u.Id == UserId);
     }
 
-    /*public double DistanceTo() //AI GENERATED!
+    public double ToRadians(double degrees)
+    {
+        return degrees * (Math.PI / 180.0);
+    }
+    public double DistanceTo(double TargetLatitude, double TargetLongitude) //AI GENERATED!
     {
         const double EarthRadiusKm = 6371.0;
 
         // Convert degrees to radians
-        double dLat = ToRadians(targetLatitude - this.Latitude);
-        double dLon = ToRadians(targetLongitude - this.Longitude);
+        double dLat = ToRadians(TargetLatitude - this.Latitude);
+        double dLon = ToRadians(TargetLongitude - this.Longitude);
 
         double originLatRad = ToRadians(this.Latitude);
-        double targetLatRad = ToRadians(targetLatitude);
+        double targetLatRad = ToRadians(TargetLatitude);
 
         // Haversine formula:
         // a = sin²(Δlat/2) + cos(lat1) * cos(lat2) * sin²(Δlon/2)
@@ -77,5 +87,5 @@ public class BloodBank : BaseEntity
         double c = 2.0 * Math.Atan2(Math.Sqrt(a), Math.Sqrt(1.0 - a));
 
         return EarthRadiusKm * c;
-    }*/
+    }
 }

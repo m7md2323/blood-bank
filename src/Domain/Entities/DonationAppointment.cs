@@ -19,4 +19,31 @@ public class DonationAppointment : BaseEntity
         = DonationAppointmentStatus.Scheduled;
 
     public string? Notes { get; set; }
+
+    // Methods
+
+    public void AddNotes(string notes)
+    {
+        Notes = notes;
+    }
+    public void MarkAsCompleted()
+    {
+        Status = DonationAppointmentStatus.Completed;
+    }
+    public void MarkAsCancelled()
+    {
+        Status = DonationAppointmentStatus.Cancelled;
+    }
+    public void MarkAsMissed()
+    {
+        Status = DonationAppointmentStatus.Missed;
+    }
+
+    public TimeSpan TimeUntilAppointment()
+    {   
+        if(ScheduledDate < DateTime.UtcNow)
+            throw new InvalidOperationException("The appointment date has already passed.");
+        return ScheduledDate - DateTime.UtcNow;
+    }
+    
 }

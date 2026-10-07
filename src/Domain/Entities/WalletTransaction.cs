@@ -48,4 +48,19 @@ public class WalletTransaction : BaseEntity
             BloodRequest = bloodRequest
         };
     }
+
+    //methods
+    public bool HasSufficientBalance()
+    {
+        if (User.BloodUnitsBalance < Amount)
+            return false;
+
+        return true;
+    }
+
+    public void ValidateReceiver(User receiver)
+    {
+        if (receiver.Id == UserId)
+            throw new InvalidOperationException("User cannot transfer blood units to themselves.");
+    }
 }
