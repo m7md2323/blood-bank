@@ -1,3 +1,4 @@
+import 'package:blood_bank/screens/MainScreens/HomePage.dart';
 import 'package:blood_bank/screens/MainScreens/MapScreen.dart';
 import 'package:blood_bank/screens/WalletSubScreens/AllTransactionsScreen.dart';
 import 'package:flutter/material.dart';
@@ -23,6 +24,7 @@ final GoRouter appRouter = GoRouter(
       builder: (context, state) => NotificationScreen(),
     ),
     GoRoute(path: '/map-screen', builder: (context, state) => MapScreen()),
+    GoRoute(path: '/home-screen', builder: (context, state) => HomePage()),
     GoRoute(
       path: '/test',
       builder: (context, state) {

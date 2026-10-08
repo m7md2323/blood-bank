@@ -1,4 +1,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+        <!-- Request explicit permission to access high-accuracy GPS location -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    
+    <!-- Request backup permission to access approximate cell/Wi-Fi location -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
     <application
         android:label="blood_bank"
         android:name="${applicationName}"

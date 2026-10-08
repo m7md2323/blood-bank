@@ -1,9 +1,13 @@
 import 'dart:convert';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_map/flutter_map.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:blood_bank/models/visits.dart';
 import 'package:blood_bank/models/banks_detail.dart';
+import 'package:latlong2/latlong.dart';
 
 class AuthService {
   final storage = const FlutterSecureStorage();
@@ -144,12 +148,18 @@ class AuthService {
 Future<List<BanksDetails>> fetchBanks() async {
   try {
     final String banksJson = await rootBundle.loadString(
-      'assets/gradProjectFlutter/lib/banks_dummy.json',
+      'assets/data/banks_dummy.json',
     );
-    final List<BanksDetails> banksData = jsonDecode(banksJson);
-    return Future.value(banksData);
+
+    final List<dynamic> jsonData = jsonDecode(banksJson);
+
+    final List<BanksDetails> banksData = jsonData
+        .map((json) => BanksDetails.fromJson(json))
+        .toList();
+
+    return banksData;
   } catch (e) {
     print('Error loading banks data: $e');
-    return Future.value([]);
+    rethrow;
   }
 }
