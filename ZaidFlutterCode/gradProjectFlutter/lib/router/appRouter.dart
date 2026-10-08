@@ -11,6 +11,16 @@ final GoRouter appRouter = GoRouter(
   initialLocation: '/map-screen',
   routes: [
     GoRoute(path: '/', builder: (context, state) => LoginScreen()),
+import 'package:blood_bank/screens/LoginScreen.dart';
+import 'package:blood_bank/screens/BloodWalletScreen.dart';
+import 'package:blood_bank/screens/allTransactionsScreen.dart';
+import 'package:blood_bank/screens/homePage.dart';
+
+final GoRouter appRouter = GoRouter(
+  initialLocation: '/home',
+  routes: [
+    GoRoute(path: '/home', builder: (context, state) => const HomePage()),
+    GoRoute(path: '/', builder: (context, state) => Bloodwalletscreen()),
     GoRoute(
       path: '/blood-wallet',
       builder: (context, state) => Bloodwalletscreen(),
