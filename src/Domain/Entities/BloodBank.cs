@@ -68,10 +68,10 @@ public class BloodBank : BaseEntity
         const double EarthRadiusKm = 6371.0;
 
         // Convert degrees to radians
-        double dLat = ToRadians(TargetLatitude - this.Latitude);
-        double dLon = ToRadians(TargetLongitude - this.Longitude);
+        double dLat = ToRadians(TargetLatitude - this.Location.Latitude);
+        double dLon = ToRadians(TargetLongitude - this.Location.Longitude);
 
-        double originLatRad = ToRadians(this.Latitude);
+        double originLatRad = ToRadians(this.Location.Latitude);
         double targetLatRad = ToRadians(TargetLatitude);
 
         // Haversine formula:

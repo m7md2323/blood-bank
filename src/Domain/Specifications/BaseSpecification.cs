@@ -1,6 +1,7 @@
 using System.Linq.Expressions;
+using Domain.Entities;
 
-namespace Domain.Specification;
+namespace Domain.Specifications;
 
 public abstract class BaseSpecification<T> : ISpecification<T>
 {
@@ -39,5 +40,11 @@ public abstract class BaseSpecification<T> : ISpecification<T>
         Skip = skip;
         Take = take;
         IsPagingEnabled = true;
+    }
+
+    public bool IsSatisfiedBy(T entity)
+    {
+        if (Criteria == null) return true;
+        return Criteria.Compile()(entity);
     }
 }
