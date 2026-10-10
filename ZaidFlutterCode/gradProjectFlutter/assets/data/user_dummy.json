@@ -1,0 +1,25 @@
+[
+    {
+    "Fname": "mohammad",
+    "Lname": "hasan",
+    "latitude": 30.9398,
+    "longitude": 35.9,
+    "id": "111"
+  },
+
+  {
+    "Fname": "khaled",
+    "Lname": "ashraf",
+    "latitude": 31.9398,
+    "longitude": 36.5,
+    "id": "111"
+  },
+
+  {
+    "Fname": "ali",
+    "Lname": "ahmad",
+    "latitude": 32.3,
+    "longitude": 36,
+    "id": "111"
+  }
+]

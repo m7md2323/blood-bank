@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:blood_bank/models/users.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_map/flutter_map.dart';
@@ -160,6 +161,25 @@ Future<List<BanksDetails>> fetchBanks() async {
     return banksData;
   } catch (e) {
     print('Error loading banks data: $e');
+    rethrow;
+  }
+}
+
+Future<List<Users>> fetchUsers() async {
+  try {
+    final String usersJson = await rootBundle.loadString(
+      'assets/data/user_dummy.json',
+    );
+
+    final List<dynamic> jsonData = jsonDecode(usersJson);
+
+    final List<Users> usersData = jsonData
+        .map((json) => Users.fromJson(json))
+        .toList();
+
+    return usersData;
+  } catch (e) {
+    print('Error loading users data: $e');
     rethrow;
   }
 }
