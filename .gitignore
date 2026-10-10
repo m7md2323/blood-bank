@@ -13,6 +13,8 @@
 # Local configuration & secrets
 appsettings*.Development.json
 appsettings.Secrets.json
+src/Web/appsettings.json
+appsettings.json
 
 .env
 *.txt

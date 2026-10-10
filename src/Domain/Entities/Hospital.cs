@@ -11,7 +11,7 @@ public class Hospital : BaseEntity
     public string Email { get; set; } = string.Empty;
     public string PhoneNumber { get; set; } = string.Empty;
 
-    Location Location { get; set; }
+    public Location Location { get; set; } = null!;
 
     //These units are stored in the ICU, or any where closer to the doctor.
     public ICollection<BloodUnit> StoredUnits { get; set; }

@@ -10,7 +10,7 @@ public class BloodBank : BaseEntity
     public string Name { get; set; } = string.Empty;
     public string Email { get; set; } = string.Empty;
 
-    Location Location { get; set; }
+    public Location Location { get; set; } = null!;
 
     public ICollection<BloodUnit> StoredUnits { get; set; }
     public ICollection<User> Staff { get; set; }
