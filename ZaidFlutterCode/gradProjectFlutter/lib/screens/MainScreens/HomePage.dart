@@ -390,7 +390,7 @@ class _DonationHistorySectionState extends State<_DonationHistorySection> {
   @override
   void initState() {
     super.initState();
-    _history = AuthService().fetchVisits();
+    _history = AuthService().dummyFetchVisits();
   }
 
   Future<void> _downloadPdf() async {
