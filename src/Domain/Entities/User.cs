@@ -69,16 +69,26 @@ public class User : BaseEntity
         if (DonatedUnits.Any()){
 
             BloodUnit lastDonatedUnit = DonatedUnits.OrderByDescending(u => u.CollectionDate).First();
-            // There is 4 types of blood donations: 
-            // 1. Whole Blood (Can donate every 56 days)
-            // 2. Power Red (Can donate every 112 days)
-            // 3. Platelets (Can donate every 7 days)
-            // 4. AB Elite Plasma (Can donate every 28 days)
-            // For now we will cover the whole blood case.
+
+            // This current implementation is based on this --> (https://www.khcc.jo/ar/donate-blood).
+
             TimeSpan elapsed = DateTime.UtcNow - lastDonatedUnit.CollectionDate;
 
-            if (elapsed.TotalDays < 56) 
+            // The case if the blood donted is Platelets, it is recommended to only donate every 14 days.
+            if (lastDonatedUnit.ComponentType == ComponentType.Platelets && elapsed.TotalDays < 14){
                 return false;
+            }
+
+            // The case with Whole Blood,it is recommended for women to donate every 4 months, 
+            // and every 3 months for men.
+            if (lastDonatedUnit.ComponentType == ComponentType.WholeBlood){
+                if (Gender == Gender.Female && elapsed.TotalDays < 120){
+                    return false;
+                }
+                if (Gender == Gender.Male && elapsed.TotalDays < 90){
+                    return false;
+                }
+            }
         }
 
         // If all conditions passes, return true.
