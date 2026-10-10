@@ -10,9 +10,7 @@ public class BloodBank : BaseEntity
     public string Name { get; set; } = string.Empty;
     public string Email { get; set; } = string.Empty;
 
-    public string City { get; set; } = string.Empty;
-    public double Latitude { get; set; }
-    public double Longitude { get; set; }
+    public Location Location { get; set; } = null!;
 
     public ICollection<BloodUnit> StoredUnits { get; set; }
     public ICollection<User> Staff { get; set; }
@@ -70,10 +68,10 @@ public class BloodBank : BaseEntity
         const double EarthRadiusKm = 6371.0;
 
         // Convert degrees to radians
-        double dLat = ToRadians(TargetLatitude - this.Latitude);
-        double dLon = ToRadians(TargetLongitude - this.Longitude);
+        double dLat = ToRadians(TargetLatitude - this.Location.Latitude);
+        double dLon = ToRadians(TargetLongitude - this.Location.Longitude);
 
-        double originLatRad = ToRadians(this.Latitude);
+        double originLatRad = ToRadians(this.Location.Latitude);
         double targetLatRad = ToRadians(TargetLatitude);
 
         // Haversine formula:
