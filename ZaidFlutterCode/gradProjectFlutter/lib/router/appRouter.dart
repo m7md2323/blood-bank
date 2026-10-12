@@ -9,11 +9,11 @@ import 'package:blood_bank/screens/MainScreens/BloodWalletScreen.dart';
 import 'package:blood_bank/screens/WalletSubScreens/NotificationScreen.dart';
 
 final GoRouter appRouter = GoRouter(
-  initialLocation: '/alert-screen',
+  initialLocation: 'wallet-screen',
   routes: [
     GoRoute(path: '/', builder: (context, state) => LoginScreen()),
     GoRoute(
-      path: '/blood-wallet',
+      path: '/wallet-screen',
       builder: (context, state) => Bloodwalletscreen(),
     ),
     GoRoute(
@@ -25,8 +25,12 @@ final GoRouter appRouter = GoRouter(
       builder: (context, state) => NotificationScreen(),
     ),
     GoRoute(
-      path: '/alert-screen',
-      builder: (context, state) => RequestAlertScreen(),
+      path: '/alert-screen/:requestId',
+      builder: (context, state) {
+        final requestId = state.pathParameters['requestId']!;
+
+        return RequestAlertScreen(requestId: requestId);
+      },
     ),
     GoRoute(path: '/map-screen', builder: (context, state) => MapScreen()),
     GoRoute(path: '/home-screen', builder: (context, state) => HomePage()),

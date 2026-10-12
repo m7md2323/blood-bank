@@ -1,0 +1,19 @@
+[
+
+    {
+        "title":"first dummy title",
+        "body":"this is the first dummy body",
+        "requestId":"1",
+        "receivedAt":"2026-10-12T19:10:00",
+        "isRead":false
+
+    },
+    {
+        "title":"second dummy title",
+        "body":"this is the second dummy body",
+        "requestId":"2",
+        "receivedAt":"2026-10-12T19:00:00",
+        "isRead":true
+
+    }
+]  

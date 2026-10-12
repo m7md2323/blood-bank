@@ -1,5 +1,6 @@
 import 'package:blood_bank/models/users.dart';
 import 'package:blood_bank/shared/network/AuthService.dart';
+import 'package:blood_bank/shared/network/NotificationService.dart';
 import 'package:blood_bank/shared/styles/components.dart';
 import 'package:blood_bank/shared/styles/constants.dart';
 import 'package:blood_bank/shared/styles/responsive_methods.dart';
@@ -8,7 +9,8 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 
 class RequestAlertScreen extends StatefulWidget {
-  const RequestAlertScreen({super.key});
+  final String requestId;
+  const RequestAlertScreen({super.key, required this.requestId});
 
   @override
   State<RequestAlertScreen> createState() => _RequestAlertScreenState();
@@ -23,6 +25,7 @@ class _RequestAlertScreenState extends State<RequestAlertScreen> {
   void initState() {
     super.initState();
     donorsLocation = fetchUsersPeriodically();
+    NotificationService.initialize();
   }
 
   Stream<List<Users>> fetchUsersPeriodically() async* {
@@ -197,7 +200,7 @@ class _RequestAlertScreenState extends State<RequestAlertScreen> {
                             children: [
                               TileLayer(
                                 urlTemplate:
-                                    'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+                                    'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
                                 subdomains: const ['a', 'b', 'c'],
                                 userAgentPackageName: 'com.example.blood_bank',
                               ),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:blood_bank/shared/styles/components.dart';
 import 'package:blood_bank/shared/styles/constants.dart';
 import 'package:blood_bank/shared/styles/responsive_methods.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:blood_bank/models/visits.dart';
 import 'package:blood_bank/shared/network/AuthService.dart';
@@ -188,6 +189,15 @@ class _HomePageState extends State<HomePage> {
         foregroundColor: Colors.white,
         centerTitle: true,
         title: Text('Account Details', style: GoogleFonts.inter()),
+        //leading: IconButton(onPressed: onPressed, icon: icon), EDIT NEEDED: add a 3-line icon to traverse other pages
+        actions: [
+          IconButton(
+            onPressed: () {
+              context.push('/notification-screen');
+            },
+            icon: Icon(Icons.notifications),
+          ),
+        ],
       ),
       body: SafeArea(
         child: SingleChildScrollView(
@@ -383,20 +393,20 @@ class _DonationHistorySection extends StatefulWidget {
 }
 
 class _DonationHistorySectionState extends State<_DonationHistorySection> {
-  late final Future<List<Visit>> _history;
+  late final Future<List<Visit>> history;
   String _selectedFilter = 'All';
   bool _isExporting = false;
 
   @override
   void initState() {
     super.initState();
-    _history = AuthService().dummyFetchVisits();
+    history = AuthService().dummyFetchVisits();
   }
 
   Future<void> _downloadPdf() async {
     setState(() => _isExporting = true);
     try {
-      final visits = await _history;
+      final visits = await history;
       final donations = visits.where((visit) {
         final type = visit.visitType.trim().toLowerCase();
         return type == 'blood donation' || type == 'donation';
@@ -484,7 +494,7 @@ class _DonationHistorySectionState extends State<_DonationHistorySection> {
             ),
             const SizedBox(height: 12),
             FutureBuilder<List<Visit>>(
-              future: _history,
+              future: history,
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const Center(

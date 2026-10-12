@@ -53,6 +53,8 @@ dependencies:
   pdf: ^3.13.1
   printing: ^5.15.1
   image_picker: ^1.2.4
+  firebase_core: ^4.15.0
+  firebase_messaging: ^16.7.0
 
 dev_dependencies:
   flutter_test:
@@ -80,6 +82,7 @@ flutter:
   assets:
   - assets/data/banks_dummy.json
   - assets/data/user_dummy.json
+  - assets/data/notification_dummy.json
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
 
