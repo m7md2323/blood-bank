@@ -18,6 +18,7 @@ public sealed class ApplicationDbContext : DbContext
     public DbSet<User> Users => Set<User>();
     public DbSet<Donation> Donations => Set<Donation>();
     public DbSet<BloodUnit> BloodUnits => Set<BloodUnit>();
+    public DbSet<BloodTestResult> BloodTestResults => Set<BloodTestResult>();
     public DbSet<BloodRequest> BloodRequests => Set<BloodRequest>();
     public DbSet<WalletTransaction> WalletTransactions => Set<WalletTransaction>();
     public DbSet<DonationCampaign> DonationCampaigns => Set<DonationCampaign>();
@@ -32,6 +33,8 @@ public sealed class ApplicationDbContext : DbContext
         modelBuilder.Entity<User>().ToTable("users", Schema).HasKey(x => x.Id);
         modelBuilder.Entity<Donation>().ToTable("donations", Schema).HasKey(x => x.Id);
         modelBuilder.Entity<BloodUnit>().ToTable("blood_units", Schema).HasKey(x => x.Id);
+        modelBuilder.Entity<BloodTestResult>().ToTable("blood_test_results", Schema).HasKey(x => x.Id);
+        modelBuilder.Entity<BloodTestResult>().HasOne(x => x.BloodUnit).WithMany(x => x.TestResults).HasForeignKey(x => x.BloodUnitId);
         modelBuilder.Entity<BloodRequest>().ToTable("blood_requests", Schema).HasKey(x => x.Id);
         modelBuilder.Entity<WalletTransaction>().ToTable("wallet_transactions", Schema).HasKey(x => x.Id);
         modelBuilder.Entity<DonationCampaign>().ToTable("donation_campaigns", Schema).HasKey(x => x.Id);

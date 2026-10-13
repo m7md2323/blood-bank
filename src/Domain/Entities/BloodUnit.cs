@@ -14,7 +14,8 @@ public class BloodUnit : BaseEntity
     public double VolumeMl {set;get;} = 0.0;
     public DateTime CollectionDate {set;get;}
     public DateTime ExpirationDate {set;get;}
-    public BloodUnitStatus Status {set;get;} = BloodUnitStatus.Available;
+    // Units remain quarantined until screening is approved.
+    public BloodUnitStatus Status {set;get;} = BloodUnitStatus.Quarantined;
 
     //EF Core linking
 
@@ -36,6 +37,8 @@ public class BloodUnit : BaseEntity
 
     public Guid? CurrentBloodBankId { get; set; }
     public BloodBank? CurrentBloodBank { get; set; }
+
+    public ICollection<BloodTestResult> TestResults { get; set; } = new List<BloodTestResult>();
 
     //Methods
 
