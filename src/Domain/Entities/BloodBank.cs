@@ -63,7 +63,10 @@ public class BloodBank : BaseEntity
     {
         return degrees * (Math.PI / 180.0);
     }
-    public double DistanceTo(double TargetLatitude, double TargetLongitude) //AI GENERATED!
+    // This is no more needed, because we are using the built package PostGIS from PostgreSQL,
+    // and PostGIS provides Distance method.
+    // This way will give use better performance.
+    /*public double DistanceTo(double TargetLatitude, double TargetLongitude) //AI GENERATED!
     {
         const double EarthRadiusKm = 6371.0;
 
@@ -85,5 +88,5 @@ public class BloodBank : BaseEntity
         double c = 2.0 * Math.Atan2(Math.Sqrt(a), Math.Sqrt(1.0 - a));
 
         return EarthRadiusKm * c;
-    }
+    }*/
 }
