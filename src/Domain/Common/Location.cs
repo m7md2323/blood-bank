@@ -1,16 +1,17 @@
+using NetTopologySuite.Geometries;
+
 namespace Domain.Common;
 
 public class Location
 {
     public string City { get; private set; } = string.Empty;
-    public double Latitude { get; private set; }
-    public double Longitude { get; private set; }
+    public Point Coordinates { get; set; } 
 
-    public Location(string city, double latitude, double longitude)
+    public Location(string city, Point coordinates)
     {
         City = city;
-        Latitude = latitude;
-        Longitude = longitude;
+        Coordinates = coordinates;
+        Coordinates.SRID = 4326;
     }
 
     private Location() { }

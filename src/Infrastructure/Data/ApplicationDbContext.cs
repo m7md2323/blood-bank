@@ -27,9 +27,12 @@ public sealed class ApplicationDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.HasPostgresExtension("postgis");
+
         modelBuilder.HasDefaultSchema(Schema);
         modelBuilder.Entity<BloodBank>().ToTable("blood_banks", Schema).HasKey(x => x.Id);
         modelBuilder.Entity<Hospital>().ToTable("hospitals", Schema).HasKey(x => x.Id);
+
         modelBuilder.Entity<User>().ToTable("users", Schema).HasKey(x => x.Id);
         modelBuilder.Entity<Donation>().ToTable("donations", Schema).HasKey(x => x.Id);
         modelBuilder.Entity<BloodUnit>().ToTable("blood_units", Schema).HasKey(x => x.Id);
@@ -93,8 +96,8 @@ public sealed class ApplicationDbContext : DbContext
     {
         location.IsRequired();
         location.Property(x => x.City).HasColumnName("location_city").IsRequired();
-        location.Property(x => x.Latitude).HasColumnName("location_latitude");
-        location.Property(x => x.Longitude).HasColumnName("location_longitude");
+        location.Property(x => x.Coordinates).HasColumnName("location_coordinates").HasColumnType("geography(Point, 4326)");
+           
     }
 
     private static string ToSnakeCase(string value) => string.Concat(value.Select((character, index) =>
