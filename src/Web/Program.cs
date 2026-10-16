@@ -1,6 +1,7 @@
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Scalar.AspNetCore;
+using Domain.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,6 +12,10 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseNpgsql(connectionString, npgsqlOptions =>{
         npgsqlOptions.UseNetTopologySuite();
     }));
+
+// DI for IRepository and IUnitOfWork with their implementation
+builder.Services.AddScoped(typeof(IRepository<>),typeof(Repository<>));
+builder.Services.AddScoped<IUnitOfWork,UnitOfWork>();
 
 // Add native .NET 10 OpenAPI support
 builder.Services.AddOpenApi();
