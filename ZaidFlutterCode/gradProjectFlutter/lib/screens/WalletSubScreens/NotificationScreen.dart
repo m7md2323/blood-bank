@@ -2,10 +2,6 @@ import 'package:blood_bank/models/AppNotification.dart';
 import 'package:blood_bank/shared/network/NotificationService.dart';
 import 'package:blood_bank/shared/network/StoreNotifications.dart';
 import 'package:flutter/material.dart';
-import 'package:blood_bank/shared/network/AuthService.dart';
-import 'package:blood_bank/shared/styles/components.dart';
-import 'package:blood_bank/shared/styles/responsive_methods.dart';
-import 'package:flutter_map/flutter_map.dart';
 
 class NotificationScreen extends StatefulWidget {
   const NotificationScreen({super.key});

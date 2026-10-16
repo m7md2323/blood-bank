@@ -1,14 +1,10 @@
 import 'dart:convert';
 import 'package:blood_bank/models/users.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_map/flutter_map.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:blood_bank/models/visits.dart';
 import 'package:blood_bank/models/banks_detail.dart';
-import 'package:latlong2/latlong.dart';
 
 class AuthService {
   final storage = const FlutterSecureStorage();

@@ -1,4 +1,5 @@
 import 'package:blood_bank/models/users.dart';
+import 'package:blood_bank/modules/donorProximityMap.dart';
 import 'package:blood_bank/shared/network/AuthService.dart';
 import 'package:blood_bank/shared/network/NotificationService.dart';
 import 'package:blood_bank/shared/styles/components.dart';
@@ -40,6 +41,7 @@ class _RequestAlertScreenState extends State<RequestAlertScreen> {
     }
   }
 
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -184,57 +186,9 @@ class _RequestAlertScreenState extends State<RequestAlertScreen> {
                       return const Center(child: CircularProgressIndicator());
                     }
                     final donors = asyncSnapshot.data!;
-                    return SizedBox(
-                      height: context.resHeight(0.45),
-                      width: context.resWidth(0.9),
-                      child: Stack(
-                        children: [
-                          FlutterMap(
-                            mapController: mapController,
-                            options: MapOptions(
-                              initialCenter: LatLng(31.9522, 35.9154),
-                              initialZoom: 11.0,
-                              onTap:
-                                  null, //EDIT: Add your onTap callback here if needed
-                            ),
-                            children: [
-                              TileLayer(
-                                urlTemplate:
-                                    'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-                                subdomains: const ['a', 'b', 'c'],
-                                userAgentPackageName: 'com.example.blood_bank',
-                              ),
-                              MarkerLayer(
-                                markers: donors.map((donor) {
-                                  return Marker(
-                                    point: LatLng(
-                                      donor.latitude,
-                                      donor.longitude,
-                                    ),
-                                    width: 40,
-                                    height: 40,
-                                    child: const Icon(
-                                      Icons.location_on,
-                                      color: Colors.red,
-                                      size: 40,
-                                    ),
-                                  );
-                                }).toList(),
-                              ),
-                            ],
-                          ),
-                          DefaultCard(
-                            color: Colors.green,
-                            child: Text(
-                              "Live view updates in 10 sec",
-                              style: TextStyle(
-                                fontSize: 10,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
+                    return DonorProximityMap(
+                      donors: donors,
+                      mapController: mapController,
                     );
                   },
                 ),

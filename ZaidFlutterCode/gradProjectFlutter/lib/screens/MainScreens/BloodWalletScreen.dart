@@ -14,6 +14,8 @@ import 'package:blood_bank/models/visits.dart';
 import "package:blood_bank/shared/styles/responsive_methods.dart";
 
 class Bloodwalletscreen extends StatefulWidget {
+  const Bloodwalletscreen({super.key});
+
   @override
   State<Bloodwalletscreen> createState() => _BloodwalletscreenState();
 }
@@ -425,7 +427,7 @@ class _BloodwalletscreenState extends State<Bloodwalletscreen> {
                               color:
                                   true // visits[index].visitType == 'Donation'
                                   ? Colors.red
-                                  : Colors.grey.withOpacity(0.3),
+                                  : Colors.grey.withValues(alpha: 0.3),
                               width: 20,
                               borderRadius: BorderRadius.circular(4),
                             ),

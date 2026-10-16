@@ -47,7 +47,7 @@ class _SignupScreenState extends State<SignupScreen> {
     if (response.statusCode == 201) {
       Navigator.pushReplacementNamed(context, '/login');
     } else {
-      debugPrint("asds");
+      debugPrint("signing up....");
     }
   }
 
