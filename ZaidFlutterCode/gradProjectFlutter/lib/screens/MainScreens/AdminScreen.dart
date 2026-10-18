@@ -34,7 +34,7 @@ class _AdminScreenState extends State<AdminScreen> {
   Stream<List<Users>> fetchUsersPeriodically() async* {
     while (true) {
       try {
-        yield await fetchUsers();
+        yield await dummyFetchUsers();
       } catch (e) {
         debugPrint('Failed to fetch donor locations: $e');
       }
@@ -351,6 +351,7 @@ class _AdminScreenState extends State<AdminScreen> {
                 },
               ),
             ),
+            //EDIT NEEDED: add a "add credit to donor" widget
           ],
         ),
       ),

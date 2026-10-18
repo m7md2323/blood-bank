@@ -161,7 +161,7 @@ Future<List<BanksDetails>> fetchBanks() async {
   }
 }
 
-Future<List<Users>> fetchUsers() async {
+  Future <List<Users>> dummyFetchUsers() async {
   try {
     final String usersJson = await rootBundle.loadString(
       'assets/data/user_dummy.json',

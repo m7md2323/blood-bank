@@ -3,6 +3,7 @@ import 'package:blood_bank/screens/MainScreens/HomePage.dart';
 import 'package:blood_bank/screens/MainScreens/MapScreen.dart';
 import 'package:blood_bank/screens/MainScreens/RequestAlertScreen.dart';
 import 'package:blood_bank/screens/WalletSubScreens/AllTransactionsScreen.dart';
+import 'package:blood_bank/screens/WalletSubScreens/transferScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:blood_bank/screens/MainScreens/LoginScreen.dart';
@@ -10,12 +11,16 @@ import 'package:blood_bank/screens/MainScreens/BloodWalletScreen.dart';
 import 'package:blood_bank/screens/WalletSubScreens/NotificationScreen.dart';
 
 final GoRouter appRouter = GoRouter(
-  initialLocation: 'admin-screen',
+  initialLocation: 'wallet-screen',
   routes: [
     GoRoute(path: '/', builder: (context, state) => LoginScreen()),
     GoRoute(
       path: '/wallet-screen',
       builder: (context, state) => Bloodwalletscreen(),
+    ),
+    GoRoute(
+      path: '/transfer-credit-screen',
+      builder: (context, state) => TransferCreditScreen(),
     ),
     GoRoute(
       path: '/all-transactions',

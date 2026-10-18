@@ -69,13 +69,16 @@ class _BloodwalletscreenState extends State<Bloodwalletscreen> {
     );
     if (!appointment.isAfter(DateTime.now())) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please choose a future appointment time.')),
+        const SnackBar(
+          content: Text('Please choose a future appointment time.'),
+        ),
       );
       return;
     }
 
-    final formattedDate = MaterialLocalizations.of(context)
-        .formatMediumDate(date);
+    final formattedDate = MaterialLocalizations.of(
+      context,
+    ).formatMediumDate(date);
     final formattedTime = time.format(context);
     final confirmed = await showDialog<bool>(
       context: context,
@@ -101,7 +104,9 @@ class _BloodwalletscreenState extends State<Bloodwalletscreen> {
     if (!mounted || confirmed != true) return;
     if (!appointment.isAfter(DateTime.now())) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please choose a future appointment time.')),
+        const SnackBar(
+          content: Text('Please choose a future appointment time.'),
+        ),
       );
       return;
     }
@@ -281,7 +286,8 @@ class _BloodwalletscreenState extends State<Bloodwalletscreen> {
                         children: [
                           FloatingActionButton(
                             heroTag: 'Transfer',
-                            onPressed: () => debugPrint("lolol"),
+                            onPressed: () =>
+                                context.push("transfer-credit-screen"),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(12),
                             ),

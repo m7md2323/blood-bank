@@ -32,7 +32,7 @@ class _RequestAlertScreenState extends State<RequestAlertScreen> {
   Stream<List<Users>> fetchUsersPeriodically() async* {
     while (true) {
       try {
-        yield await fetchUsers();
+        yield await dummyFetchUsers();
       } catch (e) {
         debugPrint('Failed to fetch donor locations: $e');
       }
