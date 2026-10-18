@@ -1,3 +1,6 @@
+// Keep the existing filename to preserve imports in other screens.
+// ignore_for_file: file_names
+
 //import 'package:blood_bank/screens/MainScreens/SignupScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:blood_bank/shared/styles/components.dart';
@@ -151,384 +154,508 @@ class _BloodwalletscreenState extends State<Bloodwalletscreen> {
   //Placeholder for donation status
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-      appBar: null,
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              SizedBox(
-                height: context.resHeight(0.4),
-                width: context.resWidth(1),
-                child: DefaultCard(
-                  color: mainColor,
-                  child: Column(
-                    children: [
-                      SizedBox(width: 0, height: context.resHeight(0.04)),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Expanded(
-                            flex: 7,
-                            child: Container(
-                              margin: EdgeInsets.only(left: 20),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    "wallet card",
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white,
-                                      fontSize: 33,
-                                      fontFamily: "Inter",
-                                    ),
-                                  ),
-                                  Text(
-                                    'Jordan Blood Bank . User ID: $placeHolder', //EDIT NEEDED: fetch ID from database
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white,
-                                      fontSize: 20,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                          SizedBox(width: 20),
-                          Expanded(
-                            flex: 3,
-                            child: CircleAvatar(
-                              backgroundColor: Colors
-                                  .white, //EDIT NEEDED: fetch user picture from database, have a default if none added
-                              radius: 17,
-                            ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: context.resWidth(0.047), width: 0),
-                      Expanded(
-                        child: DefaultCard(
-                          color: Colors.white60,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment
-                                .start, //needs to be aligned to the left
-                            children: [
-                              //and need to fix the white space to have text to appear
-                              SizedBox(
-                                width: MediaQuery.of(context).size.width * 0.05,
-                              ),
-                              Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    "Current credit:",
-                                    style: GoogleFonts.inter(),
-                                  ),
-                                  Row(
-                                    children: [
-                                      Text(
-                                        credit == null
-                                            ? "Loading..."
-                                            : credit!
-                                                  .toString(), //EDIT Completed: fetch credit from database
-                                        style: TextStyle(
-                                          fontSize: 19,
-                                          fontWeight: FontWeight.bold,
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final isWide = constraints.maxWidth >= 600;
+        return Scaffold(
+          floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+          appBar: null,
+          body: SafeArea(
+            child: SingleChildScrollView(
+              child: Align(
+                alignment: Alignment.topCenter,
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(
+                    maxWidth: isWide ? 960 : double.infinity,
+                  ),
+                  child: Padding(
+                    padding: isWide
+                        ? const EdgeInsets.fromLTRB(32, 24, 32, 96)
+                        : EdgeInsets.zero,
+                    child: Column(
+                      children: [
+                        SizedBox(
+                          height: isWide ? 280 : context.resHeight(0.4),
+                          width: context.resWidth(1),
+                          child: DefaultCard(
+                            color: mainColor,
+                            child: Column(
+                              children: [
+                                SizedBox(
+                                  width: 0,
+                                  height: isWide ? 28 : context.resHeight(0.04),
+                                ),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Expanded(
+                                      flex: 7,
+                                      child: Container(
+                                        margin: EdgeInsets.only(left: 20),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              "wallet card",
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.white,
+                                                fontSize: isWide ? 28 : 33,
+                                                fontFamily: "Inter",
+                                              ),
+                                            ),
+                                            Text(
+                                              'Jordan Blood Bank . User ID: $placeHolder', //EDIT NEEDED: fetch ID from database
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.white,
+                                                fontSize: isWide ? 14 : 20,
+                                              ),
+                                            ),
+                                          ],
                                         ),
                                       ),
-                                      Text("Units", style: GoogleFonts.inter()),
-                                    ],
+                                    ),
+                                    SizedBox(width: 20),
+                                    Expanded(
+                                      flex: 3,
+                                      child: CircleAvatar(
+                                        backgroundColor: Colors
+                                            .white, //EDIT NEEDED: fetch user picture from database, have a default if none added
+                                        radius: 17,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(
+                                  height: isWide ? 24 : context.resWidth(0.047),
+                                  width: 0,
+                                ),
+                                Expanded(
+                                  child: DefaultCard(
+                                    color: Colors.white60,
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment
+                                          .start, //needs to be aligned to the left
+                                      children: [
+                                        //and need to fix the white space to have text to appear
+                                        SizedBox(
+                                          width: isWide
+                                              ? 24
+                                              : MediaQuery.of(
+                                                      context,
+                                                    ).size.width *
+                                                    0.05,
+                                        ),
+                                        Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              "Current credit:",
+                                              style: GoogleFonts.inter(
+                                                fontSize: isWide ? 14 : null,
+                                              ),
+                                            ),
+                                            Row(
+                                              children: [
+                                                Text(
+                                                  credit == null
+                                                      ? "Loading..."
+                                                      : credit!
+                                                            .toString(), //EDIT Completed: fetch credit from database
+                                                  style: TextStyle(
+                                                    fontSize: isWide ? 24 : 19,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                                Text(
+                                                  "Units",
+                                                  style: GoogleFonts.inter(
+                                                    fontSize: isWide
+                                                        ? 14
+                                                        : null,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
                                   ),
-                                ],
+                                ),
+                                SizedBox(
+                                  height: isWide
+                                      ? 12
+                                      : context.resHeight(0.0001),
+                                  width: 0,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          width: isWide ? 24 : context.resWidth(0.047),
+                          height: isWide ? 28 : context.resHeight(0.047),
+                        ),
+                        Center(
+                          child: SizedBox(
+                            width: isWide ? 560 : double.infinity,
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  flex: 3,
+                                  child: Center(
+                                    child: Column(
+                                      children: [
+                                        //all 4 buttons still need interactivity coded
+                                        FloatingActionButton(
+                                          heroTag: 'Redeem',
+                                          onPressed: () => debugPrint("lolol"),
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(
+                                              12,
+                                            ),
+                                          ),
+                                          child: Icon(
+                                            Icons.card_giftcard_rounded,
+                                          ),
+                                        ),
+                                        Text(
+                                          "Redeem",
+                                          style: GoogleFonts.inter(
+                                            fontSize: isWide ? 14 : null,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                Expanded(
+                                  flex: 3,
+                                  child: Center(
+                                    child: Column(
+                                      children: [
+                                        FloatingActionButton(
+                                          heroTag: 'Transfer',
+                                          onPressed: () => context.push(
+                                            "transfer-credit-screen",
+                                          ),
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(
+                                              12,
+                                            ),
+                                          ),
+                                          child: Icon(
+                                            Icons.arrow_circle_up_rounded,
+                                          ),
+                                        ),
+                                        Text(
+                                          "Transfer",
+                                          style: GoogleFonts.inter(
+                                            fontSize: isWide ? 14 : null,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                Expanded(
+                                  flex: 3,
+                                  child: Center(
+                                    child: Column(
+                                      children: [
+                                        FloatingActionButton(
+                                          heroTag: 'Certificate',
+                                          onPressed: () => debugPrint("lolol"),
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(
+                                              12,
+                                            ),
+                                          ),
+                                          child: Icon(Icons.card_membership),
+                                        ),
+                                        Text(
+                                          "Certificate",
+                                          style: GoogleFonts.inter(
+                                            fontSize: isWide ? 14 : null,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                Expanded(
+                                  flex: 3,
+                                  child: Center(
+                                    child: Column(
+                                      children: [
+                                        FloatingActionButton(
+                                          heroTag: 'share',
+                                          onPressed: () => debugPrint("lolol"),
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(
+                                              12,
+                                            ),
+                                          ),
+                                          child: Icon(Icons.share),
+                                        ),
+                                        Text(
+                                          "share",
+                                          style: GoogleFonts.inter(
+                                            fontSize: isWide ? 14 : null,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: isWide ? 8 : context.resWidth(0.05),
+                            vertical: isWide ? 24 : context.resHeight(0.02),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Flexible(
+                                flex: isWide ? 1 : 0,
+                                child: SizedBox(
+                                  height: isWide
+                                      ? null
+                                      : context.resHeight(0.03),
+                                  child: Text(
+                                    "donation activities",
+                                    style: TextStyle(
+                                      fontSize: isWide
+                                          ? 20
+                                          : context.resWidth(0.047),
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ), // Optional: Add a child widget if needed
+                                ),
+                              ),
+                              SizedBox(
+                                height: isWide ? null : context.resHeight(0.02),
+                                child: Text(
+                                  "Last 6 months", // EDIT NEEDED: fetch months from database
+                                  style: TextStyle(
+                                    fontSize: isWide
+                                        ? 14
+                                        : context.resWidth(0.03),
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ), // Optional: Add a child widget if needed
                               ),
                             ],
                           ),
                         ),
-                      ),
-                      SizedBox(height: context.resHeight(0.0001), width: 0),
-                    ],
-                  ),
-                ),
-              ),
-              SizedBox(
-                width: context.resWidth(0.047),
-                height: context.resHeight(0.047),
-              ),
-              Row(
-                children: [
-                  Expanded(
-                    flex: 3,
-                    child: Center(
-                      child: Column(
-                        children: [
-                          //all 4 buttons still need interactivity coded
-                          FloatingActionButton(
-                            heroTag: 'Redeem',
-                            onPressed: () => debugPrint("lolol"),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                            child: Icon(Icons.card_giftcard_rounded),
-                          ),
-                          Text("Redeem", style: GoogleFonts.inter()),
-                        ],
-                      ),
-                    ),
-                  ),
-                  Expanded(
-                    flex: 3,
-                    child: Center(
-                      child: Column(
-                        children: [
-                          FloatingActionButton(
-                            heroTag: 'Transfer',
-                            onPressed: () =>
-                                context.push("transfer-credit-screen"),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                            child: Icon(Icons.arrow_circle_up_rounded),
-                          ),
-                          Text("Transfer", style: GoogleFonts.inter()),
-                        ],
-                      ),
-                    ),
-                  ),
-                  Expanded(
-                    flex: 3,
-                    child: Center(
-                      child: Column(
-                        children: [
-                          FloatingActionButton(
-                            heroTag: 'Certificate',
-                            onPressed: () => debugPrint("lolol"),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                            child: Icon(Icons.card_membership),
-                          ),
-                          Text("Certificate", style: GoogleFonts.inter()),
-                        ],
-                      ),
-                    ),
-                  ),
-                  Expanded(
-                    flex: 3,
-                    child: Center(
-                      child: Column(
-                        children: [
-                          FloatingActionButton(
-                            heroTag: 'share',
-                            onPressed: () => debugPrint("lolol"),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                            child: Icon(Icons.share),
-                          ),
-                          Text("share", style: GoogleFonts.inter()),
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(
-                  horizontal: context.resWidth(0.05),
-                  vertical: context.resHeight(0.02),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    SizedBox(
-                      height: context.resHeight(0.03),
-                      child: Text(
-                        "donation activities",
-                        style: TextStyle(
-                          fontSize: context.resWidth(0.047),
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ), // Optional: Add a child widget if needed
-                    ),
-                    SizedBox(
-                      height: context.resHeight(0.02),
-                      child: Text(
-                        "Last 6 months", // EDIT NEEDED: fetch months from database
-                        style: TextStyle(
-                          fontSize: context.resWidth(0.03),
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ), // Optional: Add a child widget if needed
-                    ),
-                  ],
-                ),
-              ),
 
-              AspectRatio(
-                aspectRatio: 2,
-                child: Container(
-                  margin: EdgeInsets.all(10),
-                  child: BarChart(
-                    //EDIT NEEDED: fetch data from database to display in chart
-                    BarChartData(
-                      titlesData: FlTitlesData(
-                        topTitles: AxisTitles(
-                          sideTitles: SideTitles(showTitles: false),
-                        ),
-                        rightTitles: AxisTitles(
-                          sideTitles: SideTitles(showTitles: false),
-                        ),
-                        leftTitles: AxisTitles(
-                          sideTitles: SideTitles(showTitles: false),
-                        ),
-                        bottomTitles: AxisTitles(
-                          sideTitles: SideTitles(
-                            showTitles: true,
-                            reservedSize: 30,
-                            getTitlesWidget: (double value, TitleMeta meta) {
-                              List<String> lastSixMonths =
-                                  AuthService.fetchLastSixMonths();
+                        SizedBox(
+                          height: isWide ? 260 : null,
+                          child: AspectRatio(
+                            aspectRatio: 2,
+                            child: Container(
+                              margin: EdgeInsets.all(10),
+                              child: BarChart(
+                                //EDIT NEEDED: fetch data from database to display in chart
+                                BarChartData(
+                                  titlesData: FlTitlesData(
+                                    topTitles: AxisTitles(
+                                      sideTitles: SideTitles(showTitles: false),
+                                    ),
+                                    rightTitles: AxisTitles(
+                                      sideTitles: SideTitles(showTitles: false),
+                                    ),
+                                    leftTitles: AxisTitles(
+                                      sideTitles: SideTitles(showTitles: false),
+                                    ),
+                                    bottomTitles: AxisTitles(
+                                      sideTitles: SideTitles(
+                                        showTitles: true,
+                                        reservedSize: 30,
+                                        getTitlesWidget:
+                                            (double value, TitleMeta meta) {
+                                              List<String> lastSixMonths =
+                                                  AuthService.fetchLastSixMonths();
 
-                              final index = value.toInt();
+                                              final index = value.toInt();
 
-                              if (index < 0 || index >= lastSixMonths.length) {
-                                return const SizedBox();
-                              }
+                                              if (index < 0 ||
+                                                  index >=
+                                                      lastSixMonths.length) {
+                                                return const SizedBox();
+                                              }
 
-                              return SideTitleWidget(
-                                meta: meta,
-                                space: 8,
+                                              return SideTitleWidget(
+                                                meta: meta,
+                                                space: 8,
+                                                child: Text(
+                                                  lastSixMonths[index], //EDIT NEEDED: fetch months from databaseS
+                                                  style: const TextStyle(
+                                                    color: Colors.black,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 14,
+                                                  ),
+                                                ),
+                                              );
+                                            },
+                                      ),
+                                    ),
+                                  ),
+                                  maxY: 8,
+                                  alignment: isWide
+                                      ? BarChartAlignment.spaceAround
+                                      : BarChartAlignment.start,
+                                  groupsSpace: 40,
+                                  backgroundColor: Colors.white.withValues(
+                                    alpha: 0.3,
+                                  ),
+                                  barGroups: List.generate(6, (index) {
+                                    return BarChartGroupData(
+                                      x: index,
+
+                                      barRods: [
+                                        BarChartRodData(
+                                          // TODO: Use donation data once connected.
+                                          toY: 6,
+                                          color: Colors.red,
+                                          width: 20,
+                                          borderRadius: BorderRadius.circular(
+                                            4,
+                                          ),
+                                        ),
+                                      ],
+                                    );
+                                  }),
+                                ),
+                                duration: Duration(
+                                  milliseconds: 150,
+                                ), // Optional
+                                curve: Curves.linear, // Optional
+                              ),
+                            ),
+                          ),
+                        ),
+                        /////////////
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Flexible(
+                                flex: isWide ? 1 : 0,
                                 child: Text(
-                                  lastSixMonths[index], //EDIT NEEDED: fetch months from databaseS
-                                  style: const TextStyle(
-                                    color: Colors.black,
+                                  "Recent Transactions",
+                                  style: TextStyle(
+                                    fontSize: isWide
+                                        ? 20
+                                        : context.resWidth(0.047),
                                     fontWeight: FontWeight.bold,
-                                    fontSize: 14,
                                   ),
                                 ),
-                              );
-                            },
+                              ),
+                              TextButton(
+                                onPressed: () {
+                                  context.push('/all-transactions');
+                                },
+                                child: Text(
+                                  "View All",
+                                  style: TextStyle(
+                                    fontSize: isWide
+                                        ? 14
+                                        : context.resWidth(0.03),
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                         ),
-                      ),
-                      maxY: 8,
-                      alignment: BarChartAlignment.start,
-                      groupsSpace: 40,
-                      backgroundColor: Colors.white.withValues(alpha: 0.3),
-                      barGroups: List.generate(6, (index) {
-                        return BarChartGroupData(
-                          x: index,
+                        Column(
+                          //EDIT NEEDED :fetch # of transactions from database and display them in a list
+                          children: List.generate(3, (index) {
+                            return ListTile(
+                              leading: Icon(
+                                Icons.bloodtype,
+                                color: mainColor,
+                              ), //EDIT NEEDED: fetch icon from database based on transaction type
+                              title: Text(
+                                "Transaction ${index + 1}",
+                                style: TextStyle(
+                                  fontSize: isWide
+                                      ? 16
+                                      : context.resWidth(0.04),
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              subtitle: Text(
+                                "Date of transaction ${index + 1}",
+                                style: TextStyle(
+                                  fontSize: isWide
+                                      ? 14
+                                      : context.resWidth(0.03),
+                                ),
+                              ),
+                              trailing: Text(
+                                "-${index + 1} Units",
+                                style: TextStyle(
+                                  fontSize: isWide
+                                      ? 16
+                                      : context.resWidth(0.04),
+                                  color: Colors
+                                      .red, //EDIT NEEDED: isDonation feature needs to be implemented to determine if the transaction is a donation or not, and change the color accordingly
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            );
+                          }),
+                        ),
 
-                          barRods: [
-                            BarChartRodData(
-                              //return these codes once the database is connected
-                              toY:
-                                  true //visits[index].visitType == 'Donation'
-                                  ? 6
-                                  : 1,
-                              color:
-                                  true // visits[index].visitType == 'Donation'
-                                  ? Colors.red
-                                  : Colors.grey.withValues(alpha: 0.3),
-                              width: 20,
-                              borderRadius: BorderRadius.circular(4),
-                            ),
-                          ],
-                        );
-                      }),
+                        SizedBox(
+                          width: isWide
+                              ? 0
+                              : MediaQuery.of(context).size.width * 0.3,
+                          height: isWide
+                              ? 0
+                              : MediaQuery.of(context).size.height * 0.3,
+                        ),
+
+                        //4 buttons
+                      ],
                     ),
-                    duration: Duration(milliseconds: 150), // Optional
-                    curve: Curves.linear, // Optional
                   ),
                 ),
               ),
-              /////////////
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      "Recent Transactions",
-                      style: TextStyle(
-                        fontSize: context.resWidth(0.047),
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    TextButton(
-                      onPressed: () {
-                        context.push('/all-transactions');
-                      },
-                      child: Text(
-                        "View All",
-                        style: TextStyle(
-                          fontSize: context.resWidth(0.03),
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Column(
-                //EDIT NEEDED :fetch # of transactions from database and display them in a list
-                children: List.generate(3, (index) {
-                  return ListTile(
-                    leading: Icon(
-                      Icons.bloodtype,
-                      color: mainColor,
-                    ), //EDIT NEEDED: fetch icon from database based on transaction type
-                    title: Text(
-                      "Transaction ${index + 1}",
-                      style: TextStyle(
-                        fontSize: context.resWidth(0.04),
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    subtitle: Text(
-                      "Date of transaction ${index + 1}",
-                      style: TextStyle(fontSize: context.resWidth(0.03)),
-                    ),
-                    trailing: Text(
-                      "-${index + 1} Units",
-                      style: TextStyle(
-                        fontSize: context.resWidth(0.04),
-                        color: Colors
-                            .red, //EDIT NEEDED: isDonation feature needs to be implemented to determine if the transaction is a donation or not, and change the color accordingly
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  );
-                }),
-              ),
-
-              SizedBox(
-                width: MediaQuery.of(context).size.width * 0.3,
-                height: MediaQuery.of(context).size.height * 0.3,
-              ),
-
-              //4 buttons
-            ],
+            ),
           ),
-        ),
-      ),
-      floatingActionButton: FloatingActionButton.extended(
-        icon: Icon(Icons.add, color: Colors.white),
-        backgroundColor: mainColor,
-        onPressed: _bookDonation,
-        label: Text(
-          "Book new donation",
-          style: TextStyle(
-            fontSize: context.resWidth(0.04),
-            fontWeight: FontWeight.bold,
-            color: Colors.white,
+          floatingActionButton: FloatingActionButton.extended(
+            extendedPadding: isWide
+                ? const EdgeInsets.symmetric(horizontal: 20)
+                : null,
+            icon: Icon(Icons.add, color: Colors.white),
+            backgroundColor: mainColor,
+            onPressed: _bookDonation,
+            label: Text(
+              "Book new donation",
+              style: TextStyle(
+                fontSize: isWide ? 16 : context.resWidth(0.04),
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
+            ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 }
