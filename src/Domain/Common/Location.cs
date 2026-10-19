@@ -5,7 +5,7 @@ namespace Domain.Common;
 public class Location
 {
     public string City { get; private set; } = string.Empty;
-    public Point Coordinates { get; set; } 
+    public Point Coordinates { get; set; } = new Point(0,0);
 
     public Location(string city, Point coordinates)
     {

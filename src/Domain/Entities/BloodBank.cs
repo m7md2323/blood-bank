@@ -12,30 +12,34 @@ public class BloodBank : BaseEntity
 
     public Location Location { get; set; } = null!;
 
-    public ICollection<BloodUnit> StoredUnits { get; set; }
-    public ICollection<User> Staff { get; set; }
+    public ICollection<BloodUnit> StoredUnits { get; set; } = [];
+    public ICollection<User> Staff { get; set; } = [];
 
-    public ICollection<BloodRequest> FulfilledRequests { get; set; }
+    public ICollection<BloodRequest> FulfilledRequests { get; set; } = [];
 
 
     //Methods
     public bool HasAvailableUnits(BloodType Type, ComponentType Component)
     {
-        return StoredUnits.Any(u => u.BloodType == Type && u.ComponentType == Component &&
-         u.Status == BloodUnitStatus.Available && !u.IsExpired());
+        if (StoredUnits != null)
+            return StoredUnits.Any(u => u.BloodType == Type && u.ComponentType == Component &&
+            u.Status == BloodUnitStatus.Available && !u.IsExpired());
+        else return false;
     }
 
     public int CountAvailableUnits(BloodType Type, ComponentType Component)
     {
-        return StoredUnits.Count(u => u.BloodType == Type && u.ComponentType == Component && 
-        u.Status == BloodUnitStatus.Available && !u.IsExpired());
+        if (StoredUnits != null)
+            return StoredUnits.Count(u => u.BloodType == Type && u.ComponentType == Component && 
+            u.Status == BloodUnitStatus.Available && !u.IsExpired());
+        else return 0;
     }
 
     public bool CanFulfill(BloodRequest request)
     {
         if(CountAvailableUnits(request.BloodType, request.ComponentType) >= request.NumberOfUnits)
         {
-            FulfilledRequests.Add(request);
+            FulfilledRequests?.Add(request);
             return true;
         }
         else
@@ -49,6 +53,7 @@ public class BloodBank : BaseEntity
 
     public void MarkExpiredUnits()
     {
+        if (StoredUnits != null)
         foreach (BloodUnit Unit in StoredUnits)
             if (Unit.ExpirationDate <= DateTime.UtcNow)
                 Unit.Status = BloodUnitStatus.Expired;
@@ -59,10 +64,6 @@ public class BloodBank : BaseEntity
         return Staff.Any(u => u.Id == UserId);
     }
 
-    public double ToRadians(double degrees)
-    {
-        return degrees * (Math.PI / 180.0);
-    }
     // This is no more needed, because we are using the built package PostGIS from PostgreSQL,
     // and PostGIS provides Distance method.
     // This way will give use better performance.
