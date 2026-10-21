@@ -183,209 +183,218 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: mainColor,
-        foregroundColor: Colors.white,
-        centerTitle: true,
-        title: Text('Account Details', style: GoogleFonts.inter()),
-        //leading: IconButton(onPressed: onPressed, icon: icon), EDIT NEEDED: add a 3-line icon to traverse other pages
-        actions: [
-          IconButton(
-            onPressed: () {
-              context.push('/notification-screen');
-            },
-            icon: Icon(Icons.notifications),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final isWide = constraints.maxWidth >= 600;
+        return Scaffold(
+          appBar: AppBar(
+            backgroundColor: mainColor,
+            foregroundColor: Colors.white,
+            centerTitle: true,
+            title: Text('Account Details', style: GoogleFonts.inter()),
+            //leading: IconButton(onPressed: onPressed, icon: icon), EDIT NEEDED: add a 3-line icon to traverse other pages
+            actions: [
+              IconButton(
+                onPressed: () {
+                  context.push('/notification-screen');
+                },
+                icon: Icon(Icons.notifications),
+              ),
+            ],
           ),
-        ],
-      ),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          padding: EdgeInsets.symmetric(
-            horizontal: context.resWidth(0.05),
-            vertical: context.resHeight(0.03),
-          ),
-          child: Center(
-            child: ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: 600),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Center(
-                    child: Stack(
-                      children: [
-                        CircleAvatar(
-                          radius: 55,
-                          backgroundColor: Colors.white,
-                          backgroundImage: _photo == null
-                              ? null
-                              : MemoryImage(_photo!),
-                          child: _photo == null
-                              ? const Icon(
-                                  Icons.person,
-                                  size: 70,
-                                  color: mainColor,
-                                )
-                              : null,
+          body: SafeArea(
+            child: SingleChildScrollView(
+              padding: EdgeInsets.symmetric(
+                horizontal: isWide ? 24 : context.resWidth(0.05),
+                vertical: isWide ? 24 : context.resHeight(0.03),
+              ),
+              child: Center(
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(maxWidth: isWide ? 800 : 600),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Center(
+                        child: Stack(
+                          children: [
+                            CircleAvatar(
+                              radius: 55,
+                              backgroundColor: Colors.white,
+                              backgroundImage: _photo == null
+                                  ? null
+                                  : MemoryImage(_photo!),
+                              child: _photo == null
+                                  ? const Icon(
+                                      Icons.person,
+                                      size: 70,
+                                      color: mainColor,
+                                    )
+                                  : null,
+                            ),
+                            Positioned(
+                              right: 0,
+                              bottom: 0,
+                              child: Material(
+                                color: mainColor,
+                                shape: const CircleBorder(),
+                                clipBehavior: Clip.antiAlias,
+                                child: IconButton(
+                                  tooltip: 'Edit profile photo',
+                                  onPressed: _isPickingPhoto
+                                      ? null
+                                      : _editPhoto,
+                                  icon: const Icon(
+                                    Icons.edit,
+                                    color: Colors.white,
+                                    size: 20,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
-                        Positioned(
-                          right: 0,
-                          bottom: 0,
-                          child: Material(
-                            color: mainColor,
-                            shape: const CircleBorder(),
-                            clipBehavior: Clip.antiAlias,
-                            child: IconButton(
-                              tooltip: 'Edit profile photo',
-                              onPressed: _isPickingPhoto ? null : _editPhoto,
-                              icon: const Icon(
-                                Icons.edit,
-                                color: Colors.white,
-                                size: 20,
+                      ),
+                      SizedBox(height: isWide ? 16 : context.resHeight(0.02)),
+                      Semantics(
+                        button: true,
+                        label: 'Edit Full Name',
+                        child: InkWell(
+                          onTap: () => _editText(
+                            label: 'Full Name',
+                            value: fullName,
+                            onSave: (value) => fullName = value,
+                          ),
+                          child: Text(
+                            fullName,
+                            textAlign: TextAlign.center,
+                            style: GoogleFonts.inter(
+                              fontSize: 24,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      Center(
+                        child: Semantics(
+                          label: 'Edit Blood Type: $bloodType',
+                          button: true,
+                          onTap: _editBloodType,
+                          excludeSemantics: true,
+                          child: GestureDetector(
+                            onTap: _editBloodType,
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 12,
+                                vertical: 4,
+                              ),
+                              decoration: BoxDecoration(
+                                color: mainColor,
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: Text(
+                                bloodType,
+                                style: GoogleFonts.inter(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
                             ),
                           ),
                         ),
-                      ],
-                    ),
-                  ),
-                  SizedBox(height: context.resHeight(0.02)),
-                  Semantics(
-                    button: true,
-                    label: 'Edit Full Name',
-                    child: InkWell(
-                      onTap: () => _editText(
-                        label: 'Full Name',
-                        value: fullName,
-                        onSave: (value) => fullName = value,
                       ),
-                      child: Text(
-                        fullName,
-                        textAlign: TextAlign.center,
-                        style: GoogleFonts.inter(
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
+                      SizedBox(height: isWide ? 24 : context.resHeight(0.03)),
+                      DefaultCard(
+                        child: Padding(
+                          padding: const EdgeInsets.all(20),
+                          child: Column(
+                            children: [
+                              Text('Blood balance', style: GoogleFonts.inter()),
+                              Text(
+                                widget.bloodBalance?.toString() ?? '—',
+                                style: GoogleFonts.inter(
+                                  fontSize: 48,
+                                  fontWeight: FontWeight.bold,
+                                  color: mainColor,
+                                ),
+                              ),
+                              Text('Units', style: GoogleFonts.inter()),
+                            ],
+                          ),
                         ),
                       ),
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  Center(
-                    child: Semantics(
-                      label: 'Edit Blood Type: $bloodType',
-                      button: true,
-                      onTap: _editBloodType,
-                      excludeSemantics: true,
-                      child: GestureDetector(
-                        onTap: _editBloodType,
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 12,
-                            vertical: 4,
-                          ),
-                          decoration: BoxDecoration(
-                            color: mainColor,
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: Text(
-                            bloodType,
-                            style: GoogleFonts.inter(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
+                      SizedBox(height: isWide ? 24 : context.resHeight(0.03)),
+                      DefaultCard(
+                        child: Column(
+                          children: [
+                            _accountRow(
+                              label: 'National Number',
+                              value: widget.nationalNumber,
+                              icon: Icons.badge_outlined,
                             ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: context.resHeight(0.03)),
-                  DefaultCard(
-                    child: Padding(
-                      padding: const EdgeInsets.all(20),
-                      child: Column(
-                        children: [
-                          Text('Blood balance', style: GoogleFonts.inter()),
-                          Text(
-                            widget.bloodBalance?.toString() ?? '—',
-                            style: GoogleFonts.inter(
-                              fontSize: 48,
-                              fontWeight: FontWeight.bold,
-                              color: mainColor,
+                            const Divider(height: 1),
+                            _accountRow(
+                              label: 'Phone',
+                              value: phone,
+                              icon: Icons.phone_outlined,
+                              onEdit: () => _editText(
+                                label: 'Phone',
+                                value: phone,
+                                keyboardType: TextInputType.phone,
+                                validate: (value) =>
+                                    RegExp(
+                                      r'^\+?[0-9\s()\-]{7,20}$',
+                                    ).hasMatch(value)
+                                    ? null
+                                    : 'Enter a valid phone number.',
+                                onSave: (value) {
+                                  phone = value;
+                                  widget.onEditPhone?.call();
+                                },
+                              ),
                             ),
-                          ),
-                          Text('Units', style: GoogleFonts.inter()),
-                        ],
+                            const Divider(height: 1),
+                            _accountRow(
+                              label: 'Email',
+                              value: email,
+                              icon: Icons.email_outlined,
+                              onEdit: () => _editText(
+                                label: 'Email',
+                                value: email,
+                                keyboardType: TextInputType.emailAddress,
+                                validate: (value) =>
+                                    RegExp(
+                                      r'^[^\s@]+@[^\s@]+\.[^\s@]+$',
+                                    ).hasMatch(value)
+                                    ? null
+                                    : 'Enter a valid email address.',
+                                onSave: (value) {
+                                  email = value;
+                                  widget.onEditEmail?.call();
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
+                      SizedBox(height: isWide ? 24 : context.resHeight(0.03)),
+                      _DonationHistorySection(isWide: isWide),
+                    ],
                   ),
-                  SizedBox(height: context.resHeight(0.03)),
-                  DefaultCard(
-                    child: Column(
-                      children: [
-                        _accountRow(
-                          label: 'National Number',
-                          value: widget.nationalNumber,
-                          icon: Icons.badge_outlined,
-                        ),
-                        const Divider(height: 1),
-                        _accountRow(
-                          label: 'Phone',
-                          value: phone,
-                          icon: Icons.phone_outlined,
-                          onEdit: () => _editText(
-                            label: 'Phone',
-                            value: phone,
-                            keyboardType: TextInputType.phone,
-                            validate: (value) =>
-                                RegExp(
-                                  r'^\+?[0-9\s()\-]{7,20}$',
-                                ).hasMatch(value)
-                                ? null
-                                : 'Enter a valid phone number.',
-                            onSave: (value) {
-                              phone = value;
-                              widget.onEditPhone?.call();
-                            },
-                          ),
-                        ),
-                        const Divider(height: 1),
-                        _accountRow(
-                          label: 'Email',
-                          value: email,
-                          icon: Icons.email_outlined,
-                          onEdit: () => _editText(
-                            label: 'Email',
-                            value: email,
-                            keyboardType: TextInputType.emailAddress,
-                            validate: (value) =>
-                                RegExp(
-                                  r'^[^\s@]+@[^\s@]+\.[^\s@]+$',
-                                ).hasMatch(value)
-                                ? null
-                                : 'Enter a valid email address.',
-                            onSave: (value) {
-                              email = value;
-                              widget.onEditEmail?.call();
-                            },
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  SizedBox(height: context.resHeight(0.03)),
-                  const _DonationHistorySection(),
-                ],
+                ),
               ),
             ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 }
 
 class _DonationHistorySection extends StatefulWidget {
-  const _DonationHistorySection();
+  final bool isWide;
+
+  const _DonationHistorySection({required this.isWide});
 
   @override
   State<_DonationHistorySection> createState() =>
@@ -455,6 +464,7 @@ class _DonationHistorySectionState extends State<_DonationHistorySection> {
 
   @override
   Widget build(BuildContext context) {
+    final isWide = widget.isWide;
     return DefaultCard(
       child: Padding(
         padding: const EdgeInsets.all(20),
@@ -519,40 +529,109 @@ class _DonationHistorySectionState extends State<_DonationHistorySection> {
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: DataTable(
-                        headingTextStyle: GoogleFonts.inter(
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black,
-                        ),
-                        dataTextStyle: GoogleFonts.inter(color: Colors.black),
-                        columns: const [
-                          DataColumn(label: Text('Date')),
-                          DataColumn(label: Text('Location')),
-                          DataColumn(label: Text('Status')),
-                          DataColumn(label: Text('Units'), numeric: true),
-                        ],
-                        rows: [
-                          for (final donation in donations)
-                            DataRow(
-                              cells: [
-                                DataCell(
-                                  Text(
-                                    DateFormat(
-                                      'dd/MM/yyyy',
-                                    ).format(donation.visitDate),
-                                  ),
+                    LayoutBuilder(
+                      builder: (context, constraints) {
+                        final textScale =
+                            MediaQuery.textScalerOf(context).scale(14) / 14;
+                        final tableWidth = constraints.maxWidth.clamp(
+                          520 * textScale,
+                          double.infinity,
+                        );
+                        return SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: SizedBox(
+                            width: isWide ? tableWidth : null,
+                            child: DataTable(
+                              horizontalMargin: isWide ? 12 : null,
+                              columnSpacing: isWide ? 16 : null,
+                              headingRowHeight: isWide ? 48 : null,
+                              dataRowMinHeight: isWide ? 56 : null,
+                              dataRowMaxHeight: isWide ? double.infinity : null,
+                              headingTextStyle: GoogleFonts.inter(
+                                fontSize: isWide ? 14 : null,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
+                              ),
+                              dataTextStyle: GoogleFonts.inter(
+                                color: Colors.black,
+                                fontSize: isWide ? 14 : null,
+                              ),
+                              columns: [
+                                DataColumn(
+                                  label: const Text('Date'),
+                                  columnWidth: isWide
+                                      ? FixedColumnWidth(128 * textScale)
+                                      : null,
                                 ),
-                                DataCell(Text(donation.visitLocation ?? '—')),
-                                DataCell(Text(donation.visitStatus ?? '—')),
-                                DataCell(
-                                  Text(donation.units?.toString() ?? '—'),
+                                DataColumn(
+                                  label: const Text('Location'),
+                                  columnWidth: isWide
+                                      ? const FlexColumnWidth()
+                                      : null,
+                                ),
+                                DataColumn(
+                                  label: const Text('Status'),
+                                  columnWidth: isWide
+                                      ? FixedColumnWidth(128 * textScale)
+                                      : null,
+                                ),
+                                DataColumn(
+                                  label: const Text('Units'),
+                                  numeric: true,
+                                  columnWidth: isWide
+                                      ? FixedColumnWidth(80 * textScale)
+                                      : null,
                                 ),
                               ],
+                              rows: [
+                                for (final donation in donations)
+                                  DataRow(
+                                    cells: [
+                                      DataCell(
+                                        Text(
+                                          DateFormat(
+                                            'dd/MM/yyyy',
+                                          ).format(donation.visitDate),
+                                          softWrap: isWide ? false : null,
+                                        ),
+                                      ),
+                                      DataCell(
+                                        Padding(
+                                          padding: isWide
+                                              ? const EdgeInsets.symmetric(
+                                                  vertical: 12,
+                                                )
+                                              : EdgeInsets.zero,
+                                          child: Text(
+                                            donation.visitLocation ?? '—',
+                                          ),
+                                        ),
+                                      ),
+                                      DataCell(
+                                        Padding(
+                                          padding: isWide
+                                              ? const EdgeInsets.symmetric(
+                                                  vertical: 12,
+                                                )
+                                              : EdgeInsets.zero,
+                                          child: Text(
+                                            donation.visitStatus ?? '—',
+                                          ),
+                                        ),
+                                      ),
+                                      DataCell(
+                                        Text(
+                                          donation.units?.toString() ?? '—',
+                                          softWrap: isWide ? false : null,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                              ],
                             ),
-                        ],
-                      ),
+                          ),
+                        );
+                      },
                     ),
                     if (donations.isEmpty)
                       Padding(
