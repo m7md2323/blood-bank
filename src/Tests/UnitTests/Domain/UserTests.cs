@@ -1,5 +1,6 @@
 using System.Text.Encodings.Web;
 using Domain.Entities;
+using Tests.UnitTests.Common;
 using Domain.Enums;
 using FluentAssertions;
 using Xunit;
@@ -12,7 +13,7 @@ public class UserTests
     public void AdjustBloodBalance_ShouldIncreaseBalance_WhenPositiveAmountGiven()
     {
         // Arrange
-        var user = new User();
+        var user = HelperMetods.CreateTestUser();
 
         // Act
         user.AdjustBloodBalance(2);
@@ -25,7 +26,7 @@ public class UserTests
     public void AdjustBloodBalance_ShouldThrowInvalidOperationException_WhenBalanceBecomesNegative()
     {
         // Arrange
-        var user = new User(); // Initial balance is 0
+        var user = HelperMetods.CreateTestUser(); // Initial balance is 0
 
         // Act
         var act = () => user.AdjustBloodBalance(-1);
@@ -39,7 +40,7 @@ public class UserTests
     public void MarkAsDonor_ShouldUpdateStatusToActiveDonor()
     {
         // Arrange
-        var user = new User();
+        var user = HelperMetods.CreateTestUser();
         user.MarkAsAcceptor();
 
         // Act
@@ -53,7 +54,7 @@ public class UserTests
     public void IsEligibleToDonate_ShouldReturnFalseOnNonActiveDonor()
     {
         // Arrange
-        var user = new User();
+        var user = HelperMetods.CreateTestUser();
         
         // Act
         user.MarkAsAcceptor();
@@ -68,7 +69,7 @@ public class UserTests
     public void IsEligibleToDonate_ShouldReturnFalseIfTypeIsPlateletsAndLessThan14Days()
     {
         // Arrange
-        var user = new User();
+        var user = HelperMetods.CreateTestUser();
         user.DonatedUnits.Add(
             new BloodUnit{
                 ComponentType=ComponentType.Platelets,
@@ -83,4 +84,6 @@ public class UserTests
         isEligible.Should().BeFalse();
         
     }
+
 }
+
