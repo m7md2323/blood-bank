@@ -156,7 +156,7 @@ class _TransferCreditScreenState extends State<TransferCreditScreen> {
                   isThreeLine: true,
                 ),
               )
-            else if (true)
+            else if (true) // EDIT NEEDED: remove this when backend fetching is connected
               FutureBuilder<List<Users>>(
                 future: usersFuture,
                 builder: (context, snapshot) {
@@ -204,6 +204,7 @@ class _TransferCreditScreenState extends State<TransferCreditScreen> {
                           );
                         }
                       },
+                      //EDIT NEEDED: add a button with a dialogue to confirm sending showing amount of credit to be sent
                     ),
                   );
                 },

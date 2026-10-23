@@ -107,7 +107,7 @@ class _AdminScreenState extends State<AdminScreen> {
                       ),
                       SizedBox(height: context.resHeight(0.03)),
                       DropdownButtonFormField<bool>(
-                        //EDIT NEEDED: count?s
+                        //EDIT NEEDED: count?
                         decoration: const InputDecoration(
                           labelText: 'Urgency',
                           border: OutlineInputBorder(),
