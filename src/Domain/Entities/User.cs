@@ -22,11 +22,11 @@ public class User : BaseEntity
     public bool IsDeleted { get; private set; }
 
     //For locating Donors when blood units are needed
-    public Location Location {get; private set;}
+    public Location Location {get; private set;} = null!;
 
     //Collections that stores received or donated blood units
-    public ICollection<BloodUnit> DonatedUnits { get; set; } = new List<BloodUnit>(); 
-    public ICollection<BloodUnit> ReceivedUnits { get; set; } = new List<BloodUnit>(); 
+    public ICollection<BloodUnit> DonatedUnits { get; set; } = []; 
+    public ICollection<BloodUnit> ReceivedUnits { get; set; } = []; 
 
     //To map EF Core relationship (Foreign Keys), 
     // and it's for staff members of Hospitals or Blood Banks.
@@ -35,6 +35,81 @@ public class User : BaseEntity
     public Guid? BloodBankId {get;set;}  
     public BloodBank? BloodBank {get;set;}
 
+
+    // Private Constructors, we are implemnting Factory Method to create Usres.
+    private User(){}
+        private User(
+        string nationalNumber,
+        string fullName,
+        Gender gender,
+        string email,
+        string phoneNumber,
+        UserRole role,
+        BloodType bloodType,
+        DateTime dateOfBirth,
+        string passwordHash,
+        Location location)
+    {
+        NationalNumber = nationalNumber;
+        FullName = fullName;
+        Gender = gender;
+        Email = email;
+        PhoneNumber = phoneNumber;
+        Role = role;
+        BloodType = bloodType;
+        DateOfBirth = dateOfBirth;
+        PasswordHash = passwordHash;
+        Location = location;
+        Status = UserStatus.ActiveDonor;
+        BloodUnitsBalance = 0;
+        IsDeleted = false;
+    }
+
+    public static User Create(
+        string nationalNumber,
+        string fullName,
+        Gender gender,
+        string email,
+        string phoneNumber,
+        DateTime dateOfBirth,
+        string passwordHash,
+        Location location,
+        BloodType bloodType = BloodType.OPositive,
+        UserRole role = UserRole.StandardUser)
+    {
+        // First we validate all inputs.
+        if (string.IsNullOrWhiteSpace(nationalNumber))
+            throw new ArgumentException("National number cannot be empty.", nameof(nationalNumber));
+        
+        if (string.IsNullOrWhiteSpace(fullName))
+            throw new ArgumentException("Full Name cannot be empty.", nameof(fullName));
+
+         if (string.IsNullOrWhiteSpace(email))
+            throw new ArgumentException("Email cannot be empty.", nameof(email));
+
+        if (string.IsNullOrWhiteSpace(passwordHash))
+            throw new ArgumentException("Password hash cannot be empty.", nameof(passwordHash));
+
+        if (location is null)
+            throw new ArgumentNullException(nameof(location), "User location is required.");
+
+        if (dateOfBirth >= DateTime.UtcNow)
+            throw new ArgumentException("Date of birth must be in the past.", nameof(dateOfBirth));
+
+        // Then we return the new User object.
+        return new User(
+            nationalNumber.Trim(),
+            fullName.Trim(),
+            gender,
+            email.Trim().ToLowerInvariant(),
+            phoneNumber.Trim(),
+            role,
+            bloodType,
+            dateOfBirth,
+            passwordHash,
+            location);
+
+    }    
 
     //Methods for manipulating the User Entity
     
@@ -66,7 +141,7 @@ public class User : BaseEntity
             return false;
 
         // Fetch the last blood unit donated and check its date
-        if (DonatedUnits.Any()){
+        if (DonatedUnits.Count != 0){
 
             BloodUnit lastDonatedUnit = DonatedUnits.OrderByDescending(u => u.CollectionDate).First();
 

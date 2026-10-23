@@ -14,10 +14,10 @@ public class Hospital : BaseEntity
     public Location Location { get; set; } = null!;
 
     //These units are stored in the ICU, or any where closer to the doctor.
-    public ICollection<BloodUnit> StoredUnits { get; set; }
+    public ICollection<BloodUnit> StoredUnits { get; set; } = [];
     //Nurses, Doctors, or any Hospital related work force. (All under Hopital Admin for now 19/9/2026)
-    public ICollection<User> Staff { get; set; }
-    public ICollection<BloodRequest> BloodRequests { get; set; }
+    public ICollection<User> Staff { get; set; } = [];
+    public ICollection<BloodRequest> BloodRequests { get; set; } = [];
 
     //Methods fro Hotpital Entity:
 

@@ -9,11 +9,17 @@ import 'package:go_router/go_router.dart';
 import 'package:blood_bank/screens/MainScreens/LoginScreen.dart';
 import 'package:blood_bank/screens/MainScreens/BloodWalletScreen.dart';
 import 'package:blood_bank/screens/WalletSubScreens/NotificationScreen.dart';
+import 'package:blood_bank/screens/MainScreens/StaffLoginScreen.dart';
+
 
 final GoRouter appRouter = GoRouter(
-  initialLocation: 'wallet-screen',
+  initialLocation: '/',
   routes: [
     GoRoute(path: '/', builder: (context, state) => LoginScreen()),
+    GoRoute(
+      path: '/staff-login',
+      builder: (context, state) => StaffLoginScreen(),
+    ),
     GoRoute(
       path: '/wallet-screen',
       builder: (context, state) => Bloodwalletscreen(),
