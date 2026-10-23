@@ -1,3 +1,4 @@
+import 'package:blood_bank/modules/defaultDrawer.dart';
 import 'package:flutter/material.dart';
 import 'package:blood_bank/shared/styles/components.dart';
 import 'package:blood_bank/shared/styles/constants.dart';
@@ -202,6 +203,7 @@ class _HomePageState extends State<HomePage> {
               ),
             ],
           ),
+          drawer: DefaultDrawer(),
           body: SafeArea(
             child: SingleChildScrollView(
               padding: EdgeInsets.symmetric(

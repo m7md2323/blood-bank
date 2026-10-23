@@ -56,12 +56,11 @@ class _StaffLoginScreenState extends State<StaffLoginScreen> {
         backgroundColor: mainColor,
         title: const Column(
           children: [
-            MainLogo(),
             Text(
-              "help save lives",
+              "Staff Log in",
               style: TextStyle(
-                color: Colors.grey,
-                fontSize: 10,
+                color: Colors.white,
+                fontSize: 30,
                 fontWeight: FontWeight.bold,
                 fontFamily: 'Times New Roman',
               ),

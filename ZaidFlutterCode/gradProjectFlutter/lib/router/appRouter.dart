@@ -17,7 +17,7 @@ final GoRouter appRouter = GoRouter(
   routes: [
     GoRoute(path: '/', builder: (context, state) => LoginScreen()),
     GoRoute(
-      path: '/staff-login',
+      path: '/staff-login-screen',
       builder: (context, state) => StaffLoginScreen(),
     ),
     GoRoute(

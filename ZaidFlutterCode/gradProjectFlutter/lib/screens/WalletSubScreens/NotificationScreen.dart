@@ -1,4 +1,5 @@
 import 'package:blood_bank/models/AppNotification.dart';
+import 'package:blood_bank/modules/defaultDrawer.dart';
 import 'package:blood_bank/shared/network/NotificationService.dart';
 import 'package:blood_bank/shared/network/StoreNotifications.dart';
 import 'package:flutter/material.dart';
@@ -22,6 +23,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
 
     return Scaffold(
       appBar: AppBar(title: const Text('Notifications')),
+      drawer: DefaultDrawer(),
       body: AnimatedBuilder(
         animation: store,
         builder: (context, child) {

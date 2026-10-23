@@ -2,6 +2,7 @@
 // ignore_for_file: file_names
 
 //import 'package:blood_bank/screens/MainScreens/SignupScreen.dart';
+import 'package:blood_bank/modules/defaultDrawer.dart';
 import 'package:flutter/material.dart';
 import 'package:blood_bank/shared/styles/components.dart';
 import 'package:blood_bank/shared/styles/constants.dart';
@@ -159,7 +160,10 @@ class _BloodwalletscreenState extends State<Bloodwalletscreen> {
         final isWide = constraints.maxWidth >= 600;
         return Scaffold(
           floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-          appBar: null,
+          appBar: AppBar(
+            backgroundColor: mainColor,
+          ),
+          drawer: DefaultDrawer(),
           body: SafeArea(
             child: SingleChildScrollView(
               child: Align(

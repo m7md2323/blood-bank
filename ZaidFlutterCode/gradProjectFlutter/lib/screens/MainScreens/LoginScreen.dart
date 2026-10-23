@@ -1,4 +1,5 @@
 import 'package:blood_bank/screens/MainScreens/SignupScreen.dart';
+import 'package:blood_bank/screens/MainScreens/StaffLoginScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:blood_bank/shared/styles/components.dart';
 import 'package:blood_bank/shared/styles/constants.dart';
@@ -227,7 +228,14 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     ),
                     TextButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => StaffLoginScreen(),
+                          ),
+                        );
+                      },
                       style: TextButton.styleFrom(
                         padding: EdgeInsets.zero,
                         minimumSize: Size.zero,

@@ -1,3 +1,4 @@
+import 'package:blood_bank/modules/defaultDrawer.dart';
 import 'package:blood_bank/shared/network/AuthService.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
@@ -77,6 +78,7 @@ class _MapScreenState extends State<MapScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Map')),
+      drawer: DefaultDrawer(),
       body: FutureBuilder(
         future: jordanBanks,
         builder: (context, asyncSnapshot) {
