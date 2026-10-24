@@ -67,233 +67,316 @@ class _SignupScreenState extends State<SignupScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: mainColor,
-        centerTitle: true,
-        title: Text("Sign UP"),
-      ),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final isWide = constraints.maxWidth >= 600;
+        return Scaffold(
+          appBar: AppBar(
+            backgroundColor: mainColor,
+            centerTitle: true,
+            title: Text("Sign UP"),
+          ),
 
-      body: Center(
-        child: SingleChildScrollView(
-          child: DefaultCard(
-            padding: const EdgeInsets.all(20),
-            color: Colors.white,
-            child: Form(
-              key: formKey,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  MainLogo(),
-                  Text("Sign Up"),
-                  SizedBox(height: MediaQuery.of(context).size.height * 0.04),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: DefaultFormField(
-                          textControl: firstNameController,
-                          label: 'first name',
-                          prefix: Icons.sort_by_alpha,
-                          validate: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'field cannot be empty';
-                            }
-                            return null;
-                          },
-                          type: TextInputType.text,
-                        ),
-                      ),
-                      ///////
-                      SizedBox(width: MediaQuery.of(context).size.width * 0.04),
-                      //////
-                      Expanded(
-                        child: DefaultFormField(
-                          textControl: lastNameController,
-                          label: 'last name',
-                          prefix: Icons.eighteen_mp,
-                          validate: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'field cannot be empty';
-                            }
-                            return null;
-                          },
-                          type: TextInputType.text,
-                        ),
-                      ),
-                    ],
+          body: Center(
+            child: SingleChildScrollView(
+              padding: isWide ? const EdgeInsets.all(24) : EdgeInsets.zero,
+              child: Center(
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(
+                    maxWidth: isWide ? 700 : double.infinity,
                   ),
-                  /////////
-                  SizedBox(height: MediaQuery.of(context).size.height * 0.04),
-                  /////////////
-                  DropdownButtonFormField<String>(
-                    decoration: const InputDecoration(
-                      labelText: "Gender",
-                      border: OutlineInputBorder(),
-                    ),
-                    initialValue: selectedGender,
-                    items: const [
-                      DropdownMenuItem(value: "male", child: Text("male")),
-                      DropdownMenuItem(value: "female", child: Text("female")),
-                    ],
-
-                    onChanged: (value) {
-                      setState(() {
-                        selectedGender = value;
-                      });
-                    },
-                  ),
-                  ///////
-                  SizedBox(height: MediaQuery.of(context).size.height * 0.04),
-                  DefaultFormField(
-                    textControl: nationalIDController,
-                    label: "enter your national ID",
-                    prefix: Icons.numbers,
-                    validate: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'field cannot be empty';
-                      }
-                      return null;
-                    },
-                    type: TextInputType.number,
-                  ),
-                  //////
-                  SizedBox(height: MediaQuery.of(context).size.height * 0.04),
-                  DefaultFormField(
-                    textControl: dateController,
-                    label: "enter your birth date",
-                    prefix: Icons.calendar_month,
-                    validate: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'field cannot be empty';
-                      }
-                      return null;
-                    },
-                    type: TextInputType.datetime,
-                  ),
-
-                  //////
-                  SizedBox(height: MediaQuery.of(context).size.height * 0.04),
-                  DefaultFormField(
-                    textControl: emailController,
-                    label: "enter your Email",
-                    prefix: Icons.email,
-                    validate: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'field cannot be empty';
-                      }
-                      return null;
-                    },
-                    type: TextInputType.emailAddress,
-                  ),
-                  ////////
-                  SizedBox(height: MediaQuery.of(context).size.height * 0.04),
-                  DefaultFormField(
-                    textControl: phoneNumberController,
-                    label: "enter your phone number",
-                    prefix: Icons.phone,
-                    validate: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'field cannot be empty';
-                      }
-                      return null;
-                    },
-                    type: TextInputType.phone,
-                  ),
-                  ////////////
-                  SizedBox(height: MediaQuery.of(context).size.height * 0.04),
-
-                  DefaultFormField(
-                    isPassword: isPassword,
-                    textControl: passwordController,
-                    label: "enter your password",
-                    prefix: Icons.password_sharp,
-                    validate: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'field cannot be empty';
-                      }
-                      return null;
-                    },
-                    type: TextInputType.visiblePassword,
-                    suffix: isPassword
-                        ? Icons.visibility_off
-                        : Icons.visibility,
-                    suffixPressed: () {
-                      setState(() {
-                        isPassword = !isPassword;
-                      });
-                    },
-                  ),
-                  /////////////////
-                  SizedBox(height: MediaQuery.of(context).size.height * 0.04),
-                  ////////////////
-                  DefaultFormField(
-                    isPassword: isPassword,
-                    textControl: confirmPasswordController,
-                    label: "enter your password again",
-                    prefix: Icons.password_sharp,
-                    validate: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'field cannot be empty';
-                      }
-                      return null;
-                    },
-                    type: TextInputType.visiblePassword,
-                    suffix: isPassword
-                        ? Icons.visibility_off
-                        : Icons.visibility,
-                    suffixPressed: () {
-                      setState(() {
-                        isPassword = !isPassword;
-                      });
-                    },
-                  ),
-                  //////
-                  /////////////////
-                  SizedBox(height: MediaQuery.of(context).size.height * 0.04),
-                  DefaultButton(
-                    buttonText: "Create account",
-                    function: () async {
-                      if (formKey.currentState!.validate()) {
-                        try {
-                          await signUp();
-                        } catch (error) {
-                          if (mounted) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                backgroundColor: Colors.red.shade700,
-                                behavior: SnackBarBehavior.floating,
-                                duration: const Duration(seconds: 4),
-                                content: Row(
-                                  children: [
-                                    const Icon(
-                                      Icons.error_outline,
-                                      color: Colors.white,
-                                    ),
-                                    const SizedBox(width: 12),
-                                    Expanded(
-                                      child: Text(
-                                        error.toString(),
-                                        style: const TextStyle(
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
+                  child: DefaultCard(
+                    padding: const EdgeInsets.all(20),
+                    color: Colors.white,
+                    child: Padding(
+                      padding: isWide
+                          ? const EdgeInsets.all(32)
+                          : EdgeInsets.zero,
+                      child: Form(
+                        key: formKey,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            MainLogo(),
+                            Text(
+                              "Sign Up",
+                              style: isWide
+                                  ? const TextStyle(
+                                      fontSize: 24,
+                                      fontWeight: FontWeight.bold,
+                                    )
+                                  : null,
+                            ),
+                            SizedBox(
+                              height: isWide
+                                  ? 20
+                                  : MediaQuery.of(context).size.height * 0.04,
+                            ),
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: DefaultFormField(
+                                    textControl: firstNameController,
+                                    label: 'first name',
+                                    prefix: Icons.sort_by_alpha,
+                                    validate: (value) {
+                                      if (value == null || value.isEmpty) {
+                                        return 'field cannot be empty';
+                                      }
+                                      return null;
+                                    },
+                                    type: TextInputType.text,
+                                  ),
                                 ),
+                                ///////
+                                SizedBox(
+                                  width: isWide
+                                      ? 16
+                                      : MediaQuery.of(context).size.width *
+                                            0.04,
+                                ),
+                                //////
+                                Expanded(
+                                  child: DefaultFormField(
+                                    textControl: lastNameController,
+                                    label: 'last name',
+                                    prefix: Icons.eighteen_mp,
+                                    validate: (value) {
+                                      if (value == null || value.isEmpty) {
+                                        return 'field cannot be empty';
+                                      }
+                                      return null;
+                                    },
+                                    type: TextInputType.text,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            /////////
+                            SizedBox(
+                              height: isWide
+                                  ? 20
+                                  : MediaQuery.of(context).size.height * 0.04,
+                            ),
+                            /////////////
+                            DropdownButtonFormField<String>(
+                              decoration: const InputDecoration(
+                                labelText: "Gender",
+                                border: OutlineInputBorder(),
                               ),
-                            );
-                          }
-                        }
-                      }
-                    },
+                              initialValue: selectedGender,
+                              items: const [
+                                DropdownMenuItem(
+                                  value: "male",
+                                  child: Text("male"),
+                                ),
+                                DropdownMenuItem(
+                                  value: "female",
+                                  child: Text("female"),
+                                ),
+                              ],
+
+                              onChanged: (value) {
+                                setState(() {
+                                  selectedGender = value;
+                                });
+                              },
+                            ),
+                            ///////
+                            SizedBox(
+                              height: isWide
+                                  ? 20
+                                  : MediaQuery.of(context).size.height * 0.04,
+                            ),
+                            DefaultFormField(
+                              textControl: nationalIDController,
+                              label: "enter your national ID",
+                              prefix: Icons.numbers,
+                              validate: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'field cannot be empty';
+                                }
+                                return null;
+                              },
+                              type: TextInputType.number,
+                            ),
+                            //////
+                            SizedBox(
+                              height: isWide
+                                  ? 20
+                                  : MediaQuery.of(context).size.height * 0.04,
+                            ),
+                            DefaultFormField(
+                              textControl: dateController,
+                              label: "enter your birth date",
+                              prefix: Icons.calendar_month,
+                              validate: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'field cannot be empty';
+                                }
+                                return null;
+                              },
+                              type: TextInputType.datetime,
+                            ),
+
+                            //////
+                            SizedBox(
+                              height: isWide
+                                  ? 20
+                                  : MediaQuery.of(context).size.height * 0.04,
+                            ),
+                            DefaultFormField(
+                              textControl: emailController,
+                              label: "enter your Email",
+                              prefix: Icons.email,
+                              validate: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'field cannot be empty';
+                                }
+                                return null;
+                              },
+                              type: TextInputType.emailAddress,
+                            ),
+                            ////////
+                            SizedBox(
+                              height: isWide
+                                  ? 20
+                                  : MediaQuery.of(context).size.height * 0.04,
+                            ),
+                            DefaultFormField(
+                              textControl: phoneNumberController,
+                              label: "enter your phone number",
+                              prefix: Icons.phone,
+                              validate: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'field cannot be empty';
+                                }
+                                return null;
+                              },
+                              type: TextInputType.phone,
+                            ),
+                            ////////////
+                            SizedBox(
+                              height: isWide
+                                  ? 20
+                                  : MediaQuery.of(context).size.height * 0.04,
+                            ),
+
+                            DefaultFormField(
+                              isPassword: isPassword,
+                              textControl: passwordController,
+                              label: "enter your password",
+                              prefix: Icons.password_sharp,
+                              validate: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'field cannot be empty';
+                                }
+                                return null;
+                              },
+                              type: TextInputType.visiblePassword,
+                              suffix: isPassword
+                                  ? Icons.visibility_off
+                                  : Icons.visibility,
+                              suffixPressed: () {
+                                setState(() {
+                                  isPassword = !isPassword;
+                                });
+                              },
+                            ),
+                            /////////////////
+                            SizedBox(
+                              height: isWide
+                                  ? 20
+                                  : MediaQuery.of(context).size.height * 0.04,
+                            ),
+                            ////////////////
+                            DefaultFormField(
+                              isPassword: isPassword,
+                              textControl: confirmPasswordController,
+                              label: "enter your password again",
+                              prefix: Icons.password_sharp,
+                              validate: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'field cannot be empty';
+                                }
+                                return null;
+                              },
+                              type: TextInputType.visiblePassword,
+                              suffix: isPassword
+                                  ? Icons.visibility_off
+                                  : Icons.visibility,
+                              suffixPressed: () {
+                                setState(() {
+                                  isPassword = !isPassword;
+                                });
+                              },
+                            ),
+                            //////
+                            /////////////////
+                            SizedBox(
+                              height: isWide
+                                  ? 20
+                                  : MediaQuery.of(context).size.height * 0.04,
+                            ),
+                            SizedBox(
+                              height: isWide ? 48 : null,
+                              child: DefaultButton(
+                                width: isWide ? 320 : double.infinity,
+                                buttonText: "Create account",
+                                function: () async {
+                                  if (formKey.currentState!.validate()) {
+                                    try {
+                                      await signUp();
+                                    } catch (error) {
+                                      if (mounted) {
+                                        ScaffoldMessenger.of(
+                                          context,
+                                        ).showSnackBar(
+                                          SnackBar(
+                                            backgroundColor:
+                                                Colors.red.shade700,
+                                            behavior: SnackBarBehavior.floating,
+                                            duration: const Duration(
+                                              seconds: 4,
+                                            ),
+                                            content: Row(
+                                              children: [
+                                                const Icon(
+                                                  Icons.error_outline,
+                                                  color: Colors.white,
+                                                ),
+                                                const SizedBox(width: 12),
+                                                Expanded(
+                                                  child: Text(
+                                                    error.toString(),
+                                                    style: const TextStyle(
+                                                      color: Colors.white,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        );
+                                      }
+                                    }
+                                  }
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
                   ),
-                ],
+                ),
               ),
             ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 }
