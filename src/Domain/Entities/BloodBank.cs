@@ -64,7 +64,17 @@ public class BloodBank : BaseEntity
         return Staff.Any(u => u.Id == UserId);
     }
 
-    // This is no more needed, because we are using the built package PostGIS from PostgreSQL,
+    public int CountBasedOnStatus(BloodUnitStatus status)
+    {
+        int counter=0;
+        if (StoredUnits != null)
+        foreach (BloodUnit Unit in StoredUnits)
+            if (Unit.Status == status)
+                ++counter;
+
+        return counter;
+    }
+    // This is no more needed, because we are using the built in package PostGIS from PostgreSQL,
     // and PostGIS provides Distance method.
     // This way will give use better performance.
     /*public double DistanceTo(double TargetLatitude, double TargetLongitude) //AI GENERATED!

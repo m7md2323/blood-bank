@@ -42,6 +42,38 @@ public class BloodUnit : BaseEntity
 
     //Methods
 
+
+    // Blood unit Factory Methods Creator
+    private BloodUnit() {}
+    public static BloodUnit Create(
+        Guid donorId,
+        Guid bloodBankId,
+        BloodType bloodType,
+        ComponentType componentType,
+        double volumeMl,
+        DateTime collectionDate,
+        DateTime expirationDate)
+    {
+    if (donorId == Guid.Empty)
+        throw new ArgumentException("DonorId cannot be empty.", nameof(donorId));
+    if (bloodBankId == Guid.Empty)
+        throw new ArgumentException("BloodBankId cannot be empty.", nameof(bloodBankId));
+    if (volumeMl <= 0)
+        throw new ArgumentException("Volume must be greater than zero.", nameof(volumeMl));
+    if (expirationDate <= collectionDate)
+        throw new ArgumentException("Expiration date must be after collection date.", nameof(expirationDate));
+    return new BloodUnit
+    {
+        DonorId = donorId,
+        CurrentBloodBankId = bloodBankId,
+        BloodType = bloodType,
+        ComponentType = componentType,
+        VolumeMl = volumeMl,
+        CollectionDate = collectionDate,
+        ExpirationDate = expirationDate,
+        Status = BloodUnitStatus.Quarantined
+    };
+}
     public bool IsExpired()
     {
         return ExpirationDate <= DateTime.UtcNow;
