@@ -2,6 +2,7 @@ import 'package:blood_bank/screens/MainScreens/AdminScreen.dart';
 import 'package:blood_bank/screens/MainScreens/HomePage.dart';
 import 'package:blood_bank/screens/MainScreens/MapScreen.dart';
 import 'package:blood_bank/screens/MainScreens/RequestAlertScreen.dart';
+import 'package:blood_bank/screens/MainScreens/staffscreens/doctorRequestScreen.dart';
 import 'package:blood_bank/screens/WalletSubScreens/AllTransactionsScreen.dart';
 import 'package:blood_bank/screens/WalletSubScreens/transferScreen.dart';
 import 'package:flutter/material.dart';
@@ -13,9 +14,11 @@ import 'package:blood_bank/screens/MainScreens/StaffLoginScreen.dart';
 
 
 final GoRouter appRouter = GoRouter(
-  initialLocation: '/',
+  initialLocation: '/transfer-credit-screen',
   routes: [
     GoRoute(path: '/', builder: (context, state) => LoginScreen()),
+    GoRoute(path: '/doctor-request-screen',
+    builder: (context, state) => DoctorRequestScreen(),),
     GoRoute(
       path: '/staff-login-screen',
       builder: (context, state) => StaffLoginScreen(),
