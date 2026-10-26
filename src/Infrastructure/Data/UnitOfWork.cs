@@ -16,7 +16,7 @@ public class UnitOfWork : IUnitOfWork {
     private IRepository<DonationCampaign>? _donationCampaigns;
     private IRepository<Notification>? _notifications;
     private IRepository<WalletTransaction>? _walletTransactions; 
-
+    private IRepository<BloodTestResult>? _bloodTestResults; 
     public UnitOfWork(ApplicationDbContext context){
         _context = context;
     }
@@ -31,7 +31,7 @@ public class UnitOfWork : IUnitOfWork {
     public IRepository<DonationCampaign> DonationCampaigns => _donationCampaigns ??= new Repository<DonationCampaign>(_context);
     public IRepository<Notification> Notifications => _notifications ??= new Repository<Notification>(_context);
     public IRepository<WalletTransaction> WalletTransactions => _walletTransactions ??= new Repository<WalletTransaction>(_context);
-    
+    public IRepository<BloodTestResult> BloodTestResults => _bloodTestResults ??= new Repository<BloodTestResult>(_context);  
     public async Task<int> SaveChangesAsync(){
         return await _context.SaveChangesAsync();
     }

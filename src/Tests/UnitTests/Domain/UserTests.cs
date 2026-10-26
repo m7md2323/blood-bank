@@ -71,10 +71,7 @@ public class UserTests
         // Arrange
         var user = HelperMetods.CreateTestUser();
         user.DonatedUnits.Add(
-            new BloodUnit{
-                ComponentType=ComponentType.Platelets,
-                CollectionDate= DateTime.UtcNow.AddDays(-10)
-            }
+            HelperMetods.CreateTestBloodUnit()
         );
 
         // Act
