@@ -1,7 +1,9 @@
+using Application.Common;
+
 namespace Application.Features.BloodInventory;
 
 public interface IBloodInventoryService {
-    Task<bool> AddUnitAsync(Guid staffId, AddBloodUnitDto bloodUnitDto,CancellationToken ct);
-    Task<InventorySummaryDto> GetInventorySummaryAsync(Guid staffId,CancellationToken ct);
-    Task<string> RecordTestResultAsync(Guid staffId, RecordBloodTestDto bloodTestDto,CancellationToken ct);
+    Task<Result<Guid>> AddUnitAsync(Guid staffId, AddBloodUnitDto bloodUnitDto,CancellationToken ct);
+    Task<Result<InventorySummaryDto>> GetInventorySummaryAsync(Guid staffId,CancellationToken ct);
+    Task<Result<BloodTestOutcomeDto>> RecordTestResultAsync(Guid staffId, RecordBloodTestDto bloodTestDto,CancellationToken ct);
 }

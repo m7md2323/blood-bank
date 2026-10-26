@@ -3,6 +3,8 @@ using Domain.Interfaces;
 using Domain.Specifications;
 using Domain.Enums;
 using Domain.Specifications.BloodUnits;
+using Domain.Common;
+using Application.Common;
 
 namespace Application.Features.BloodInventory;
 
@@ -47,16 +49,22 @@ public class BloodInventoryService : IBloodInventoryService {
     */
 
     // This method will add units to the Blood Bnank Inventory by a staff member.
-    public async Task<bool> AddUnitAsync(Guid staffId, AddBloodUnitDto bloodUnitDto, CancellationToken ct){
+    public async Task<Result<Guid>> AddUnitAsync(Guid staffId, AddBloodUnitDto bloodUnitDto, CancellationToken ct){
         var staff = await _unitOfWork.Users.GetByIdAsync(staffId);
 
 
         if (staff is null || staff.CanManageInventory() == false || !staff.BloodBankId.HasValue){
-            return false;
+            return Result<Guid>.Unauthorized("This staff member doesn't have access to blood inventory, or there is an error fetching the staff object");
+
         }
 
-        _ = Enum.TryParse<BloodType>(bloodUnitDto.BloodType, out var parseBloodType);
-        _ = Enum.TryParse<ComponentType>(bloodUnitDto.ComponentType, out var parseComponantType);
+        if(!Enum.TryParse<BloodType>(bloodUnitDto.BloodType, out var parseBloodType)){
+            return Result<Guid>.Failure("Faild to parse Blood Type",ErrorType.ParseFaild);
+        }
+        if(!Enum.TryParse<ComponentType>(bloodUnitDto.ComponentType, out var parseComponantType)){
+            return Result<Guid>.Failure("Faild to parse Component Type",ErrorType.ParseFaild);
+        }
+
         var newBloodUnit = BloodUnit.Create(
             bloodUnitDto.DonorId,
             staff.BloodBankId.Value,
@@ -71,23 +79,20 @@ public class BloodInventoryService : IBloodInventoryService {
 
         await _unitOfWork.SaveChangesAsync();
 
-        return true;
+        return Result<Guid>.Success(newBloodUnit.Id);
     }
     // This method is responsable of giving a staff member a Summary of the Inventory.
-    public async Task<InventorySummaryDto> GetInventorySummaryAsync(Guid staffId,CancellationToken ct){
+    public async Task<Result<InventorySummaryDto>> GetInventorySummaryAsync(Guid staffId,CancellationToken ct){
         var staff = await _unitOfWork.Users.GetByIdAsync(staffId);
 
         if (staff is null || staff.CanManageInventory() == false || !staff.BloodBankId.HasValue){
-            return null;
+            return Result<InventorySummaryDto>.Unauthorized("This staff member doesn't have access to blood inventory, or there is an error fetching the staff object");
         }
 
-        var bloodBank = staff.BloodBank;
+        var bloodBank =await _unitOfWork.BloodBanks.GetByIdAsync((Guid)staff.BloodBankId);
 
         if(bloodBank is null)
-            return null;
-
-        if (bloodBank.StoredUnits.Count == 0)
-            return null;
+            return Result<InventorySummaryDto>.Failure("Faild to fetch Blood Bank or it doesn't exists.",ErrorType.NotFound);
         
         ISpecification<BloodUnit> spec = new BloodUnitsByBloodBankSpec(bloodBank.Id);
 
@@ -103,13 +108,13 @@ public class BloodInventoryService : IBloodInventoryService {
             
             map.TryGetValue(key,out var counts);
 
-            if (Unit.Status == BloodUnitStatus.Available && !Unit.IsExpired()){
+            if (Unit.Status == BloodUnitStatus.Available){
                 counts.Available++;
             }
-            else if (Unit.Status == BloodUnitStatus.Quarantined && !Unit.IsExpired()){
+            else if (Unit.Status == BloodUnitStatus.Quarantined){
                 counts.Quarantined++;
             }
-            else if (Unit.Status == BloodUnitStatus.Expired && !Unit.IsExpired()){
+            else if (Unit.IsExpired()){
                 counts.Expired++;
             }
 
@@ -137,38 +142,39 @@ public class BloodInventoryService : IBloodInventoryService {
             bloodInventoryRecords
         );
 
-        return inventorySummary;
+        return Result<InventorySummaryDto>.Success(inventorySummary);
 
     }
-    public async Task<string> RecordTestResultAsync(Guid staffId, RecordBloodTestDto bloodTestDto,CancellationToken ct){
+    public async Task<Result<BloodTestOutcomeDto>> RecordTestResultAsync(Guid staffId, RecordBloodTestDto bloodTestDto,CancellationToken ct){
         var staff = await _unitOfWork.Users.GetByIdAsync(staffId);
 
         if (staff is null || staff.CanManageInventory() == false){
-            return "Unauthorized.";
+            return Result<BloodTestOutcomeDto>.Unauthorized("Staff member doesn't have access, or the system faild to load the staff member");
         }
 
         ISpecification<BloodUnit> spec = new BloodUnitWithTestsByIdSpec(bloodTestDto.BloodUnitId);
         var bloodUnit = await _unitOfWork.BloodUnits.GetBySpecAsync(spec,ct);
 
         if (bloodUnit is null){
-            return "Blood Unit is not found or there is an error fetching it.";
+            return Result<BloodTestOutcomeDto>.NotFound("Blood Unit is not found or there is an error fetching it.");
         }
 
         if (bloodUnit.Status != BloodUnitStatus.Quarantined){
-            return $"Cannot record test, unit status is {bloodUnit.Status}.";
+            return Result<BloodTestOutcomeDto>.Failure($"Cannot record test, unit status is {bloodUnit.Status}.");
         }
 
         if (!Enum.TryParse<TestType>(bloodTestDto.TestType, true, out var parseBloodTest))
         {
-            return "Invalid test type provided.";
+            return Result<BloodTestOutcomeDto>.Failure("Invalid test type provided.",ErrorType.ParseFaild);;
         }
 
         if (bloodUnit.TestResults.Any(t => t.TestType == parseBloodTest))
         {
-            return $"Test {parseBloodTest} has already been recorded for this blood unit.";
+            return Result<BloodTestOutcomeDto>.Failure($"Test {parseBloodTest} has already been recorded for this blood unit.");
         }
 
         var testResult = new BloodTestResult();
+        
         
         if (bloodTestDto.IsPassed == true) {
             testResult = new BloodTestResult {
@@ -179,39 +185,51 @@ public class BloodInventoryService : IBloodInventoryService {
 
             bloodUnit.TestResults.Add(testResult);
 
+            await _unitOfWork.SaveChangesAsync();
             // Check if all tests are passed.
             var bloodUnitTests = bloodUnit.TestResults;
+            var remainingTests = Enum.GetNames<TestType>().Length - bloodUnitTests.Count;
+
             if (bloodUnitTests.Count != Enum.GetNames<TestType>().Length){
-                await _unitOfWork.SaveChangesAsync();
-                return $"There is is {Enum.GetNames<TestType>().Length - bloodUnitTests.Count} tests left, please provide all test results regarding this blood unit.";
-            }
-            // Check if the blood unit passed all tests.
-            foreach (var test in bloodUnitTests){
-                if (test.TestResult == TestResult.Positive){
 
-                    bloodUnit.Status = BloodUnitStatus.Expired;
-                    await _unitOfWork.SaveChangesAsync();
+                var bloodTestOutcome = new BloodTestOutcomeDto(
+                    bloodUnit.Id,
+                    bloodTestDto.TestType,
+                    bloodUnit.Status.ToString(),
+                    remainingTests,
+                    bloodUnit.Status == BloodUnitStatus.Available,
+                    $"Test {bloodTestDto.TestType} passed. {remainingTests} tests remaining."
 
-                    return "This blood unit didn't pass all tests, it will be marked as expired!";
-                }    
+                );
+
+                return Result<BloodTestOutcomeDto>.Success(bloodTestOutcome);
             }
 
             // If we are here, then the blood unit passed all tests, and can be considered safe (Available)
             bloodUnit.Status = BloodUnitStatus.Available;
-            
+
             var donor = await _unitOfWork.Users.GetByIdAsync(bloodUnit.DonorId);
 
             if (donor is null){
-                return "User does not exist";
+                return Result<BloodTestOutcomeDto>.Failure("User does not exist");
             }
 
             donor.AdjustBloodBalance(1);
 
             donor.DonatedUnits.Add(bloodUnit);
-
+            
             await _unitOfWork.SaveChangesAsync();
 
-            return "Blood unit has been added to user and blood bank inventory Succussfully.";
+            var bloodTestOutcome2 = new BloodTestOutcomeDto(
+                bloodUnit.Id,
+                bloodTestDto.TestType,
+                bloodUnit.Status.ToString(),
+                Enum.GetNames<TestType>().Length - bloodUnitTests.Count,
+                bloodUnit.Status == BloodUnitStatus.Available,
+                "All tests passed Successfully, the unit is now ready to be used."
+                
+            );     
+            return Result<BloodTestOutcomeDto>.Success(bloodTestOutcome2);
 
         }
         else {
@@ -220,9 +238,22 @@ public class BloodInventoryService : IBloodInventoryService {
                 TestType = parseBloodTest,
                 TestResult = TestResult.Positive
             };
+            bloodUnit.TestResults.Add(testResult);
+            bloodUnit.Status = BloodUnitStatus.Expired;
 
             await _unitOfWork.SaveChangesAsync();
-            return $"Blood unit appeared to be infected while taking the {parseBloodTest} test.";
+
+            var bloodTestOutcome = new BloodTestOutcomeDto(
+                bloodUnit.Id,
+                bloodTestDto.TestType,
+                bloodUnit.Status.ToString(),
+                0,
+                bloodUnit.Status == BloodUnitStatus.Available,
+                $"Test {bloodTestDto.TestType} didn't pass, marking this blood unit as expired"
+                
+            );
+
+            return Result<BloodTestOutcomeDto>.Success(bloodTestOutcome);
         }
         
     }
