@@ -7,7 +7,6 @@ import 'package:blood_bank/shared/styles/components.dart';
 import 'package:blood_bank/shared/styles/constants.dart';
 import 'package:blood_bank/shared/styles/responsive_methods.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_map/flutter_map.dart';
 
 class AdminScreen extends StatefulWidget {
@@ -66,6 +65,17 @@ class _AdminScreenState extends State<AdminScreen> {
         final statWidth = constraints.maxWidth >= 900
             ? (contentWidth - 32) / 3
             : contentWidth;
+        final cardWidth = isWide ? statWidth : context.resWidth(1);
+        final cardHeight = isWide ? 120.0 : context.resHeight(0.2);
+        final cardPadding = isWide
+            ? EdgeInsets.zero
+            : EdgeInsets.symmetric(
+                vertical: context.resHeight(0.03),
+                horizontal: context.resWidth(0.1),
+              );
+        final cardTextAlign = isWide ? TextAlign.center : null;
+        final headingSize = isWide ? 20.0 : context.resWidth(0.05);
+        final detailSize = isWide ? 14.0 : context.resWidth(0.03);
         return Scaffold(
           key: scaffoldKey,
           appBar: AppBar(
@@ -228,286 +238,231 @@ class _AdminScreenState extends State<AdminScreen> {
               : FloatingActionButtonLocation.miniEndTop,
 
           body: SingleChildScrollView(
-            child: Align(
-              alignment: Alignment.topCenter,
-              child: ConstrainedBox(
+            child: Center(
+              child: Container(
                 constraints: BoxConstraints(
                   maxWidth: isWide ? 1120 : double.infinity,
                 ),
-                child: Padding(
-                  padding: isWide
-                      ? const EdgeInsets.fromLTRB(24, 24, 24, 96)
-                      : EdgeInsets.zero,
-                  child: Column(
-                    children: [
-                      Wrap(
-                        spacing: isWide ? 16 : 0,
-                        runSpacing: isWide ? 16 : 0,
+                padding: isWide
+                    ? const EdgeInsets.fromLTRB(24, 24, 24, 96)
+                    : EdgeInsets.zero,
+                child: Column(
+                  children: [
+                    Wrap(
+                      spacing: isWide ? 16 : 0,
+                      runSpacing: isWide ? 16 : 0,
+                      children: [
+                        Container(
+                          width: cardWidth,
+                          height: cardHeight,
+                          padding: cardPadding,
+                          child: DefaultCard(
+                            color: mainColor,
+                            child: Center(
+                              child: Text(
+                                "total requests for 'date': '#'",
+                                textAlign: cardTextAlign,
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w200,
+                                  fontSize: headingSize,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        Container(
+                          width: cardWidth,
+                          height: cardHeight,
+                          padding: cardPadding,
+                          child: DefaultCard(
+                            color: mainColor,
+                            child: Center(
+                              child: Text(
+                                "requests answered for 'date': '#'",
+                                textAlign: cardTextAlign,
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w200,
+                                  fontSize: isWide
+                                      ? 20
+                                      : context.resWidth(0.045),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        Container(
+                          width: cardWidth,
+                          height: cardHeight,
+                          padding: cardPadding,
+                          child: DefaultCard(
+                            color: mainColor,
+                            child: Center(
+                              child: Text(
+                                "cases fulfilled for 'date': '#'",
+                                textAlign: cardTextAlign,
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w200,
+                                  fontSize: headingSize,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    Padding(
+                      padding: EdgeInsets.fromLTRB(
+                        isWide ? 0 : context.resWidth(0.02),
+                        isWide ? 32 : 0,
+                        0,
+                        isWide ? 16 : context.resWidth(0.02),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          SizedBox(
-                            width: isWide ? statWidth : context.resWidth(1),
-                            child: Center(
-                              child: Container(
-                                height: isWide ? 120 : context.resHeight(0.2),
-                                width: context.resWidth(1),
-                                padding: EdgeInsets.symmetric(
-                                  vertical: isWide
-                                      ? 0
-                                      : context.resHeight(0.03),
-                                  horizontal: isWide
-                                      ? 0
-                                      : context.resWidth(0.1),
-                                ),
-                                child: DefaultCard(
-                                  color: mainColor,
-                                  child: Center(
-                                    child: Text(
-                                      "total requests for 'date': '#'",
-                                      textAlign: isWide
-                                          ? TextAlign.center
-                                          : null,
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.w200,
-                                        fontSize: isWide
-                                            ? 20
-                                            : context.resWidth(0.05),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                          SizedBox(
-                            width: isWide ? statWidth : context.resWidth(1),
-                            child: Center(
-                              child: Container(
-                                height: isWide ? 120 : context.resHeight(0.2),
-                                width: context.resWidth(1),
-                                padding: EdgeInsets.symmetric(
-                                  vertical: isWide
-                                      ? 0
-                                      : context.resHeight(0.03),
-                                  horizontal: isWide
-                                      ? 0
-                                      : context.resWidth(0.1),
-                                ),
-                                child: DefaultCard(
-                                  color: mainColor,
-                                  child: Center(
-                                    child: Text(
-                                      "requests answered for 'date': '#'",
-                                      textAlign: isWide
-                                          ? TextAlign.center
-                                          : null,
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.w200,
-                                        fontSize: isWide
-                                            ? 20
-                                            : context.resWidth(0.045),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                          SizedBox(
-                            width: isWide ? statWidth : context.resWidth(1),
-                            child: Center(
-                              child: Container(
-                                height: isWide ? 120 : context.resHeight(0.2),
-                                width: context.resWidth(1),
-                                padding: EdgeInsets.symmetric(
-                                  vertical: isWide
-                                      ? 0
-                                      : context.resHeight(0.03),
-                                  horizontal: isWide
-                                      ? 0
-                                      : context.resWidth(0.1),
-                                ),
-                                child: DefaultCard(
-                                  color: mainColor,
-                                  child: Center(
-                                    child: Text(
-                                      "cases fulfilled for 'date': '#'",
-                                      textAlign: isWide
-                                          ? TextAlign.center
-                                          : null,
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.w200,
-                                        fontSize: isWide
-                                            ? 20
-                                            : context.resWidth(0.05),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
+                          Text(
+                            "Current requests out", //EDIT NEEDED: add a fetching function and an 'if' to validate if null
+                            style: TextStyle(
+                              fontSize: headingSize,
+                              fontWeight: FontWeight.bold,
                             ),
                           ),
                         ],
                       ),
-                      Padding(
-                        padding: EdgeInsets.fromLTRB(
-                          isWide ? 0 : context.resWidth(0.02),
-                          isWide ? 32 : 0,
-                          0,
-                          isWide ? 16 : context.resWidth(0.02),
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
+                    ),
+                    Column(
+                      children: List.generate(3, (index) {
+                        return ExpansionTile(
+                          tilePadding: isWide
+                              ? const EdgeInsets.symmetric(
+                                  horizontal: 16,
+                                  vertical: 8,
+                                )
+                              : null,
+                          leading: const Text("O+"), // Blood type
+
+                          title: Text(
+                            "Request ${index + 1}: Request Center",
+                            style: TextStyle(
+                              fontSize: isWide ? 16 : context.resWidth(0.04),
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+
+                          subtitle: Text(
+                            "Date of request ${index + 1}",
+                            style: TextStyle(fontSize: detailSize),
+                          ),
+
+                          trailing: Text(
+                            isRequestFullfilled ? "Fulfilled" : "Not fulfilled",
+                            style: TextStyle(
+                              fontSize: detailSize,
+                              color: isRequestFullfilled
+                                  ? Colors.green
+                                  : Colors.red,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+
+                          // Information revealed when expanded
                           children: [
-                            Text(
-                              "Current requests out", //EDIT NEEDED: add a fetching function and an 'if' to validate if null
-                              style: TextStyle(
-                                fontSize: isWide ? 20 : context.resWidth(0.05),
-                                fontWeight: FontWeight.bold,
+                            ListTile(
+                              leading: const Icon(Icons.bloodtype),
+                              title: const Text("Blood type"),
+                              subtitle: const Text("O+"),
+                            ),
+                            ListTile(
+                              leading: const Icon(Icons.water_drop),
+                              title: const Text("Units needed"),
+                              subtitle: const Text("6 units"),
+                            ),
+                            ListTile(
+                              leading: const Icon(Icons.local_hospital),
+                              title: const Text("Request center"),
+                              subtitle: const Text(
+                                "Central North Blood Center",
                               ),
                             ),
                           ],
-                        ),
+                        );
+                      }),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.fromLTRB(
+                        0,
+                        isWide ? 32 : context.resHeight(0.02),
+                        0,
+                        0,
                       ),
-                      Column(
-                        children: List.generate(3, (index) {
-                          return ExpansionTile(
-                            tilePadding: isWide
-                                ? const EdgeInsets.symmetric(
-                                    horizontal: 16,
-                                    vertical: 8,
-                                  )
-                                : null,
-                            leading: const Text("O+"), // Blood type
-
-                            title: Text(
-                              "Request ${index + 1}: Request Center",
-                              style: TextStyle(
-                                fontSize: isWide ? 16 : context.resWidth(0.04),
-                                fontWeight: FontWeight.bold,
-                              ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Current donors locations out", //EDIT NEEDED: add a fetching function and an 'if' to validate if null
+                            style: TextStyle(
+                              fontSize: headingSize,
+                              fontWeight: FontWeight.bold,
                             ),
-
-                            subtitle: Text(
-                              "Date of request ${index + 1}",
-                              style: TextStyle(
-                                fontSize: isWide ? 14 : context.resWidth(0.03),
-                              ),
-                            ),
-
-                            trailing: Text(
-                              isRequestFullfilled
-                                  ? "Fulfilled"
-                                  : "Not fulfilled",
-                              style: TextStyle(
-                                fontSize: isWide ? 14 : context.resWidth(0.03),
-                                color: isRequestFullfilled
-                                    ? Colors.green
-                                    : Colors.red,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-
-                            // Information revealed when expanded
-                            children: [
-                              ListTile(
-                                leading: const Icon(Icons.bloodtype),
-                                title: const Text("Blood type"),
-                                subtitle: const Text("O+"),
-                              ),
-                              ListTile(
-                                leading: const Icon(Icons.water_drop),
-                                title: const Text("Units needed"),
-                                subtitle: const Text("6 units"),
-                              ),
-                              ListTile(
-                                leading: const Icon(Icons.local_hospital),
-                                title: const Text("Request center"),
-                                subtitle: const Text(
-                                  "Central North Blood Center",
-                                ),
-                              ),
-                            ],
-                          );
-                        }),
+                          ),
+                        ],
                       ),
-                      Padding(
-                        padding: EdgeInsets.fromLTRB(
-                          0,
-                          isWide ? 32 : context.resHeight(0.02),
-                          0,
-                          0,
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Text(
-                              "Current donors locations out", //EDIT NEEDED: add a fetching function and an 'if' to validate if null
-                              style: TextStyle(
-                                fontSize: isWide ? 20 : context.resWidth(0.05),
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ],
-                        ),
+                    ),
+                    Container(
+                      padding: EdgeInsets.fromLTRB(
+                        isWide ? 0 : context.resWidth(0.05),
+                        isWide ? 16 : context.resHeight(0.05),
+                        isWide ? 0 : context.resWidth(0.05),
+                        isWide ? 16 : context.resHeight(0.05),
                       ),
-                      Container(
-                        padding: EdgeInsets.fromLTRB(
-                          isWide ? 0 : context.resWidth(0.05),
-                          isWide ? 16 : context.resHeight(0.05),
-                          isWide ? 0 : context.resWidth(0.05),
-                          isWide ? 16 : context.resHeight(0.05),
-                        ),
-                        child: StreamBuilder(
-                          stream: donorsLocation,
-                          builder: (context, asyncSnapshot) {
-                            if (asyncSnapshot.hasError) {
-                              return Text("error: $asyncSnapshot.error");
-                            }
-                            if (asyncSnapshot.connectionState ==
-                                    ConnectionState.waiting &&
-                                !asyncSnapshot.hasData) {
-                              return const Center(
-                                child: CircularProgressIndicator(),
-                              );
-                            }
-                            final donors = asyncSnapshot.data!;
-                            return Padding(
-                              padding: EdgeInsets.fromLTRB(
-                                0,
-                                0,
-                                isWide ? 0 : context.resWidth(0.02),
-                                0,
-                              ),
-                              child: isWide
-                                  ? SizedBox(
-                                      height: 400,
-                                      width: double.infinity,
-                                      // Bound the shared map's viewport-based label and
-                                      // marker sizing without changing its interactions.
-                                      child: MediaQuery(
-                                        data: MediaQuery.of(context).copyWith(
-                                          size: const Size(500, 400 / 0.45),
-                                        ),
-                                        child: DonorProximityMap(
-                                          donors: donors,
-                                          mapController: mapController,
-                                        ),
-                                      ),
-                                    )
-                                  : DonorProximityMap(
-                                      donors: donors,
-                                      mapController: mapController,
-                                    ),
+                      child: StreamBuilder(
+                        stream: donorsLocation,
+                        builder: (context, asyncSnapshot) {
+                          if (asyncSnapshot.hasError) {
+                            return Text("error: $asyncSnapshot.error");
+                          }
+                          if (asyncSnapshot.connectionState ==
+                                  ConnectionState.waiting &&
+                              !asyncSnapshot.hasData) {
+                            return const Center(
+                              child: CircularProgressIndicator(),
                             );
-                          },
-                        ),
+                          }
+                          final donors = asyncSnapshot.data!;
+                          final map = DonorProximityMap(
+                            donors: donors,
+                            mapController: mapController,
+                          );
+                          return Padding(
+                            padding: EdgeInsets.fromLTRB(
+                              0,
+                              0,
+                              isWide ? 0 : context.resWidth(0.02),
+                              0,
+                            ),
+                            child: isWide
+                                ? SizedBox(
+                                    height: 400,
+                                    width: double.infinity,
+                                    // Bound the shared map's viewport-based label and
+                                    // marker sizing without changing its interactions.
+                                    child: MediaQuery(
+                                      data: MediaQuery.of(context).copyWith(
+                                        size: const Size(500, 400 / 0.45),
+                                      ),
+                                      child: map,
+                                    ),
+                                  )
+                                : map,
+                          );
+                        },
                       ),
-                      //EDIT NEEDED: add a "add credit to donor" widget
-                    ],
-                  ),
+                    ),
+                    //EDIT NEEDED: add a "add credit to donor" widget
+                  ],
                 ),
               ),
             ),

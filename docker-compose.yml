@@ -1,4 +1,17 @@
 services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "5000:8080"
+    environment:
+      ASPNETCORE_ENVIRONMENT: ${ASPNETCORE_ENVIRONMENT:-Development}
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: unless-stopped
+
   flutter:
     build:
       context: ./ZaidFlutterCode
@@ -10,7 +23,7 @@ services:
     restart: unless-stopped
 
   postgres:
-    image: postgres:17
+    image: postgis/postgis:17-3.5
     container_name: bloodbank_postgres
     restart: unless-stopped
     environment:
@@ -21,6 +34,11 @@ services:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d smart_blood_bank"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
 
 volumes:
   postgres_data:

@@ -8,7 +8,7 @@ using System.Text;
 using Application;
 using Infrastructure;
 using Infrastructure.Security;
-
+using Application.Interfaces;
 var builder = WebApplication.CreateBuilder(args);
 
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
@@ -68,6 +68,12 @@ builder.Services.AddOpenApi();
 
 var app = builder.Build();
 
+using (var scope = app.Services.CreateScope())
+{
+    var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+    var passwordHasher = scope.ServiceProvider.GetRequiredService<IPasswordHasher>();
+    await DatabaseSeeder.SeedAsync(context, passwordHasher);
+}
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {

@@ -27,4 +27,31 @@ public static User CreateTestUser(
             bloodType: bloodType
         );
     }
+
+    public static BloodUnit CreateTestBloodUnit(
+        Guid? donorId = null,
+        Guid? bloodBankId = null,
+        BloodType bloodType = BloodType.OPositive,
+        ComponentType componentType = ComponentType.WholeBlood,
+        double volumeMl = 450.0,
+        DateTime? collectionDate = null,
+        DateTime? expirationDate = null,
+        BloodUnitStatus status = BloodUnitStatus.Available)
+    {
+        var collected = collectionDate ?? DateTime.UtcNow;
+        var expired = expirationDate ?? (collected > DateTime.UtcNow ? collected.AddDays(35) : DateTime.UtcNow.AddDays(35));
+
+        var unit = BloodUnit.Create(
+            donorId: donorId ?? Guid.NewGuid(),
+            bloodBankId: bloodBankId ?? Guid.NewGuid(),
+            bloodType: bloodType,
+            componentType: componentType,
+            volumeMl: volumeMl,
+            collectionDate: collected,
+            expirationDate: expired
+        );
+
+        unit.Status = status;
+        return unit;
+    }
 }

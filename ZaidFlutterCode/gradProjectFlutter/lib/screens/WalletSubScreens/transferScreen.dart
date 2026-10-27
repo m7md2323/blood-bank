@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:blood_bank/models/users.dart';
 import 'package:blood_bank/shared/network/AuthService.dart';
+import 'package:blood_bank/shared/styles/components.dart';
 import 'package:blood_bank/shared/styles/constants.dart';
 import 'package:blood_bank/shared/styles/responsive_methods.dart';
 import 'package:flutter/material.dart';
@@ -19,6 +20,7 @@ class _TransferCreditScreenState extends State<TransferCreditScreen> {
   Timer? debounce;
   Map<String, dynamic>? donor;
   bool isLoading = false;
+  TextEditingController unitCountController = TextEditingController();
   String? errorMessage;
   late Future<List<Users>> usersFuture;
   @override
@@ -102,6 +104,7 @@ class _TransferCreditScreenState extends State<TransferCreditScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         backgroundColor: mainColor,
         title: const Text(
@@ -184,7 +187,8 @@ class _TransferCreditScreenState extends State<TransferCreditScreen> {
                       ),
                     ),
                     child: ListView.builder(
-                      shrinkWrap: true,//Note: removing this causes the page to crash
+                      shrinkWrap:
+                          true, //Note: removing this causes the page to crash
                       physics: const NeverScrollableScrollPhysics(),
                       itemCount: filteredUsers.length,
                       itemBuilder: (context, index) {
@@ -195,12 +199,71 @@ class _TransferCreditScreenState extends State<TransferCreditScreen> {
                           debugPrint(
                             'Available IDs: ${dummyUsers.map((user) => user.id).toList()}',
                           );
-                          return ListTile(
-                            title: Text(
-                              'First name: ${user.Fname} \n \nLast name:${user.Lname}\n \nID: ${user.id}',
+                          return Column(
+                            children: [
+                              ListTile(
+                                title: Text(
+                                  'First name: ${user.Fname} \n \nLast name:${user.Lname}\n \nID: ${user.id}',
 
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            ),
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                ),
+                              ),
+
+                              SizedBox(
+                                height: context.resHeight(
+                                  0.03,
+                                ), //EDIT NEEDED: this had isWide but removed
+                              ),
+                              DefaultFormField(
+                                textControl: unitCountController,
+                                label: "# of Units to send",
+                                prefix: Icons.numbers,
+                                validate: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return 'field cannot be empty';
+                                  }
+                                  return null;
+                                },
+                                type: TextInputType.numberWithOptions(),
+                              ),
+                              SizedBox(height: context.resHeight(0.03)),
+
+                              DefaultButton(
+                                buttonText: "Send request",
+                                function: () {
+                                  showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return AlertDialog(
+                                        title: Text('Confirm request'),
+                                        content: Text(
+                                          'Are you sure you want to send units to this user?',
+                                        ),
+                                        actions: <Widget>[
+                                          TextButton(
+                                            child: Text('Cancel'),
+                                            onPressed: () {
+                                              Navigator.of(context).pop(
+                                                false,
+                                              ); // Dismiss and return false
+                                            },
+                                          ),
+                                          TextButton(
+                                            child: Text('send'),
+                                            onPressed: () {
+                                              Navigator.of(context).pop(
+                                                true,
+                                              ); // Dismiss and return true
+                                              // Perform your delete action here
+                                            },
+                                          ),
+                                        ],
+                                      );
+                                    },
+                                  );
+                                },
+                              ),
+                            ],
                           );
                         }
                       },

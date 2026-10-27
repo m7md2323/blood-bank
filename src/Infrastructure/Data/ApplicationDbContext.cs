@@ -38,6 +38,7 @@ public sealed class ApplicationDbContext : DbContext
         modelBuilder.Entity<BloodUnit>().ToTable("blood_units", Schema).HasKey(x => x.Id);
         modelBuilder.Entity<BloodTestResult>().ToTable("blood_test_results", Schema).HasKey(x => x.Id);
         modelBuilder.Entity<BloodTestResult>().HasOne(x => x.BloodUnit).WithMany(x => x.TestResults).HasForeignKey(x => x.BloodUnitId);
+        modelBuilder.Entity<BloodTestResult>().Property(x => x.Id).ValueGeneratedNever();
         modelBuilder.Entity<BloodRequest>().ToTable("blood_requests", Schema).HasKey(x => x.Id);
         modelBuilder.Entity<WalletTransaction>().ToTable("wallet_transactions", Schema).HasKey(x => x.Id);
         modelBuilder.Entity<DonationCampaign>().ToTable("donation_campaigns", Schema).HasKey(x => x.Id);

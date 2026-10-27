@@ -14,7 +14,7 @@ public interface IUnitOfWork: IDisposable {
     IRepository<DonationCampaign> DonationCampaigns { get; }
     IRepository<Notification> Notifications { get; }
     IRepository<WalletTransaction> WalletTransactions { get; }
-
+    IRepository<BloodTestResult> BloodTestResults { get; }
     // All chenges will be commited as one transaction.
     Task<int> SaveChangesAsync();
 
