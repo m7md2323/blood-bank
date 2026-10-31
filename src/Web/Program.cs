@@ -64,16 +64,29 @@ builder.Services.AddAuthentication(options =>
 // Add native .NET 10 OpenAPI support
 builder.Services.AddOpenApi();
 
+// CORS for Flutter Web (browser enforces CORS, unlike mobile)
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("FlutterWeb", policy =>
+        policy.WithOrigins("http://localhost:7357", "http://localhost:8080") // Flutter web default ports
+              .AllowAnyMethod()
+              .AllowAnyHeader()
+              .AllowCredentials());
+});
+
 
 
 var app = builder.Build();
 
-using (var scope = app.Services.CreateScope())
+// If you want to seed the database, please uncomment this section
+// The current seeder contains only one Admin insert, for testing
+/*using (var scope = app.Services.CreateScope())
 {
     var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
     var passwordHasher = scope.ServiceProvider.GetRequiredService<IPasswordHasher>();
     await DatabaseSeeder.SeedAsync(context, passwordHasher);
-}
+}*/
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -83,6 +96,8 @@ if (app.Environment.IsDevelopment())
     // Renders the Scalar API UI at /scalar/v1
     app.MapScalarApiReference();
 }
+
+app.UseCors("FlutterWeb");
 
 app.UseAuthentication();
 
