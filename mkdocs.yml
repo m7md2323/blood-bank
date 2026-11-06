@@ -35,7 +35,8 @@ nav:
   - Team & Roles: team.md
   - Resources: resources.md
   - Progress Tracker: progress.md
-
+  - API: api_design.md
+  - User Flow: user_flow.md
 extra_css:
   - stylesheets/extra.css
 
