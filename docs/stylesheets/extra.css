@@ -1,0 +1,10 @@
+/* Makes the main container full width on pages containing Scalar */
+.md-content {
+    max-width: none !important;
+}
+
+.md-content__inner {
+    max-width: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}

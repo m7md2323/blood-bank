@@ -1,3 +1,9 @@
+---
+hide:
+  - navigation
+  - toc
+---
+
 # API Reference
 
 ## last updated : 6 - November - 2026
