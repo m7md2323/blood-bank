@@ -14,7 +14,7 @@ import 'package:blood_bank/screens/MainScreens/StaffLoginScreen.dart';
 
 
 final GoRouter appRouter = GoRouter(
-  initialLocation: '/transfer-credit-screen',
+  initialLocation: '/',
   routes: [
     GoRoute(path: '/', builder: (context, state) => LoginScreen()),
     GoRoute(path: '/doctor-request-screen',

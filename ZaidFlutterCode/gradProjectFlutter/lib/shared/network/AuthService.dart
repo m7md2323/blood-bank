@@ -9,7 +9,7 @@ import 'package:blood_bank/models/banks_detail.dart';
 class AuthService {
   final storage = const FlutterSecureStorage();
   // 1. Define your backend address (Replace with your actual API URL later)
-  static const String baseUrl = 'https://our-api-url.com';
+  static const String baseUrl = 'https://localhost:5188';//EDIT NEEDED: Replace with your actual backend URL
 
   Future<Map<String, dynamic>> login(String nationalID, String password) async {
     try {
@@ -161,7 +161,7 @@ Future<List<BanksDetails>> fetchBanks() async {
   }
 }
 
-  Future <List<Users>> dummyFetchUsers() async {
+Future<List<Users>> dummyFetchUsers() async {
   try {
     final String usersJson = await rootBundle.loadString(
       'assets/data/user_dummy.json',

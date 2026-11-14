@@ -83,6 +83,9 @@ flutter:
   - assets/data/banks_dummy.json
   - assets/data/user_dummy.json
   - assets/data/notification_dummy.json
+  - assets/images/backgroundDonor.jpg
+  - assets/images/Nurseimage.jpg
+  - assets/images/backgroundDonor2.jpg
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
 
