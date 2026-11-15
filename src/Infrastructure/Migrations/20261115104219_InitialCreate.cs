@@ -1,9 +1,10 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
+using NetTopologySuite.Geometries;
 
 #nullable disable
 
-namespace Infrastructure.Data.Migrations
+namespace Infrastructure.Migrations
 {
     /// <inheritdoc />
     public partial class InitialCreate : Migration
@@ -14,6 +15,9 @@ namespace Infrastructure.Data.Migrations
             migrationBuilder.EnsureSchema(
                 name: "smart_blood_bank");
 
+            migrationBuilder.AlterDatabase()
+                .Annotation("Npgsql:PostgresExtension:postgis", ",,");
+
             migrationBuilder.CreateTable(
                 name: "blood_banks",
                 schema: "smart_blood_bank",
@@ -23,10 +27,9 @@ namespace Infrastructure.Data.Migrations
                     name = table.Column<string>(type: "text", nullable: false),
                     email = table.Column<string>(type: "text", nullable: false),
                     location_city = table.Column<string>(type: "text", nullable: false),
-                    location_latitude = table.Column<double>(type: "double precision", nullable: false),
-                    location_longitude = table.Column<double>(type: "double precision", nullable: false),
-                    created_at_utc = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    updated_at_utc = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
+                    location_coordinates = table.Column<Point>(type: "geography(Point, 4326)", nullable: false),
+                    created_at_utc = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    updated_at_utc = table.Column<DateTime>(type: "timestamp without time zone", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -43,10 +46,9 @@ namespace Infrastructure.Data.Migrations
                     email = table.Column<string>(type: "text", nullable: false),
                     phone_number = table.Column<string>(type: "text", nullable: false),
                     location_city = table.Column<string>(type: "text", nullable: false),
-                    location_latitude = table.Column<double>(type: "double precision", nullable: false),
-                    location_longitude = table.Column<double>(type: "double precision", nullable: false),
-                    created_at_utc = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    updated_at_utc = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
+                    location_coordinates = table.Column<Point>(type: "geography(Point, 4326)", nullable: false),
+                    created_at_utc = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    updated_at_utc = table.Column<DateTime>(type: "timestamp without time zone", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -64,12 +66,12 @@ namespace Infrastructure.Data.Migrations
                     title = table.Column<string>(type: "text", nullable: false),
                     description = table.Column<string>(type: "text", nullable: false),
                     target_units = table.Column<int>(type: "integer", nullable: false),
-                    start_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    end_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    start_date = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    end_date = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     status = table.Column<int>(type: "integer", nullable: false),
                     actual_units = table.Column<int>(type: "integer", nullable: false),
-                    created_at_utc = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    updated_at_utc = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
+                    created_at_utc = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    updated_at_utc = table.Column<DateTime>(type: "timestamp without time zone", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -96,8 +98,8 @@ namespace Infrastructure.Data.Migrations
                     component_type = table.Column<int>(type: "integer", nullable: false),
                     hospital_id = table.Column<Guid>(type: "uuid", nullable: false),
                     blood_bank_id = table.Column<Guid>(type: "uuid", nullable: true),
-                    created_at_utc = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    updated_at_utc = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
+                    created_at_utc = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    updated_at_utc = table.Column<DateTime>(type: "timestamp without time zone", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -129,7 +131,7 @@ namespace Infrastructure.Data.Migrations
                     email = table.Column<string>(type: "text", nullable: false),
                     phone_number = table.Column<string>(type: "text", nullable: false),
                     password_hash = table.Column<string>(type: "text", nullable: false),
-                    date_of_birth = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    date_of_birth = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     blood_type = table.Column<int>(type: "integer", nullable: false),
                     status = table.Column<int>(type: "integer", nullable: false),
                     role = table.Column<int>(type: "integer", nullable: false),
@@ -139,10 +141,9 @@ namespace Infrastructure.Data.Migrations
                     blood_bank_id = table.Column<Guid>(type: "uuid", nullable: true),
                     xmin = table.Column<uint>(type: "xid", rowVersion: true, nullable: false),
                     location_city = table.Column<string>(type: "text", nullable: false),
-                    location_latitude = table.Column<double>(type: "double precision", nullable: false),
-                    location_longitude = table.Column<double>(type: "double precision", nullable: false),
-                    created_at_utc = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    updated_at_utc = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
+                    location_coordinates = table.Column<Point>(type: "geography(Point, 4326)", nullable: false),
+                    created_at_utc = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    updated_at_utc = table.Column<DateTime>(type: "timestamp without time zone", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -171,15 +172,15 @@ namespace Infrastructure.Data.Migrations
                     blood_type = table.Column<int>(type: "integer", nullable: false),
                     component_type = table.Column<int>(type: "integer", nullable: false),
                     volume_ml = table.Column<double>(type: "double precision", nullable: false),
-                    collection_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    expiration_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    collection_date = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    expiration_date = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     status = table.Column<int>(type: "integer", nullable: false),
                     donor_id = table.Column<Guid>(type: "uuid", nullable: false),
                     recipient_acceptor_id = table.Column<Guid>(type: "uuid", nullable: true),
                     current_hospital_id = table.Column<Guid>(type: "uuid", nullable: true),
                     current_blood_bank_id = table.Column<Guid>(type: "uuid", nullable: true),
-                    created_at_utc = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    updated_at_utc = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
+                    created_at_utc = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    updated_at_utc = table.Column<DateTime>(type: "timestamp without time zone", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -220,11 +221,11 @@ namespace Infrastructure.Data.Migrations
                     id = table.Column<Guid>(type: "uuid", nullable: false),
                     user_id = table.Column<Guid>(type: "uuid", nullable: false),
                     blood_bank_id = table.Column<Guid>(type: "uuid", nullable: false),
-                    scheduled_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    scheduled_date = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     status = table.Column<int>(type: "integer", nullable: false),
                     notes = table.Column<string>(type: "text", nullable: true),
-                    created_at_utc = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    updated_at_utc = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
+                    created_at_utc = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    updated_at_utc = table.Column<DateTime>(type: "timestamp without time zone", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -254,13 +255,13 @@ namespace Infrastructure.Data.Migrations
                     title = table.Column<string>(type: "text", nullable: false),
                     message = table.Column<string>(type: "text", nullable: false),
                     is_read = table.Column<bool>(type: "boolean", nullable: false),
-                    read_at_utc = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    read_at_utc = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
                     recipient_user_id = table.Column<Guid>(type: "uuid", nullable: true),
                     recipient_hospital_id = table.Column<Guid>(type: "uuid", nullable: true),
                     recipient_blood_bank_id = table.Column<Guid>(type: "uuid", nullable: true),
                     related_blood_request_id = table.Column<Guid>(type: "uuid", nullable: true),
-                    created_at_utc = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    updated_at_utc = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
+                    created_at_utc = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    updated_at_utc = table.Column<DateTime>(type: "timestamp without time zone", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -292,6 +293,30 @@ namespace Infrastructure.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "blood_test_results",
+                schema: "smart_blood_bank",
+                columns: table => new
+                {
+                    id = table.Column<Guid>(type: "uuid", nullable: false),
+                    test_type = table.Column<int>(type: "integer", nullable: false),
+                    test_result = table.Column<int>(type: "integer", nullable: false),
+                    blood_unit_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    created_at_utc = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    updated_at_utc = table.Column<DateTime>(type: "timestamp without time zone", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_blood_test_results", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_blood_test_results_blood_units_blood_unit_id",
+                        column: x => x.blood_unit_id,
+                        principalSchema: "smart_blood_bank",
+                        principalTable: "blood_units",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "donations",
                 schema: "smart_blood_bank",
                 columns: table => new
@@ -301,10 +326,10 @@ namespace Infrastructure.Data.Migrations
                     hospital_id = table.Column<Guid>(type: "uuid", nullable: true),
                     blood_bank_id = table.Column<Guid>(type: "uuid", nullable: true),
                     blood_unit_id = table.Column<Guid>(type: "uuid", nullable: false),
-                    donation_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    next_eligible_donation_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    created_at_utc = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    updated_at_utc = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
+                    donation_date = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    next_eligible_donation_date = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    created_at_utc = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    updated_at_utc = table.Column<DateTime>(type: "timestamp without time zone", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -348,8 +373,8 @@ namespace Infrastructure.Data.Migrations
                     receiver_id = table.Column<Guid>(type: "uuid", nullable: false),
                     donation_id = table.Column<Guid>(type: "uuid", nullable: false),
                     blood_request_id = table.Column<Guid>(type: "uuid", nullable: true),
-                    created_at_utc = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    updated_at_utc = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
+                    created_at_utc = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    updated_at_utc = table.Column<DateTime>(type: "timestamp without time zone", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -395,6 +420,12 @@ namespace Infrastructure.Data.Migrations
                 schema: "smart_blood_bank",
                 table: "blood_requests",
                 column: "hospital_id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_blood_test_results_blood_unit_id",
+                schema: "smart_blood_bank",
+                table: "blood_test_results",
+                column: "blood_unit_id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_blood_units_current_blood_bank_id",
@@ -526,6 +557,10 @@ namespace Infrastructure.Data.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "blood_test_results",
+                schema: "smart_blood_bank");
+
             migrationBuilder.DropTable(
                 name: "donation_appointments",
                 schema: "smart_blood_bank");

@@ -4,20 +4,18 @@ using System.Collections.Generic;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using NetTopologySuite.Geometries;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace Infrastructure.Data.Migrations
+namespace Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20261010165618_InitialCreate")]
-    partial class InitialCreate
+    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
     {
-        /// <inheritdoc />
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -25,6 +23,7 @@ namespace Infrastructure.Data.Migrations
                 .HasAnnotation("ProductVersion", "10.0.0")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
+            NpgsqlModelBuilderExtensions.HasPostgresExtension(modelBuilder, "postgis");
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
             modelBuilder.Entity("Domain.Entities.BloodBank", b =>
@@ -35,7 +34,7 @@ namespace Infrastructure.Data.Migrations
                         .HasColumnName("id");
 
                     b.Property<DateTime>("CreatedAtUtc")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("created_at_utc");
 
                     b.Property<string>("Email")
@@ -49,7 +48,7 @@ namespace Infrastructure.Data.Migrations
                         .HasColumnName("name");
 
                     b.Property<DateTime?>("UpdatedAtUtc")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("updated_at_utc");
 
                     b.ComplexProperty(typeof(Dictionary<string, object>), "Location", "Domain.Entities.BloodBank.Location#Location", b1 =>
@@ -61,13 +60,10 @@ namespace Infrastructure.Data.Migrations
                                 .HasColumnType("text")
                                 .HasColumnName("location_city");
 
-                            b1.Property<double>("Latitude")
-                                .HasColumnType("double precision")
-                                .HasColumnName("location_latitude");
-
-                            b1.Property<double>("Longitude")
-                                .HasColumnType("double precision")
-                                .HasColumnName("location_longitude");
+                            b1.Property<Point>("Coordinates")
+                                .IsRequired()
+                                .HasColumnType("geography(Point, 4326)")
+                                .HasColumnName("location_coordinates");
                         });
 
                     b.HasKey("Id");
@@ -95,7 +91,7 @@ namespace Infrastructure.Data.Migrations
                         .HasColumnName("component_type");
 
                     b.Property<DateTime>("CreatedAtUtc")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("created_at_utc");
 
                     b.Property<Guid>("HospitalId")
@@ -111,7 +107,7 @@ namespace Infrastructure.Data.Migrations
                         .HasColumnName("status");
 
                     b.Property<DateTime?>("UpdatedAtUtc")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("updated_at_utc");
 
                     b.Property<int>("UrgencyLevel")
@@ -127,6 +123,39 @@ namespace Infrastructure.Data.Migrations
                     b.ToTable("blood_requests", "smart_blood_bank");
                 });
 
+            modelBuilder.Entity("Domain.Entities.BloodTestResult", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<Guid>("BloodUnitId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("blood_unit_id");
+
+                    b.Property<DateTime>("CreatedAtUtc")
+                        .HasColumnType("timestamp without time zone")
+                        .HasColumnName("created_at_utc");
+
+                    b.Property<int>("TestResult")
+                        .HasColumnType("integer")
+                        .HasColumnName("test_result");
+
+                    b.Property<int>("TestType")
+                        .HasColumnType("integer")
+                        .HasColumnName("test_type");
+
+                    b.Property<DateTime?>("UpdatedAtUtc")
+                        .HasColumnType("timestamp without time zone")
+                        .HasColumnName("updated_at_utc");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BloodUnitId");
+
+                    b.ToTable("blood_test_results", "smart_blood_bank");
+                });
+
             modelBuilder.Entity("Domain.Entities.BloodUnit", b =>
                 {
                     b.Property<Guid>("Id")
@@ -139,7 +168,7 @@ namespace Infrastructure.Data.Migrations
                         .HasColumnName("blood_type");
 
                     b.Property<DateTime>("CollectionDate")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("collection_date");
 
                     b.Property<int>("ComponentType")
@@ -147,7 +176,7 @@ namespace Infrastructure.Data.Migrations
                         .HasColumnName("component_type");
 
                     b.Property<DateTime>("CreatedAtUtc")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("created_at_utc");
 
                     b.Property<Guid?>("CurrentBloodBankId")
@@ -163,7 +192,7 @@ namespace Infrastructure.Data.Migrations
                         .HasColumnName("donor_id");
 
                     b.Property<DateTime>("ExpirationDate")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("expiration_date");
 
                     b.Property<bool>("IsDeleted")
@@ -179,7 +208,7 @@ namespace Infrastructure.Data.Migrations
                         .HasColumnName("status");
 
                     b.Property<DateTime?>("UpdatedAtUtc")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("updated_at_utc");
 
                     b.Property<double>("VolumeMl")
@@ -215,11 +244,11 @@ namespace Infrastructure.Data.Migrations
                         .HasColumnName("blood_unit_id");
 
                     b.Property<DateTime>("CreatedAtUtc")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("created_at_utc");
 
                     b.Property<DateTime>("DonationDate")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("donation_date");
 
                     b.Property<Guid>("DonorId")
@@ -231,11 +260,11 @@ namespace Infrastructure.Data.Migrations
                         .HasColumnName("hospital_id");
 
                     b.Property<DateTime>("NextEligibleDonationDate")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("next_eligible_donation_date");
 
                     b.Property<DateTime?>("UpdatedAtUtc")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("updated_at_utc");
 
                     b.HasKey("Id");
@@ -263,7 +292,7 @@ namespace Infrastructure.Data.Migrations
                         .HasColumnName("blood_bank_id");
 
                     b.Property<DateTime>("CreatedAtUtc")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("created_at_utc");
 
                     b.Property<string>("Notes")
@@ -271,7 +300,7 @@ namespace Infrastructure.Data.Migrations
                         .HasColumnName("notes");
 
                     b.Property<DateTime>("ScheduledDate")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("scheduled_date");
 
                     b.Property<int>("Status")
@@ -279,7 +308,7 @@ namespace Infrastructure.Data.Migrations
                         .HasColumnName("status");
 
                     b.Property<DateTime?>("UpdatedAtUtc")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("updated_at_utc");
 
                     b.Property<Guid>("UserId")
@@ -315,7 +344,7 @@ namespace Infrastructure.Data.Migrations
                         .HasColumnName("blood_type");
 
                     b.Property<DateTime>("CreatedAtUtc")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("created_at_utc");
 
                     b.Property<string>("Description")
@@ -324,11 +353,11 @@ namespace Infrastructure.Data.Migrations
                         .HasColumnName("description");
 
                     b.Property<DateTime>("EndDate")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("end_date");
 
                     b.Property<DateTime>("StartDate")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("start_date");
 
                     b.Property<int>("Status")
@@ -345,7 +374,7 @@ namespace Infrastructure.Data.Migrations
                         .HasColumnName("title");
 
                     b.Property<DateTime?>("UpdatedAtUtc")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("updated_at_utc");
 
                     b.HasKey("Id");
@@ -363,7 +392,7 @@ namespace Infrastructure.Data.Migrations
                         .HasColumnName("id");
 
                     b.Property<DateTime>("CreatedAtUtc")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("created_at_utc");
 
                     b.Property<string>("Email")
@@ -382,7 +411,7 @@ namespace Infrastructure.Data.Migrations
                         .HasColumnName("phone_number");
 
                     b.Property<DateTime?>("UpdatedAtUtc")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("updated_at_utc");
 
                     b.ComplexProperty(typeof(Dictionary<string, object>), "Location", "Domain.Entities.Hospital.Location#Location", b1 =>
@@ -394,13 +423,10 @@ namespace Infrastructure.Data.Migrations
                                 .HasColumnType("text")
                                 .HasColumnName("location_city");
 
-                            b1.Property<double>("Latitude")
-                                .HasColumnType("double precision")
-                                .HasColumnName("location_latitude");
-
-                            b1.Property<double>("Longitude")
-                                .HasColumnType("double precision")
-                                .HasColumnName("location_longitude");
+                            b1.Property<Point>("Coordinates")
+                                .IsRequired()
+                                .HasColumnType("geography(Point, 4326)")
+                                .HasColumnName("location_coordinates");
                         });
 
                     b.HasKey("Id");
@@ -416,7 +442,7 @@ namespace Infrastructure.Data.Migrations
                         .HasColumnName("id");
 
                     b.Property<DateTime>("CreatedAtUtc")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("created_at_utc");
 
                     b.Property<bool>("IsRead")
@@ -429,7 +455,7 @@ namespace Infrastructure.Data.Migrations
                         .HasColumnName("message");
 
                     b.Property<DateTime?>("ReadAtUtc")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("read_at_utc");
 
                     b.Property<Guid?>("RecipientBloodBankId")
@@ -454,7 +480,7 @@ namespace Infrastructure.Data.Migrations
                         .HasColumnName("title");
 
                     b.Property<DateTime?>("UpdatedAtUtc")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("updated_at_utc");
 
                     b.HasKey("Id");
@@ -490,11 +516,11 @@ namespace Infrastructure.Data.Migrations
                         .HasColumnName("blood_units_balance");
 
                     b.Property<DateTime>("CreatedAtUtc")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("created_at_utc");
 
                     b.Property<DateTime>("DateOfBirth")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("date_of_birth");
 
                     b.Property<string>("Email")
@@ -543,7 +569,7 @@ namespace Infrastructure.Data.Migrations
                         .HasColumnName("status");
 
                     b.Property<DateTime?>("UpdatedAtUtc")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("updated_at_utc");
 
                     b.Property<uint>("xmin")
@@ -561,13 +587,10 @@ namespace Infrastructure.Data.Migrations
                                 .HasColumnType("text")
                                 .HasColumnName("location_city");
 
-                            b1.Property<double>("Latitude")
-                                .HasColumnType("double precision")
-                                .HasColumnName("location_latitude");
-
-                            b1.Property<double>("Longitude")
-                                .HasColumnType("double precision")
-                                .HasColumnName("location_longitude");
+                            b1.Property<Point>("Coordinates")
+                                .IsRequired()
+                                .HasColumnType("geography(Point, 4326)")
+                                .HasColumnName("location_coordinates");
                         });
 
                     b.HasKey("Id");
@@ -595,7 +618,7 @@ namespace Infrastructure.Data.Migrations
                         .HasColumnName("blood_request_id");
 
                     b.Property<DateTime>("CreatedAtUtc")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("created_at_utc");
 
                     b.Property<Guid>("DonationId")
@@ -607,7 +630,7 @@ namespace Infrastructure.Data.Migrations
                         .HasColumnName("receiver_id");
 
                     b.Property<DateTime?>("UpdatedAtUtc")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("updated_at_utc");
 
                     b.Property<Guid>("UserId")
@@ -642,6 +665,17 @@ namespace Infrastructure.Data.Migrations
                     b.Navigation("BloodBank");
 
                     b.Navigation("Hospital");
+                });
+
+            modelBuilder.Entity("Domain.Entities.BloodTestResult", b =>
+                {
+                    b.HasOne("Domain.Entities.BloodUnit", "BloodUnit")
+                        .WithMany("TestResults")
+                        .HasForeignKey("BloodUnitId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("BloodUnit");
                 });
 
             modelBuilder.Entity("Domain.Entities.BloodUnit", b =>
@@ -815,6 +849,11 @@ namespace Infrastructure.Data.Migrations
             modelBuilder.Entity("Domain.Entities.BloodRequest", b =>
                 {
                     b.Navigation("WalletTransactions");
+                });
+
+            modelBuilder.Entity("Domain.Entities.BloodUnit", b =>
+                {
+                    b.Navigation("TestResults");
                 });
 
             modelBuilder.Entity("Domain.Entities.Hospital", b =>

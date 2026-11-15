@@ -8,7 +8,8 @@ using System.Text;
 using Application;
 using Infrastructure;
 using Infrastructure.Security;
-using Application.Interfaces;
+using System.Text.Json.Serialization;
+
 var builder = WebApplication.CreateBuilder(args);
 
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
@@ -18,7 +19,11 @@ builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
 
 // DI to configure Controllers
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+.AddJsonOptions(options =>
+{
+    options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+});
 builder.Services.AddEndpointsApiExplorer();
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
@@ -68,7 +73,7 @@ builder.Services.AddOpenApi();
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("FlutterWeb", policy =>
-        policy.WithOrigins("http://localhost:7357", "http://localhost:8080") // Flutter web default ports
+        policy.SetIsOriginAllowed(origin => new Uri(origin).Host == "localhost")
               .AllowAnyMethod()
               .AllowAnyHeader()
               .AllowCredentials());
@@ -86,7 +91,6 @@ var app = builder.Build();
     var passwordHasher = scope.ServiceProvider.GetRequiredService<IPasswordHasher>();
     await DatabaseSeeder.SeedAsync(context, passwordHasher);
 }*/
-
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -96,6 +100,7 @@ if (app.Environment.IsDevelopment())
     // Renders the Scalar API UI at /scalar/v1
     app.MapScalarApiReference();
 }
+//app.UseHttpsRedirection();
 
 app.UseCors("FlutterWeb");
 
@@ -105,9 +110,5 @@ app.UseAuthorization();
 
 // Map the controllers
 app.MapControllers();
-
-
-app.UseHttpsRedirection();
-
 
 app.Run();
