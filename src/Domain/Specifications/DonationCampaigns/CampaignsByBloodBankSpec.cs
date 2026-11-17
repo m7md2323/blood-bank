@@ -1,6 +1,6 @@
 using Domain.Entities;
 
-namespace Domain.Specifications;
+namespace Domain.Specifications.DonationCampaigns;
 
 public class CampaignsByBloodBankSpec : BaseSpecification<DonationCampaign> {
 

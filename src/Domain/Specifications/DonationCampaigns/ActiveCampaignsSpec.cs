@@ -1,7 +1,8 @@
+using System.Reflection.Metadata;
 using Domain.Entities;
 using Domain.Enums;
 
-namespace Domain.Specifications;
+namespace Domain.Specifications.DonationCampaigns;
 
 public class ActiveCampaignsSpec : BaseSpecification<DonationCampaign> {
 

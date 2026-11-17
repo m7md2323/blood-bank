@@ -36,7 +36,7 @@ public class BloodRequestsController : ControllerBase
         };
     }
 
-    [HttpGet("hospital/{hospitalId:guid}")]
+    [HttpGet("hospitals/active")]
     public async Task<ActionResult<BloodRequestDto>> ListHospitalActiveRequests(CancellationToken ct){
         
         var HospitalIdAsString = User.FindFirstValue(ClaimTypes.NameIdentifier);
