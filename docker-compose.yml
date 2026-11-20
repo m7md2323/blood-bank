@@ -12,6 +12,7 @@ services:
       JwtSettings__Issuer: ${JwtSettings__Issuer:?Set JwtSettings__Issuer in .env}
       JwtSettings__Audience: ${JwtSettings__Audience:?Set JwtSettings__Audience in .env}
       JwtSettings__ExpiryMinutes: ${JwtSettings__ExpiryMinutes:-60}
+
     depends_on:
       postgres:
         condition: service_healthy
@@ -32,17 +33,9 @@ services:
     container_name: bloodbank_postgres
     restart: unless-stopped
     environment:
-<<<<<<< Updated upstream
-      POSTGRES_DB: smart_blood_bank
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
-    ports:
-      - "5432:5432"
-=======
       POSTGRES_DB: ${POSTGRES_DB:?Set POSTGRES_DB in .env}
       POSTGRES_USER: ${POSTGRES_USER:?Set POSTGRES_USER in .env}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}
->>>>>>> Stashed changes
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
