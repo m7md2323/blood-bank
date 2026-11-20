@@ -4,9 +4,14 @@ services:
       context: .
       dockerfile: Dockerfile
     ports:
-      - "5000:8080"
+      - "127.0.0.1:${BACKEND_PORT:-5000}:8080"
     environment:
-      ASPNETCORE_ENVIRONMENT: ${ASPNETCORE_ENVIRONMENT:-Development}
+      ASPNETCORE_ENVIRONMENT: ${ASPNETCORE_ENVIRONMENT:-Production}
+      ConnectionStrings__DefaultConnection: 'Host=postgres;Port=5432;Database=${POSTGRES_DB:?Set POSTGRES_DB in .env};Username=${POSTGRES_USER:?Set POSTGRES_USER in .env};Password="${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}"'
+      JwtSettings__Secret: ${JwtSettings__Secret:?Set JwtSettings__Secret in .env}
+      JwtSettings__Issuer: ${JwtSettings__Issuer:?Set JwtSettings__Issuer in .env}
+      JwtSettings__Audience: ${JwtSettings__Audience:?Set JwtSettings__Audience in .env}
+      JwtSettings__ExpiryMinutes: ${JwtSettings__ExpiryMinutes:-60}
     depends_on:
       postgres:
         condition: service_healthy
@@ -19,7 +24,7 @@ services:
       target: runtime
     container_name: bloodbank_flutter_web
     ports:
-      - "8080:80"
+      - "127.0.0.1:${FLUTTER_PORT:-8080}:80"
     restart: unless-stopped
 
   postgres:
@@ -27,15 +32,21 @@ services:
     container_name: bloodbank_postgres
     restart: unless-stopped
     environment:
+<<<<<<< Updated upstream
       POSTGRES_DB: smart_blood_bank
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
     ports:
       - "5432:5432"
+=======
+      POSTGRES_DB: ${POSTGRES_DB:?Set POSTGRES_DB in .env}
+      POSTGRES_USER: ${POSTGRES_USER:?Set POSTGRES_USER in .env}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}
+>>>>>>> Stashed changes
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres -d smart_blood_bank"]
+      test: ["CMD-SHELL", 'pg_isready -U "$$POSTGRES_USER" -d "$$POSTGRES_DB"']
       interval: 5s
       timeout: 5s
       retries: 10
