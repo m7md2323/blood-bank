@@ -1,8 +1,6 @@
 services:
   backend:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: awsmalek/blood-bank-backend:latest
     ports:
       - "127.0.0.1:${BACKEND_PORT:-5000}:8080"
     environment:
@@ -19,10 +17,7 @@ services:
     restart: unless-stopped
 
   flutter:
-    build:
-      context: ./ZaidFlutterCode
-      dockerfile: Dockerfile
-      target: runtime
+    image: awsmalek/blood-bank-flutter:latest
     container_name: bloodbank_flutter_web
     ports:
       - "127.0.0.1:${FLUTTER_PORT:-8080}:80"
